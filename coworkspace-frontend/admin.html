@@ -1,540 +1,571 @@
 <!DOCTYPE html>
-
-<html class="light" lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>CoWorkSpace Admin Dashboard</title>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CoWorkSpace — Admin</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            "colors": {
-                    "tertiary": "#850025",
-                    "on-tertiary-fixed-variant": "#92002a",
-                    "surface-dim": "#d3daea",
-                    "error-container": "#ffdad6",
-                    "on-background": "#151c27",
-                    "on-primary-container": "#c6caff",
-                    "on-surface-variant": "#454655",
-                    "on-secondary-fixed-variant": "#005137",
-                    "on-surface": "#151c27",
-                    "on-secondary": "#ffffff",
-                    "outline": "#757687",
-                    "secondary-container": "#64f9bc",
-                    "inverse-primary": "#bdc2ff",
-                    "surface-container-low": "#f0f3ff",
-                    "on-tertiary-fixed": "#40000d",
-                    "secondary": "#006c4b",
-                    "inverse-on-surface": "#ebf1ff",
-                    "primary-fixed": "#dfe0ff",
-                    "surface-container-lowest": "#ffffff",
-                    "surface-container-highest": "#dce2f3",
-                    "on-error": "#ffffff",
-                    "on-error-container": "#93000a",
-                    "secondary-fixed": "#68fcbf",
-                    "on-primary-fixed": "#000865",
-                    "on-secondary-container": "#00714e",
-                    "surface-container": "#e7eefe",
-                    "on-secondary-fixed": "#002114",
-                    "surface-variant": "#dce2f3",
-                    "on-tertiary": "#ffffff",
-                    "surface": "#f9f9ff",
-                    "error": "#ba1a1a",
-                    "surface-tint": "#3648e9",
-                    "secondary-fixed-dim": "#45dfa4",
-                    "tertiary-fixed-dim": "#ffb2b7",
-                    "background": "#f9f9ff",
-                    "primary-fixed-dim": "#bdc2ff",
-                    "inverse-surface": "#2a313d",
-                    "on-primary-fixed-variant": "#1127d2",
-                    "on-tertiary-container": "#ffbdc0",
-                    "surface-bright": "#f9f9ff",
-                    "tertiary-container": "#b10035",
-                    "tertiary-fixed": "#ffdadb",
-                    "on-primary": "#ffffff",
-                    "surface-container-high": "#e2e8f8",
-                    "primary-container": "#2d3fe2",
-                    "outline-variant": "#c5c5d8",
-                    "primary": "#001bcc"
-            },
-            "borderRadius": {
-                    "DEFAULT": "0.25rem",
-                    "lg": "0.5rem",
-                    "xl": "0.75rem",
-                    "full": "9999px"
-            },
-            "spacing": {
-                    "margin-desktop": "32px",
-                    "container-max": "1280px",
-                    "gutter": "24px",
-                    "margin-mobile": "16px",
-                    "sidebar-width": "240px",
-                    "unit": "4px"
-            },
-            "fontFamily": {
-                    "label-md": ["Inter"],
-                    "headline-lg-mobile": ["Inter"],
-                    "body-md": ["Inter"],
-                    "label-sm": ["Inter"],
-                    "headline-lg": ["Inter"],
-                    "display": ["Inter"],
-                    "headline-md": ["Inter"],
-                    "body-lg": ["Inter"]
-            },
-            "fontSize": {
-                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
-                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
-                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
-                    "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "600"}],
-                    "headline-lg": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
-                    "display": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
-                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
-                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
-            }
-          },
-        },
-      }
-    </script>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined"/>
 <style>
-        body { font-family: 'Inter', sans-serif; }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(8px);
-            border: 1px solid #E5E7EB;
-        }
-        .sidebar-active {
-            border-left: 4px solid #001bcc;
-            background: rgba(45, 63, 226, 0.05);
-            color: #001bcc;
-            font-weight: 700;
-        }
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-            vertical-align: middle;
-        }
-        /* Custom Table Scrollbar */
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #dce2f3; border-radius: 10px; }
-    </style>
+  body { font-family: 'Inter', sans-serif; background: #F4F5FB; }
+  .glass-card { background: #FFFFFF; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+  .sidebar-link.active { background: #EEF0FE; color: #2D3FE2; font-weight: 600; }
+</style>
 </head>
-<body class="bg-background text-on-background selection:bg-primary-fixed-dim min-h-screen">
-<!-- SideNavBar (Shared Component Identity) -->
-<aside class="w-sidebar-width h-full fixed left-0 top-0 bg-surface border-r border-outline-variant flex flex-col py-6 gap-2 z-50">
-<div class="px-6 mb-8">
-<h1 class="font-headline-md text-headline-md font-bold text-primary">CoWorkSpace</h1>
-<p class="font-label-md text-label-md text-on-surface-variant opacity-70">Admin Portal</p>
+<body class="text-[#1B1C29]">
+
+<div class="flex min-h-screen">
+
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white border-r border-gray-200 flex flex-col justify-between fixed h-screen">
+    <div>
+      <div class="p-6">
+        <h1 class="font-bold text-xl text-[#2D3FE2]">CoWorkSpace</h1>
+        <p class="text-sm text-gray-500">Admin Portal</p>
+      </div>
+      <nav class="px-3 space-y-1">
+        <button class="sidebar-link active w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-600 hover:bg-gray-50 transition-all" data-tab="dashboard">
+          <span class="material-symbols-outlined text-[20px]">dashboard</span>
+          <span>Dashboard</span>
+        </button>
+        <button class="sidebar-link w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-600 hover:bg-gray-50 transition-all" data-tab="spaces">
+          <span class="material-symbols-outlined text-[20px]">meeting_room</span>
+          <span>Manage Spaces</span>
+        </button>
+        <button class="sidebar-link w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-600 hover:bg-gray-50 transition-all" data-tab="seats">
+          <span class="material-symbols-outlined text-[20px]">event_seat</span>
+          <span>Manage Seats</span>
+        </button>
+        <button class="sidebar-link w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-600 hover:bg-gray-50 transition-all" data-tab="bookings">
+          <span class="material-symbols-outlined text-[20px]">confirmation_number</span>
+          <span>All Bookings</span>
+        </button>
+        <div class="pt-4 mt-4 border-t border-gray-100">
+          <button class="sidebar-link w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-600 hover:bg-gray-50 transition-all" data-tab="settings">
+            <span class="material-symbols-outlined text-[20px]">settings</span>
+            <span>Settings</span>
+          </button>
+        </div>
+      </nav>
+    </div>
+    <div class="p-4">
+      <button class="w-full flex items-center justify-center gap-2 py-3 bg-red-50 text-red-600 rounded-lg font-medium hover:bg-red-100 transition-all" id="sign-out-btn">
+        <span class="material-symbols-outlined text-[18px]">logout</span>
+        <span>Sign Out</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 ml-64 p-8">
+
+    <!-- ===================== DASHBOARD TAB ===================== -->
+    <section class="tab-panel active" id="tab-dashboard">
+      <div class="flex justify-between items-center mb-8">
+        <div>
+          <h2 class="text-3xl font-bold">Dashboard Overview</h2>
+          <p class="text-gray-500 mt-1">Real-time performance metrics and space management.</p>
+        </div>
+        <button class="bg-[#2D3FE2] text-white px-6 py-2.5 rounded-lg font-medium flex items-center gap-2 shadow-md hover:shadow-lg transition-all active:scale-95" id="add-space-btn-1">
+          <span class="material-symbols-outlined">add</span>
+          Add New Space
+        </button>
+      </div>
+
+      <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="glass-card p-6 rounded-xl border border-gray-100 shadow-sm">
+          <div class="p-2 bg-green-50 rounded-lg w-fit mb-4"><span class="material-symbols-outlined text-green-600">meeting_room</span></div>
+          <h3 class="text-xs text-gray-500 uppercase tracking-wider font-medium">Total Spaces</h3>
+          <div class="text-3xl font-bold mt-1" id="stat-total-spaces">0</div>
+        </div>
+        <div class="glass-card p-6 rounded-xl border border-gray-100 shadow-sm">
+          <div class="p-2 bg-indigo-50 rounded-lg w-fit mb-4"><span class="material-symbols-outlined text-[#2D3FE2]">event_seat</span></div>
+          <h3 class="text-xs text-gray-500 uppercase tracking-wider font-medium">Total Seat Units</h3>
+          <div class="text-3xl font-bold mt-1" id="stat-total-seats">0</div>
+        </div>
+        <div class="glass-card p-6 rounded-xl border border-gray-100 shadow-sm">
+          <div class="p-2 bg-rose-50 rounded-lg w-fit mb-4"><span class="material-symbols-outlined text-rose-600">confirmation_number</span></div>
+          <h3 class="text-xs text-gray-500 uppercase tracking-wider font-medium">Total Bookings</h3>
+          <div class="text-3xl font-bold mt-1" id="stat-total-bookings">0</div>
+        </div>
+      </section>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 glass-card rounded-xl border border-gray-100 shadow-sm p-6">
+          <h3 class="font-bold text-lg mb-4">Recent Spaces</h3>
+          <div id="dashboard-recent-spaces" class="divide-y divide-gray-100"></div>
+        </div>
+        <div class="glass-card rounded-xl border border-gray-100 shadow-sm p-6">
+          <h3 class="font-bold text-lg mb-4">Recent Bookings</h3>
+          <div id="dashboard-recent-bookings" class="space-y-4 max-h-[300px] overflow-y-auto"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== MANAGE SPACES TAB ===================== -->
+    <section class="tab-panel" id="tab-spaces">
+      <div class="flex justify-between items-center mb-8">
+        <div>
+          <h2 class="text-3xl font-bold">Manage Spaces</h2>
+          <p class="text-gray-500 mt-1">Create, view, and remove coworking spaces.</p>
+        </div>
+        <button class="bg-[#2D3FE2] text-white px-6 py-2.5 rounded-lg font-medium flex items-center gap-2 shadow-md hover:shadow-lg transition-all active:scale-95" id="add-space-btn-2">
+          <span class="material-symbols-outlined">add</span>
+          Add New Space
+        </button>
+      </div>
+
+      <div class="glass-card rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+        <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+          <h3 class="font-bold text-lg">All Spaces</h3>
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-[20px]">search</span>
+            <input class="pl-10 pr-4 py-2 border border-gray-200 rounded-lg bg-white text-sm focus:ring-2 focus:ring-[#2D3FE2] focus:border-[#2D3FE2] outline-none transition-all" id="spaces-filter" placeholder="Filter spaces..." type="text"/>
+          </div>
+        </div>
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="bg-gray-50 text-gray-500 uppercase tracking-tight text-xs">
+              <th class="px-6 py-3 text-left">Space Name</th>
+              <th class="px-6 py-3 text-left">Location</th>
+              <th class="px-6 py-3 text-left">Type</th>
+              <th class="px-6 py-3 text-left">Price/Day</th>
+              <th class="px-6 py-3 text-left">Seat Units</th>
+              <th class="px-6 py-3 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100" id="spaces-tbody">
+            <tr><td colspan="6" class="px-6 py-10 text-center text-gray-500" id="spaces-status">Loading spaces...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===================== MANAGE SEATS TAB ===================== -->
+    <section class="tab-panel" id="tab-seats">
+      <div class="mb-8">
+        <h2 class="text-3xl font-bold">Manage Seats</h2>
+        <p class="text-gray-500 mt-1">Add desks or cabins to an existing space.</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="glass-card rounded-xl border border-gray-100 shadow-sm p-6">
+          <h3 class="font-bold text-lg mb-2">Add Seat Unit</h3>
+          <p class="text-gray-500 text-sm mb-4">Add a desk or cabin to an existing space.</p>
+          <div class="space-y-3">
+            <select class="w-full border border-gray-200 rounded-lg px-3 py-2.5 bg-white text-sm focus:ring-2 focus:ring-[#2D3FE2] outline-none" id="seat-space-select">
+              <option value="">Select a space...</option>
+            </select>
+            <input class="w-full border border-gray-200 rounded-lg px-3 py-2.5 bg-white text-sm focus:ring-2 focus:ring-[#2D3FE2] outline-none" id="seat-label-input" placeholder="Label (e.g. Desk-9)" type="text"/>
+            <select class="w-full border border-gray-200 rounded-lg px-3 py-2.5 bg-white text-sm focus:ring-2 focus:ring-[#2D3FE2] outline-none" id="seat-type-select">
+              <option value="DESK">Desk</option>
+              <option value="CABIN">Cabin</option>
+            </select>
+            <button class="w-full py-2.5 bg-[#1B1C29] text-white rounded-lg font-medium hover:bg-opacity-90 transition-all" id="add-seat-btn">Add Seat Unit</button>
+            <p class="text-sm hidden" id="add-seat-msg"></p>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-xl border border-gray-100 shadow-sm p-6">
+          <h3 class="font-bold text-lg mb-4">Seat Units by Space</h3>
+          <div id="seats-by-space" class="space-y-4 max-h-[400px] overflow-y-auto">
+            <p class="text-gray-500 text-sm">Loading...</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== ALL BOOKINGS TAB ===================== -->
+    <section class="tab-panel" id="tab-bookings">
+      <div class="mb-8">
+        <h2 class="text-3xl font-bold">All Bookings</h2>
+        <p class="text-gray-500 mt-1">Every booking made across the platform.</p>
+      </div>
+
+      <div class="glass-card rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="bg-gray-50 text-gray-500 uppercase tracking-tight text-xs">
+              <th class="px-6 py-3 text-left">User</th>
+              <th class="px-6 py-3 text-left">Space</th>
+              <th class="px-6 py-3 text-left">Seat</th>
+              <th class="px-6 py-3 text-left">Dates</th>
+              <th class="px-6 py-3 text-left">Type</th>
+              <th class="px-6 py-3 text-left">Price</th>
+              <th class="px-6 py-3 text-left">Status</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100" id="all-bookings-tbody">
+            <tr><td colspan="7" class="px-6 py-10 text-center text-gray-500">Loading bookings...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===================== SETTINGS TAB ===================== -->
+    <section class="tab-panel" id="tab-settings">
+      <div class="mb-8">
+        <h2 class="text-3xl font-bold">Settings</h2>
+        <p class="text-gray-500 mt-1">Your admin account details.</p>
+      </div>
+
+      <div class="glass-card rounded-xl border border-gray-100 shadow-sm p-6 max-w-lg">
+        <h3 class="font-bold text-lg mb-4">Account</h3>
+        <div class="space-y-4">
+          <div>
+            <label class="text-xs text-gray-500 uppercase tracking-wide font-medium">Name</label>
+            <p class="text-base mt-1" id="settings-name">—</p>
+          </div>
+          <div>
+            <label class="text-xs text-gray-500 uppercase tracking-wide font-medium">Email</label>
+            <p class="text-base mt-1" id="settings-email">—</p>
+          </div>
+          <div>
+            <label class="text-xs text-gray-500 uppercase tracking-wide font-medium">Role</label>
+            <p class="text-base mt-1" id="settings-role">—</p>
+          </div>
+        </div>
+        <p class="text-xs text-gray-400 mt-6">Editing admin account details isn't available in this build.</p>
+      </div>
+    </section>
+
+  </main>
 </div>
-<nav class="flex-1 px-3 space-y-1">
-<a class="sidebar-active flex items-center px-3 py-3 rounded-r-lg transition-all duration-200" href="#">
-<span class="material-symbols-outlined mr-3" data-icon="dashboard">dashboard</span>
-<span class="font-label-md text-label-md">Dashboard</span>
-</a>
-<a class="flex items-center px-3 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-r-lg transition-all duration-200 group" href="#">
-<span class="material-symbols-outlined mr-3 group-hover:text-primary" data-icon="meeting_room">meeting_room</span>
-<span class="font-label-md text-label-md">Manage Spaces</span>
-</a>
-<a class="flex items-center px-3 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-r-lg transition-all duration-200 group" href="#">
-<span class="material-symbols-outlined mr-3 group-hover:text-primary" data-icon="event_seat">event_seat</span>
-<span class="font-label-md text-label-md">Manage Seats</span>
-</a>
-<a class="flex items-center px-3 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-r-lg transition-all duration-200 group" href="#">
-<span class="material-symbols-outlined mr-3 group-hover:text-primary" data-icon="book_online">book_online</span>
-<span class="font-label-md text-label-md">All Bookings</span>
-</a>
-<div class="pt-4 pb-2 px-3">
-<div class="h-px bg-outline-variant/30"></div>
-</div>
-<a class="flex items-center px-3 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-r-lg transition-all duration-200 group" href="#">
-<span class="material-symbols-outlined mr-3 group-hover:text-primary" data-icon="settings">settings</span>
-<span class="font-label-md text-label-md">Settings</span>
-</a>
-</nav>
-<div class="px-6 mt-auto">
-<button class="w-full flex items-center justify-center gap-2 py-3 bg-error-container text-on-error-container rounded-lg font-label-md hover:bg-opacity-80 transition-all" id="sign-out-btn">
-<span class="material-symbols-outlined text-[18px]" data-icon="logout">logout</span>
-<span>Sign Out</span>
-</button>
-</div>
-</aside>
-<!-- Main Content Canvas -->
-<main class="ml-sidebar-width min-h-screen p-margin-desktop bg-surface-container-low">
-<!-- Header Section -->
-<header class="flex justify-between items-end mb-8">
-<div>
-<h2 class="font-headline-lg text-headline-lg text-on-surface">Dashboard Overview</h2>
-<p class="font-body-md text-body-md text-on-surface-variant">Real-time performance metrics and space management.</p>
-</div>
-<button class="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-label-md flex items-center gap-2 shadow-md hover:shadow-lg transition-all active:scale-95" id="add-space-btn">
-<span class="material-symbols-outlined" data-icon="add">add</span>
-                Add New Space
-            </button>
-</header>
-<!-- Stats Bento Grid -->
-<section class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-8">
-<!-- Total Spaces -->
-<div class="glass-card p-6 rounded-xl relative overflow-hidden group">
-<div class="flex justify-between items-start mb-4">
-<div class="p-2 bg-secondary-container/20 rounded-lg">
-<span class="material-symbols-outlined text-secondary" data-icon="meeting_room">meeting_room</span>
-</div>
-</div>
-<h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Total Spaces</h3>
-<div class="flex items-baseline gap-2 mt-1">
-<span class="font-display text-display text-on-surface" id="stat-total-spaces">0</span>
-</div>
-<div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-secondary to-transparent opacity-30"></div>
-</div>
-<!-- Total Seat Units -->
-<div class="glass-card p-6 rounded-xl relative overflow-hidden group">
-<div class="flex justify-between items-start mb-4">
-<div class="p-2 bg-primary-container/10 rounded-lg">
-<span class="material-symbols-outlined text-primary" data-icon="event_seat">event_seat</span>
-</div>
-</div>
-<h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Total Seat Units</h3>
-<div class="flex items-baseline gap-2 mt-1">
-<span class="font-display text-display text-on-surface" id="stat-total-seats">0</span>
-</div>
-<div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-transparent opacity-30"></div>
-</div>
-<!-- Total Bookings -->
-<div class="glass-card p-6 rounded-xl relative overflow-hidden group">
-<div class="flex justify-between items-start mb-4">
-<div class="p-2 bg-tertiary-container/10 rounded-lg">
-<span class="material-symbols-outlined text-tertiary" data-icon="confirmation_number">confirmation_number</span>
-</div>
-</div>
-<h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Total Bookings</h3>
-<div class="flex items-baseline gap-2 mt-1">
-<span class="font-display text-display text-on-surface" id="stat-total-bookings">0</span>
-</div>
-</div>
-</section>
-<!-- Main Workspace Management Area -->
-<div class="grid grid-cols-12 gap-gutter">
-<!-- Table Section (8 Cols) -->
-<section class="col-span-12 lg:col-span-8 space-y-gutter">
-<div class="glass-card rounded-xl overflow-hidden border border-outline-variant">
-<div class="p-6 border-b border-outline-variant flex justify-between items-center bg-surface-container">
-<h3 class="font-headline-md text-headline-md text-on-surface">Manage Spaces</h3>
-<div class="flex items-center gap-3">
-<div class="relative">
-<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]" data-icon="search">search</span>
-<input class="pl-10 pr-4 py-2 border border-outline-variant rounded-lg bg-surface text-body-md focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all" id="spaces-filter" placeholder="Filter spaces..." type="text"/>
-</div>
-</div>
-</div>
-<div class="overflow-x-auto custom-scrollbar">
-<table class="w-full text-left border-collapse">
-<thead>
-<tr class="bg-surface-container-high/50 font-label-md text-label-md text-on-surface-variant uppercase tracking-tight">
-<th class="px-6 py-4">Space Name</th>
-<th class="px-6 py-4">Location</th>
-<th class="px-6 py-4">Type</th>
-<th class="px-6 py-4">Price/Day</th>
-<th class="px-6 py-4">Seat Units</th>
-<th class="px-6 py-4 text-right">Actions</th>
-</tr>
-</thead>
-<tbody class="divide-y divide-outline-variant/30" id="spaces-tbody">
-<tr><td colspan="6" class="px-6 py-10 text-center text-on-surface-variant" id="spaces-status">Loading spaces...</td></tr>
-</tbody>
-</table>
-</div>
-</div>
-</section>
-<!-- Sidebar Info Panel (4 Cols) -->
-<aside class="col-span-12 lg:col-span-4 space-y-gutter">
-<!-- All Bookings Panel -->
-<div class="glass-card rounded-xl p-6 border border-outline-variant">
-<h4 class="font-headline-md text-headline-md text-on-surface mb-6">All Bookings</h4>
-<div class="space-y-4 max-h-[420px] overflow-y-auto custom-scrollbar" id="admin-bookings-list">
-<p class="text-on-surface-variant font-body-md text-body-md">Loading bookings...</p>
-</div>
-</div>
-<!-- Add Seat Units Card -->
-<div class="glass-card rounded-xl p-6 border border-outline-variant">
-<h4 class="font-headline-md text-headline-md text-on-surface mb-2">Add Seat Unit</h4>
-<p class="font-body-md text-body-md text-on-surface-variant mb-4">Add a desk or cabin to an existing space.</p>
-<div class="space-y-3">
-<select class="w-full border border-outline-variant rounded-lg px-3 py-2 bg-surface text-body-md" id="seat-space-select">
-<option value="">Select a space...</option>
-</select>
-<input class="w-full border border-outline-variant rounded-lg px-3 py-2 bg-surface text-body-md" id="seat-label-input" placeholder="Label (e.g. Desk-9)" type="text"/>
-<select class="w-full border border-outline-variant rounded-lg px-3 py-2 bg-surface text-body-md" id="seat-type-select">
-<option value="DESK">Desk</option>
-<option value="CABIN">Cabin</option>
-</select>
-<button class="w-full py-2.5 bg-on-surface text-surface rounded-lg font-label-md hover:bg-opacity-90 transition-all" id="add-seat-btn">Add Seat Unit</button>
-<p class="text-label-sm text-on-surface-variant hidden" id="add-seat-msg"></p>
-</div>
-</div>
-</aside>
-</div>
-</main>
+
 <!-- Add Space Modal -->
 <div class="fixed inset-0 bg-black/40 flex items-center justify-center z-[100] hidden backdrop-blur-sm" id="add-space-modal">
-<div class="bg-surface p-8 rounded-2xl w-full max-w-lg shadow-2xl border border-outline-variant">
-<h2 class="font-headline-md text-headline-md text-on-surface mb-6">Add New Space</h2>
+<div class="bg-white p-8 rounded-2xl w-full max-w-lg shadow-2xl border border-gray-100">
+<h2 class="text-xl font-bold mb-6">Add New Space</h2>
 <div class="space-y-4">
-<input class="w-full border border-outline-variant rounded-lg px-3 py-2 bg-surface text-body-md" id="new-space-name" placeholder="Space name (e.g. Innov8 Hub - Andheri)" type="text"/>
-<input class="w-full border border-outline-variant rounded-lg px-3 py-2 bg-surface text-body-md" id="new-space-location" placeholder="Location" type="text"/>
-<select class="w-full border border-outline-variant rounded-lg px-3 py-2 bg-surface text-body-md" id="new-space-type">
+<input class="w-full border border-gray-200 rounded-lg px-3 py-2.5 bg-white text-sm" id="new-space-name" placeholder="Space name (e.g. Innov8 Hub - Andheri)" type="text"/>
+<input class="w-full border border-gray-200 rounded-lg px-3 py-2.5 bg-white text-sm" id="new-space-location" placeholder="Location" type="text"/>
+<select class="w-full border border-gray-200 rounded-lg px-3 py-2.5 bg-white text-sm" id="new-space-type">
 <option value="DESK">Desk</option>
 <option value="CABIN">Cabin</option>
 </select>
-<textarea class="w-full border border-outline-variant rounded-lg px-3 py-2 bg-surface text-body-md" id="new-space-description" placeholder="Description" rows="2"></textarea>
+<textarea class="w-full border border-gray-200 rounded-lg px-3 py-2.5 bg-white text-sm" id="new-space-description" placeholder="Description" rows="2"></textarea>
 <div class="grid grid-cols-2 gap-4">
-<input class="w-full border border-outline-variant rounded-lg px-3 py-2 bg-surface text-body-md" id="new-space-price-day" placeholder="Price per day" type="number"/>
-<input class="w-full border border-outline-variant rounded-lg px-3 py-2 bg-surface text-body-md" id="new-space-price-month" placeholder="Price per month" type="number"/>
+<input class="w-full border border-gray-200 rounded-lg px-3 py-2.5 bg-white text-sm" id="new-space-price-day" placeholder="Price per day" type="number"/>
+<input class="w-full border border-gray-200 rounded-lg px-3 py-2.5 bg-white text-sm" id="new-space-price-month" placeholder="Price per month" type="number"/>
 </div>
-<p class="hidden text-error text-label-sm" id="add-space-error"></p>
+<p class="hidden text-red-600 text-sm" id="add-space-error"></p>
 </div>
 <div class="flex gap-4 mt-6">
-<button class="flex-1 py-2.5 border border-outline-variant rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container transition-all" id="add-space-cancel">Cancel</button>
-<button class="flex-1 py-2.5 bg-primary text-on-primary rounded-lg font-label-md text-label-md hover:opacity-90 transition-all" id="add-space-submit">Create Space</button>
+<button class="flex-1 py-2.5 border border-gray-200 rounded-lg font-medium text-gray-600 hover:bg-gray-50 transition-all" id="add-space-cancel">Cancel</button>
+<button class="flex-1 py-2.5 bg-[#2D3FE2] text-white rounded-lg font-medium hover:opacity-90 transition-all" id="add-space-submit">Create Space</button>
 </div>
 </div>
 </div>
+
 <!-- Delete confirm modal -->
 <div class="fixed inset-0 bg-black/40 flex items-center justify-center z-[100] hidden backdrop-blur-sm" id="delete-space-modal">
-<div class="bg-surface p-8 rounded-2xl w-full max-w-md shadow-2xl border border-outline-variant">
-<h2 class="font-headline-md text-headline-md text-on-surface mb-2">Delete Space?</h2>
-<p class="font-body-md text-body-md text-on-surface-variant mb-6">This will permanently remove the space and its seat units.</p>
+<div class="bg-white p-8 rounded-2xl w-full max-w-md shadow-2xl border border-gray-100">
+<h2 class="text-xl font-bold mb-2">Delete Space?</h2>
+<p class="text-gray-500 text-sm mb-6">This will permanently remove the space and its seat units.</p>
 <div class="flex gap-4">
-<button class="flex-1 py-2.5 border border-outline-variant rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container transition-all" id="delete-space-cancel">Cancel</button>
-<button class="flex-1 py-2.5 bg-error text-on-error rounded-lg font-label-md text-label-md hover:opacity-90 transition-all" id="delete-space-confirm">Delete</button>
+<button class="flex-1 py-2.5 border border-gray-200 rounded-lg font-medium text-gray-600 hover:bg-gray-50 transition-all" id="delete-space-cancel">Cancel</button>
+<button class="flex-1 py-2.5 bg-red-600 text-white rounded-lg font-medium hover:opacity-90 transition-all" id="delete-space-confirm">Delete</button>
 </div>
 </div>
 </div>
-<!-- Success Feedback Notification -->
-<div class="fixed bottom-8 right-8 translate-y-20 opacity-0 transition-all duration-300 pointer-events-none" id="toast">
-<div class="bg-inverse-surface text-inverse-on-surface px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3">
-<span class="material-symbols-outlined text-secondary-fixed" data-icon="check_circle">check_circle</span>
-<span class="font-body-md text-body-md" id="toast-text">Action successful.</span>
+
+<!-- Toast -->
+<div class="fixed bottom-8 right-8 translate-y-20 opacity-0 transition-all duration-300 pointer-events-none z-[200]" id="toast">
+<div class="bg-[#1B1C29] text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3">
+<span class="material-symbols-outlined text-green-400">check_circle</span>
+<span class="text-sm" id="toast-text">Action successful.</span>
 </div>
 </div>
+
 <script src="api.js"></script>
 <script>
-        Auth.requireAdmin();
+    Auth.requireAdmin();
 
-        let allSpaces = [];
-        let pendingDeleteId = null;
+    let allSpaces = [];
+    let allBookings = [];
+    let pendingDeleteId = null;
 
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-text').textContent = message;
-            toast.classList.remove('translate-y-20', 'opacity-0');
-            toast.classList.add('translate-y-0', 'opacity-100');
-            setTimeout(() => {
-                toast.classList.add('translate-y-20', 'opacity-0');
-                toast.classList.remove('translate-y-0', 'opacity-100');
-            }, 3000);
+    // ---------- Tab switching ----------
+    function switchTab(tabName) {
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        document.getElementById('tab-' + tabName).classList.add('active');
+
+        document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+        document.querySelector(`.sidebar-link[data-tab="${tabName}"]`).classList.add('active');
+    }
+
+    document.querySelectorAll('.sidebar-link').forEach(link => {
+        link.addEventListener('click', () => switchTab(link.dataset.tab));
+    });
+
+    // ---------- Toast / Modal helpers ----------
+    function showToast(message) {
+        const toast = document.getElementById('toast');
+        document.getElementById('toast-text').textContent = message;
+        toast.classList.remove('translate-y-20', 'opacity-0');
+        toast.classList.add('translate-y-0', 'opacity-100');
+        setTimeout(() => {
+            toast.classList.add('translate-y-20', 'opacity-0');
+            toast.classList.remove('translate-y-0', 'opacity-100');
+        }, 3000);
+    }
+    function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+    // ---------- Rendering ----------
+    function renderSpacesTable(spaces) {
+        const tbody = document.getElementById('spaces-tbody');
+        if (spaces.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6" class="px-6 py-10 text-center text-gray-500">No spaces yet. Click "Add New Space" to create one.</td></tr>`;
+            return;
         }
+        tbody.innerHTML = spaces.map(s => `
+            <tr class="hover:bg-gray-50 transition-colors group">
+                <td class="px-6 py-4 font-medium">${s.name}</td>
+                <td class="px-6 py-4 text-gray-500">${s.location}</td>
+                <td class="px-6 py-4"><span class="px-2 py-1 bg-green-50 text-green-700 text-xs font-medium rounded border border-green-200">${s.type}</span></td>
+                <td class="px-6 py-4 text-gray-500">$${s.pricePerDay}</td>
+                <td class="px-6 py-4 text-gray-500">${s.totalSeatUnits}</td>
+                <td class="px-6 py-4 text-right">
+                    <button class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all delete-space-btn" data-space-id="${s.id}">
+                        <span class="material-symbols-outlined text-[20px]">delete</span>
+                    </button>
+                </td>
+            </tr>
+        `).join('');
 
-        function openModal(id) {
-            document.getElementById(id).classList.remove('hidden');
-        }
-        function closeModal(id) {
-            document.getElementById(id).classList.add('hidden');
-        }
-
-        function renderSpacesTable(spaces) {
-            const tbody = document.getElementById('spaces-tbody');
-            if (spaces.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="px-6 py-10 text-center text-on-surface-variant">No spaces yet. Click "Add New Space" to create one.</td></tr>`;
-                return;
-            }
-            tbody.innerHTML = spaces.map(s => `
-                <tr class="hover:bg-surface-container-lowest transition-colors group">
-                    <td class="px-6 py-4">
-                        <span class="font-body-lg text-body-lg font-medium text-on-surface">${s.name}</span>
-                    </td>
-                    <td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">${s.location}</td>
-                    <td class="px-6 py-4">
-                        <span class="px-2 py-1 bg-secondary-container/10 text-secondary text-label-sm font-label-sm rounded border border-secondary/20">${s.type}</span>
-                    </td>
-                    <td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">$${s.pricePerDay}</td>
-                    <td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">${s.totalSeatUnits}</td>
-                    <td class="px-6 py-4 text-right">
-                        <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button class="p-2 text-on-surface-variant hover:text-error hover:bg-error/5 rounded-lg transition-all delete-space-btn" data-space-id="${s.id}">
-                                <span class="material-symbols-outlined text-[20px]">delete</span>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            `).join('');
-
-            document.querySelectorAll('.delete-space-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    pendingDeleteId = btn.dataset.spaceId;
-                    openModal('delete-space-modal');
-                });
+        document.querySelectorAll('.delete-space-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                pendingDeleteId = btn.dataset.spaceId;
+                openModal('delete-space-modal');
             });
-        }
-
-        function populateSeatSpaceSelect(spaces) {
-            const select = document.getElementById('seat-space-select');
-            select.innerHTML = '<option value="">Select a space...</option>' +
-                spaces.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
-        }
-
-        function applySpaceFilter() {
-            const query = document.getElementById('spaces-filter').value.trim().toLowerCase();
-            const filtered = allSpaces.filter(s =>
-                s.name.toLowerCase().includes(query) || s.location.toLowerCase().includes(query)
-            );
-            renderSpacesTable(filtered);
-        }
-
-        async function loadSpaces() {
-            try {
-                allSpaces = await Api.getSpaces();
-                renderSpacesTable(allSpaces);
-                populateSeatSpaceSelect(allSpaces);
-                document.getElementById('stat-total-spaces').textContent = allSpaces.length;
-                document.getElementById('stat-total-seats').textContent =
-                    allSpaces.reduce((sum, s) => sum + s.totalSeatUnits, 0);
-            } catch (err) {
-                document.getElementById('spaces-tbody').innerHTML =
-                    `<tr><td colspan="6" class="px-6 py-10 text-center text-error">Could not load spaces: ${err.message}</td></tr>`;
-            }
-        }
-
-        function renderAdminBookings(bookings) {
-            const list = document.getElementById('admin-bookings-list');
-            document.getElementById('stat-total-bookings').textContent = bookings.length;
-
-            if (bookings.length === 0) {
-                list.innerHTML = '<p class="text-on-surface-variant font-body-md text-body-md">No bookings yet.</p>';
-                return;
-            }
-
-            const statusColor = {
-                CONFIRMED: 'bg-primary',
-                CANCELLED: 'bg-error',
-                PENDING: 'bg-tertiary',
-            };
-
-            list.innerHTML = bookings.map(b => `
-                <div class="flex gap-4">
-                    <div class="mt-1 w-2 h-2 rounded-full ${statusColor[b.status] || 'bg-primary'} flex-shrink-0"></div>
-                    <div>
-                        <p class="font-body-md text-body-md text-on-surface"><strong>${b.seatUnitLabel}</strong> at ${b.spaceName} booked by ${b.userEmail}</p>
-                        <span class="font-label-sm text-label-sm text-on-surface-variant opacity-60">${b.startDate} to ${b.endDate} • ${b.status} • $${b.totalPrice}</span>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        async function loadAdminBookings() {
-            try {
-                const bookings = await Api.getAllBookings();
-                renderAdminBookings(bookings);
-            } catch (err) {
-                document.getElementById('admin-bookings-list').innerHTML =
-                    `<p class="text-error font-body-md text-body-md">Could not load bookings: ${err.message}</p>`;
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('sign-out-btn').addEventListener('click', () => Auth.logout());
-
-            document.getElementById('spaces-filter').addEventListener('keyup', applySpaceFilter);
-
-            // ---- Add Space modal ----
-            document.getElementById('add-space-btn').addEventListener('click', () => openModal('add-space-modal'));
-            document.getElementById('add-space-cancel').addEventListener('click', () => closeModal('add-space-modal'));
-
-            document.getElementById('add-space-submit').addEventListener('click', async () => {
-                const errorEl = document.getElementById('add-space-error');
-                errorEl.classList.add('hidden');
-
-                const name = document.getElementById('new-space-name').value.trim();
-                const location = document.getElementById('new-space-location').value.trim();
-                const type = document.getElementById('new-space-type').value;
-                const description = document.getElementById('new-space-description').value.trim();
-                const pricePerDay = document.getElementById('new-space-price-day').value;
-                const pricePerMonth = document.getElementById('new-space-price-month').value;
-
-                if (!name || !location || !pricePerDay || !pricePerMonth) {
-                    errorEl.textContent = 'Please fill in name, location, and both prices.';
-                    errorEl.classList.remove('hidden');
-                    return;
-                }
-
-                try {
-                    await Api.createSpace({ name, location, type, description, pricePerDay, pricePerMonth });
-                    closeModal('add-space-modal');
-                    // reset form
-                    document.getElementById('new-space-name').value = '';
-                    document.getElementById('new-space-location').value = '';
-                    document.getElementById('new-space-description').value = '';
-                    document.getElementById('new-space-price-day').value = '';
-                    document.getElementById('new-space-price-month').value = '';
-                    showToast('Space created successfully.');
-                    await loadSpaces();
-                } catch (err) {
-                    errorEl.textContent = err.message;
-                    errorEl.classList.remove('hidden');
-                }
-            });
-
-            // ---- Delete Space modal ----
-            document.getElementById('delete-space-cancel').addEventListener('click', () => {
-                pendingDeleteId = null;
-                closeModal('delete-space-modal');
-            });
-
-            document.getElementById('delete-space-confirm').addEventListener('click', async () => {
-                if (!pendingDeleteId) return;
-                try {
-                    await Api.deleteSpace(pendingDeleteId);
-                    closeModal('delete-space-modal');
-                    showToast('Space deleted.');
-                    await loadSpaces();
-                } catch (err) {
-                    alert('Could not delete space: ' + err.message);
-                } finally {
-                    pendingDeleteId = null;
-                }
-            });
-
-            // ---- Add Seat Unit ----
-            document.getElementById('add-seat-btn').addEventListener('click', async () => {
-                const msgEl = document.getElementById('add-seat-msg');
-                const spaceId = document.getElementById('seat-space-select').value;
-                const label = document.getElementById('seat-label-input').value.trim();
-                const type = document.getElementById('seat-type-select').value;
-
-                msgEl.classList.remove('hidden', 'text-error');
-                if (!spaceId || !label) {
-                    msgEl.textContent = 'Select a space and enter a label.';
-                    msgEl.classList.add('text-error');
-                    return;
-                }
-
-                try {
-                    await Api.addSeatUnit(spaceId, { label, type });
-                    document.getElementById('seat-label-input').value = '';
-                    msgEl.textContent = `Added ${label}.`;
-                    showToast(`${label} added.`);
-                    await loadSpaces();
-                } catch (err) {
-                    msgEl.textContent = err.message;
-                    msgEl.classList.add('text-error');
-                }
-            });
-
-            loadSpaces();
-            loadAdminBookings();
         });
-    </script>
+    }
+
+    function renderDashboardRecentSpaces(spaces) {
+        const el = document.getElementById('dashboard-recent-spaces');
+        if (spaces.length === 0) {
+            el.innerHTML = '<p class="text-gray-500 text-sm py-4">No spaces yet.</p>';
+            return;
+        }
+        el.innerHTML = spaces.slice(0, 5).map(s => `
+            <div class="flex justify-between items-center py-3">
+                <div>
+                    <p class="font-medium text-sm">${s.name}</p>
+                    <p class="text-gray-500 text-xs">${s.location}</p>
+                </div>
+                <span class="text-sm text-gray-500">${s.totalSeatUnits} seats</span>
+            </div>
+        `).join('');
+    }
+
+    function renderDashboardRecentBookings(bookings) {
+        const el = document.getElementById('dashboard-recent-bookings');
+        if (bookings.length === 0) {
+            el.innerHTML = '<p class="text-gray-500 text-sm">No bookings yet.</p>';
+            return;
+        }
+        const statusColor = { CONFIRMED: 'bg-[#2D3FE2]', CANCELLED: 'bg-red-500', PENDING: 'bg-amber-500' };
+        el.innerHTML = bookings.slice(0, 6).map(b => `
+            <div class="flex gap-3">
+                <div class="mt-1.5 w-2 h-2 rounded-full ${statusColor[b.status] || 'bg-[#2D3FE2]'} flex-shrink-0"></div>
+                <div>
+                    <p class="text-sm"><strong>${b.seatUnitLabel}</strong> at ${b.spaceName}</p>
+                    <p class="text-xs text-gray-400">${b.userEmail} • ${b.status}</p>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function populateSeatSpaceSelect(spaces) {
+        const select = document.getElementById('seat-space-select');
+        select.innerHTML = '<option value="">Select a space...</option>' +
+            spaces.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+    }
+
+    async function renderSeatsBySpace(spaces) {
+        const container = document.getElementById('seats-by-space');
+        if (spaces.length === 0) {
+            container.innerHTML = '<p class="text-gray-500 text-sm">No spaces yet.</p>';
+            return;
+        }
+        // We already have totalSeatUnits per space from the list endpoint; show a simple summary per space
+        container.innerHTML = spaces.map(s => `
+            <div class="p-4 border border-gray-100 rounded-lg">
+                <div class="flex justify-between items-center">
+                    <p class="font-medium text-sm">${s.name}</p>
+                    <span class="text-xs text-gray-500">${s.totalSeatUnits} seat unit${s.totalSeatUnits === 1 ? '' : 's'}</span>
+                </div>
+                <p class="text-xs text-gray-400 mt-1">${s.location}</p>
+            </div>
+        `).join('');
+    }
+
+    function applySpaceFilter() {
+        const query = document.getElementById('spaces-filter').value.trim().toLowerCase();
+        const filtered = allSpaces.filter(s =>
+            s.name.toLowerCase().includes(query) || s.location.toLowerCase().includes(query)
+        );
+        renderSpacesTable(filtered);
+    }
+
+    async function loadSpaces() {
+        try {
+            allSpaces = await Api.getSpaces();
+            renderSpacesTable(allSpaces);
+            renderDashboardRecentSpaces(allSpaces);
+            populateSeatSpaceSelect(allSpaces);
+            renderSeatsBySpace(allSpaces);
+            document.getElementById('stat-total-spaces').textContent = allSpaces.length;
+            document.getElementById('stat-total-seats').textContent =
+                allSpaces.reduce((sum, s) => sum + s.totalSeatUnits, 0);
+        } catch (err) {
+            document.getElementById('spaces-tbody').innerHTML =
+                `<tr><td colspan="6" class="px-6 py-10 text-center text-red-600">Could not load spaces: ${err.message}</td></tr>`;
+        }
+    }
+
+    function renderAllBookingsTable(bookings) {
+        const tbody = document.getElementById('all-bookings-tbody');
+        document.getElementById('stat-total-bookings').textContent = bookings.length;
+
+        if (bookings.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="7" class="px-6 py-10 text-center text-gray-500">No bookings yet.</td></tr>`;
+            return;
+        }
+
+        const statusBadge = (status) => {
+            if (status === 'CONFIRMED') return `<span class="px-2 py-1 bg-green-50 text-green-700 text-xs font-medium rounded border border-green-200">Confirmed</span>`;
+            if (status === 'CANCELLED') return `<span class="px-2 py-1 bg-red-50 text-red-700 text-xs font-medium rounded border border-red-200">Cancelled</span>`;
+            return `<span class="px-2 py-1 bg-amber-50 text-amber-700 text-xs font-medium rounded border border-amber-200">Pending</span>`;
+        };
+
+        tbody.innerHTML = bookings.map(b => `
+            <tr class="hover:bg-gray-50 transition-colors">
+                <td class="px-6 py-4 text-gray-600">${b.userEmail}</td>
+                <td class="px-6 py-4 font-medium">${b.spaceName}</td>
+                <td class="px-6 py-4 text-gray-500">${b.seatUnitLabel}</td>
+                <td class="px-6 py-4 text-gray-500">${b.startDate} → ${b.endDate}</td>
+                <td class="px-6 py-4 text-gray-500">${b.bookingType}</td>
+                <td class="px-6 py-4 text-gray-500">$${b.totalPrice}</td>
+                <td class="px-6 py-4">${statusBadge(b.status)}</td>
+            </tr>
+        `).join('');
+    }
+
+    async function loadAllBookings() {
+        try {
+            allBookings = await Api.getAllBookings();
+            renderAllBookingsTable(allBookings);
+            renderDashboardRecentBookings(allBookings);
+        } catch (err) {
+            document.getElementById('all-bookings-tbody').innerHTML =
+                `<tr><td colspan="7" class="px-6 py-10 text-center text-red-600">Could not load bookings: ${err.message}</td></tr>`;
+        }
+    }
+
+    function loadSettings() {
+        const user = Auth.getUser();
+        if (!user) return;
+        document.getElementById('settings-name').textContent = user.name;
+        document.getElementById('settings-email').textContent = user.email;
+        document.getElementById('settings-role').textContent = user.role;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('sign-out-btn').addEventListener('click', () => Auth.logout());
+        document.getElementById('spaces-filter').addEventListener('keyup', applySpaceFilter);
+
+        // Add Space modal — opened from either button
+        ['add-space-btn-1', 'add-space-btn-2'].forEach(id => {
+            document.getElementById(id).addEventListener('click', () => openModal('add-space-modal'));
+        });
+        document.getElementById('add-space-cancel').addEventListener('click', () => closeModal('add-space-modal'));
+
+        document.getElementById('add-space-submit').addEventListener('click', async () => {
+            const errorEl = document.getElementById('add-space-error');
+            errorEl.classList.add('hidden');
+
+            const name = document.getElementById('new-space-name').value.trim();
+            const location = document.getElementById('new-space-location').value.trim();
+            const type = document.getElementById('new-space-type').value;
+            const description = document.getElementById('new-space-description').value.trim();
+            const pricePerDay = document.getElementById('new-space-price-day').value;
+            const pricePerMonth = document.getElementById('new-space-price-month').value;
+
+            if (!name || !location || !pricePerDay || !pricePerMonth) {
+                errorEl.textContent = 'Please fill in name, location, and both prices.';
+                errorEl.classList.remove('hidden');
+                return;
+            }
+
+            try {
+                await Api.createSpace({ name, location, type, description, pricePerDay, pricePerMonth });
+                closeModal('add-space-modal');
+                document.getElementById('new-space-name').value = '';
+                document.getElementById('new-space-location').value = '';
+                document.getElementById('new-space-description').value = '';
+                document.getElementById('new-space-price-day').value = '';
+                document.getElementById('new-space-price-month').value = '';
+                showToast('Space created successfully.');
+                await loadSpaces();
+            } catch (err) {
+                errorEl.textContent = err.message;
+                errorEl.classList.remove('hidden');
+            }
+        });
+
+        document.getElementById('delete-space-cancel').addEventListener('click', () => {
+            pendingDeleteId = null;
+            closeModal('delete-space-modal');
+        });
+
+        document.getElementById('delete-space-confirm').addEventListener('click', async () => {
+            if (!pendingDeleteId) return;
+            try {
+                await Api.deleteSpace(pendingDeleteId);
+                closeModal('delete-space-modal');
+                showToast('Space deleted.');
+                await loadSpaces();
+            } catch (err) {
+                alert('Could not delete space: ' + err.message);
+            } finally {
+                pendingDeleteId = null;
+            }
+        });
+
+        document.getElementById('add-seat-btn').addEventListener('click', async () => {
+            const msgEl = document.getElementById('add-seat-msg');
+            const spaceId = document.getElementById('seat-space-select').value;
+            const label = document.getElementById('seat-label-input').value.trim();
+            const type = document.getElementById('seat-type-select').value;
+
+            msgEl.classList.remove('hidden', 'text-red-600');
+            if (!spaceId || !label) {
+                msgEl.textContent = 'Select a space and enter a label.';
+                msgEl.classList.add('text-red-600');
+                return;
+            }
+
+            try {
+                await Api.addSeatUnit(spaceId, { label, type });
+                document.getElementById('seat-label-input').value = '';
+                msgEl.textContent = `Added ${label}.`;
+                showToast(`${label} added.`);
+                await loadSpaces();
+            } catch (err) {
+                msgEl.textContent = err.message;
+                msgEl.classList.add('text-red-600');
+            }
+        });
+
+        loadSettings();
+        loadSpaces();
+        loadAllBookings();
+    });
+</script>
 </body></html>
