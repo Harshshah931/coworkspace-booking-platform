@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CoWorkSpace | Space Details</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#850025",
+                        "on-tertiary-fixed-variant": "#92002a",
+                        "surface-dim": "#d3daea",
+                        "error-container": "#ffdad6",
+                        "on-background": "#151c27",
+                        "on-primary-container": "#c6caff",
+                        "on-surface-variant": "#454655",
+                        "on-secondary-fixed-variant": "#005137",
+                        "on-surface": "#151c27",
+                        "on-secondary": "#ffffff",
+                        "outline": "#757687",
+                        "secondary-container": "#64f9bc",
+                        "inverse-primary": "#bdc2ff",
+                        "surface-container-low": "#f0f3ff",
+                        "on-tertiary-fixed": "#40000d",
+                        "secondary": "#006c4b",
+                        "inverse-on-surface": "#ebf1ff",
+                        "primary-fixed": "#dfe0ff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-highest": "#dce2f3",
+                        "on-error": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed": "#68fcbf",
+                        "on-primary-fixed": "#000865",
+                        "on-secondary-container": "#00714e",
+                        "surface-container": "#e7eefe",
+                        "on-secondary-fixed": "#002114",
+                        "surface-variant": "#dce2f3",
+                        "on-tertiary": "#ffffff",
+                        "surface": "#f9f9ff",
+                        "error": "#ba1a1a",
+                        "surface-tint": "#3648e9",
+                        "secondary-fixed-dim": "#45dfa4",
+                        "tertiary-fixed-dim": "#ffb2b7",
+                        "background": "#f9f9ff",
+                        "primary-fixed-dim": "#bdc2ff",
+                        "inverse-surface": "#2a313d",
+                        "on-primary-fixed-variant": "#1127d2",
+                        "on-tertiary-container": "#ffbdc0",
+                        "surface-bright": "#f9f9ff",
+                        "tertiary-container": "#b10035",
+                        "tertiary-fixed": "#ffdadb",
+                        "on-primary": "#ffffff",
+                        "surface-container-high": "#e2e8f8",
+                        "primary-container": "#2d3fe2",
+                        "outline-variant": "#c5c5d8",
+                        "primary": "#001bcc"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-desktop": "32px",
+                        "container-max": "1280px",
+                        "gutter": "24px",
+                        "margin-mobile": "16px",
+                        "sidebar-width": "240px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "display": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "600"}],
+                        "headline-lg": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "display": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { background-color: #f9f9ff; color: #151c27; -webkit-font-smoothing: antialiased; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; display: inline-block; vertical-align: middle; }
+        .seat-map-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 8px; }
+        .shadow-soft { box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05); }
+        .shadow-modal { box-shadow: 0px 12px 32px rgba(0, 0, 0, 0.1); }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="font-body-md text-body-md overflow-x-hidden">
+<!-- TopNavBar (The Anchor) -->
+<header class="bg-surface w-full h-16 border-b border-outline-variant sticky top-0 z-50">
+<div class="flex justify-between items-center px-margin-desktop max-w-container-max mx-auto h-full">
+<div class="flex items-center gap-8">
+<span class="font-display text-display text-primary">CoWorkSpace</span>
+<nav class="hidden md:flex gap-6 items-center">
+<a class="text-primary border-b-2 border-primary font-bold pb-1 font-body-md text-body-md cursor-pointer transition-opacity active:opacity-70" href="#">Browse</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md cursor-pointer active:opacity-70" href="#">Memberships</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md cursor-pointer active:opacity-70" href="#">Support</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-3 mr-4">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" data-icon="help">help</span>
+</div>
+<a class="bg-primary text-on-primary px-4 py-2 rounded-lg font-label-md text-label-md hover:opacity-90 transition-opacity" href="my-bookings.html">My Bookings</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="browse.html" title="Back to browse">
+<span class="material-symbols-outlined">arrow_back</span>
+</a>
+<button class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary" id="logout-btn" title="Log out">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+</button>
+</div>
+</div>
+</header>
+<main class="max-w-container-max mx-auto px-margin-desktop py-8">
+<div class="flex flex-col lg:flex-row gap-gutter">
+<!-- Left Content (75%) -->
+<div class="w-full lg:w-3/4 flex flex-col gap-8">
+<!-- Header & Date Picker -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface" id="space-name">Loading space...</h1>
+<p class="text-on-surface-variant font-body-md text-body-md mt-1 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="location_on">location_on</span>
+<span id="space-location"></span>
+</p>
+</div>
+<div class="bg-surface border border-outline-variant rounded-xl p-1 flex items-center shadow-soft gap-2">
+<div class="px-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="calendar_today">calendar_today</span>
+<input class="border border-outline-variant rounded-lg px-2 py-1.5 text-label-md font-label-md" id="start-date" type="date"/>
+<span class="text-on-surface-variant">to</span>
+<input class="border border-outline-variant rounded-lg px-2 py-1.5 text-label-md font-label-md" id="end-date" type="date"/>
+</div>
+<button class="px-4 py-2 text-primary font-label-md text-label-md hover:bg-primary-container/10 rounded-lg transition-all" id="check-availability-btn">Check Availability</button>
+</div>
+</div>
+<!-- Seat Map Canvas -->
+<section class="bg-white border border-outline-variant rounded-xl p-8 overflow-hidden relative shadow-soft">
+<div class="flex justify-between items-center mb-8">
+<h2 class="font-headline-md text-headline-md">Floor Plan - West Wing</h2>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 bg-secondary-container border border-secondary rounded-sm"></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Available</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 bg-error-container border border-error rounded-sm"></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Booked</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 bg-primary-container border border-primary rounded-sm"></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Your Selection</span>
+</div>
+</div>
+</div>
+<!-- Interactive Map Component (rendered by JS from real availability data) -->
+<div class="seat-map-grid overflow-x-auto scrollbar-hide p-4 bg-surface-container-lowest rounded-lg border border-dashed border-outline-variant" id="seat-map-grid">
+<p class="col-span-12 text-center text-on-surface-variant py-8" id="seat-map-status">Pick your dates and check availability to see the seat map.</p>
+</div>
+<!-- Visual Decorations -->
+<div class="mt-8 flex gap-8 items-center text-on-surface-variant opacity-60">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="coffee">coffee</span>
+<span class="font-label-sm text-label-sm">Kitchen Area</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="print">print</span>
+<span class="font-label-sm text-label-sm">Printing Station</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="wifi">wifi</span>
+<span class="font-label-sm text-label-sm">High-Speed Zone</span>
+</div>
+</div>
+</section>
+<!-- Amenities / Details -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="bg-white border border-outline-variant p-6 rounded-xl shadow-soft">
+<span class="material-symbols-outlined text-primary mb-4" data-icon="shield_with_heart">shield_with_heart</span>
+<h3 class="font-headline-md text-headline-md text-[16px] mb-2">Member Perks</h3>
+<p class="text-on-surface-variant font-body-md text-body-md">Unlimited premium coffee, high-speed fiber internet, and ergonomic chairs for all bookings.</p>
+</div>
+<div class="bg-white border border-outline-variant p-6 rounded-xl shadow-soft">
+<span class="material-symbols-outlined text-primary mb-4" data-icon="schedule">schedule</span>
+<h3 class="font-headline-md text-headline-md text-[16px] mb-2">Flexible Access</h3>
+<p class="text-on-surface-variant font-body-md text-body-md">24/7 keycard access for weekly members. Daily bookings valid from 8 AM to 8 PM.</p>
+</div>
+<div class="bg-white border border-outline-variant p-6 rounded-xl shadow-soft">
+<span class="material-symbols-outlined text-primary mb-4" data-icon="group">group</span>
+<h3 class="font-headline-md text-headline-md text-[16px] mb-2">Community</h3>
+<p class="text-on-surface-variant font-body-md text-body-md">Join weekly networking events and industry-specific workshops held in our lounge.</p>
+</div>
+</div>
+</div>
+<!-- Right Panel: Booking Summary (25%) -->
+<div class="w-full lg:w-1/4">
+<aside class="sticky top-24 flex flex-col gap-6">
+<div class="bg-white border border-outline-variant rounded-xl p-6 shadow-soft">
+<h2 class="font-headline-md text-headline-md mb-6 pb-4 border-b border-outline-variant">Booking Summary</h2>
+<div class="space-y-4" id="booking-summary-body">
+<p class="text-on-surface-variant font-body-md text-body-md">Select a seat on the map to begin.</p>
+</div>
+<div class="hidden" id="booking-summary-totals">
+<div class="border-t border-dashed border-outline-variant pt-4 mt-4 space-y-2">
+<div class="flex justify-between text-on-surface-variant font-label-md text-label-md">
+<span>Booking Type</span>
+<span id="summary-type">Daily</span>
+</div>
+<div class="flex justify-between text-on-surface font-bold text-body-lg pt-2 border-t border-outline-variant">
+<span>Total</span>
+<span id="summary-total">$0.00</span>
+</div>
+</div>
+</div>
+<div class="hidden" id="booking-type-toggle">
+<div class="flex gap-2 mt-4">
+<button class="flex-1 py-2 rounded-lg border border-primary text-primary font-label-md text-label-md booking-type-btn" data-type="DAILY">Daily</button>
+<button class="flex-1 py-2 rounded-lg border border-outline-variant text-on-surface-variant font-label-md text-label-md booking-type-btn" data-type="MONTHLY">Monthly</button>
+</div>
+</div>
+<button class="w-full mt-8 bg-primary text-on-primary py-4 rounded-xl font-headline-md text-[16px] hover:opacity-95 transition-all shadow-lg shadow-primary/20 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed" disabled="" id="confirm-booking-btn">
+                            Confirm Booking
+                        </button>
+<p class="text-center text-on-surface-variant font-label-sm text-label-sm mt-4" id="booking-msg">
+                            No charge until confirmation
+                        </p>
+</div>
+<!-- Secondary Info Card -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-4 flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary" data-icon="info">info</span>
+<div>
+<p class="font-label-md text-label-md text-on-surface mb-1">Cancellation Policy</p>
+<p class="text-on-surface-variant font-label-sm text-label-sm">Full refund if cancelled at least 24 hours before the booking starts.</p>
+</div>
+</div>
+</aside>
+</div>
+</div>
+</main>
+<!-- Visual Footer Decoration -->
+<footer class="mt-16 border-t border-outline-variant bg-surface py-12">
+<div class="max-w-container-max mx-auto px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-8">
+<div class="flex flex-col items-center md:items-start">
+<span class="font-display text-headline-md text-primary mb-2">CoWorkSpace</span>
+<p class="text-on-surface-variant font-body-md text-body-md">Precision workspaces for modern professionals.</p>
+</div>
+<div class="flex gap-8">
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="#">Privacy</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="#">Terms</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="#">Help Center</a>
+</div>
+</div>
+</footer>
+<script src="api.js"></script>
+<script>
+        Auth.requireLogin();
+
+        const params = new URLSearchParams(window.location.search);
+        const spaceId = params.get('spaceId');
+
+        if (!spaceId) {
+            window.location.href = 'browse.html';
+        }
+
+        let currentSpace = null;
+        let selectedSeatUnit = null; // { id, label, type }
+        let bookingType = 'DAILY';
+
+        function todayStr(offsetDays = 0) {
+            const d = new Date();
+            d.setDate(d.getDate() + offsetDays);
+            return d.toISOString().split('T')[0];
+        }
+
+        function renderSeatMap(seatUnits) {
+            const grid = document.getElementById('seat-map-grid');
+            grid.innerHTML = '';
+
+            if (seatUnits.length === 0) {
+                grid.innerHTML = '<p class="col-span-12 text-center text-on-surface-variant py-8">No seat units configured for this space yet.</p>';
+                return;
+            }
+
+            seatUnits.forEach(su => {
+                const div = document.createElement('div');
+                const isCabin = su.type === 'CABIN';
+
+                if (!su.available) {
+                    div.className = 'w-full h-12 bg-surface-container-highest border border-outline-variant text-outline flex items-center justify-center rounded-md cursor-not-allowed' + (isCabin ? ' col-span-2' : '');
+                    div.innerHTML = `<span class="material-symbols-outlined text-[18px]">block</span>`;
+                } else {
+                    div.className = 'w-full h-12 bg-white border border-secondary text-secondary flex items-center justify-center rounded-md cursor-pointer hover:bg-secondary-container/20 transition-all' + (isCabin ? ' col-span-2' : '');
+                    div.innerHTML = isCabin
+                        ? `<span class="material-symbols-outlined text-[18px] mr-1">meeting_room</span><span class="text-[10px] font-bold">${su.label}</span>`
+                        : `<span class="material-symbols-outlined text-[18px]">desk</span>`;
+                    div.title = su.label;
+                    div.dataset.seatId = su.id;
+                    div.dataset.label = su.label;
+                    div.dataset.type = su.type;
+                    div.addEventListener('click', () => selectSeat(su, div));
+                }
+                grid.appendChild(div);
+            });
+        }
+
+        function selectSeat(su, div) {
+            // reset all other seats' visual state
+            document.querySelectorAll('#seat-map-grid > div[data-seat-id]').forEach(d => {
+                const isCabin = d.dataset.type === 'CABIN';
+                d.className = 'w-full h-12 bg-white border border-secondary text-secondary flex items-center justify-center rounded-md cursor-pointer hover:bg-secondary-container/20 transition-all' + (isCabin ? ' col-span-2' : '');
+                d.innerHTML = isCabin
+                    ? `<span class="material-symbols-outlined text-[18px] mr-1">meeting_room</span><span class="text-[10px] font-bold">${d.dataset.label}</span>`
+                    : `<span class="material-symbols-outlined text-[18px]">desk</span>`;
+            });
+
+            const isCabin = su.type === 'CABIN';
+            div.className = 'w-full h-12 bg-primary-container/10 border-2 border-primary text-primary flex items-center justify-center rounded-md cursor-pointer shadow-soft ring-2 ring-primary/20' + (isCabin ? ' col-span-2' : '');
+            div.innerHTML = `<span class="material-symbols-outlined text-[18px]">check_circle</span>`;
+
+            selectedSeatUnit = su;
+            updateSummary();
+        }
+
+        function updateSummary() {
+            const summaryBody = document.getElementById('booking-summary-body');
+            const totalsBlock = document.getElementById('booking-summary-totals');
+            const typeToggle = document.getElementById('booking-type-toggle');
+            const confirmBtn = document.getElementById('confirm-booking-btn');
+
+            if (!selectedSeatUnit) {
+                summaryBody.innerHTML = '<p class="text-on-surface-variant font-body-md text-body-md">Select a seat on the map to begin.</p>';
+                totalsBlock.classList.add('hidden');
+                typeToggle.classList.add('hidden');
+                confirmBtn.disabled = true;
+                return;
+            }
+
+            const start = document.getElementById('start-date').value;
+            const end = document.getElementById('end-date').value;
+            const days = Math.max(1, Math.round((new Date(end) - new Date(start)) / (1000 * 60 * 60 * 24)));
+
+            const price = bookingType === 'MONTHLY'
+                ? parseFloat(currentSpace.pricePerMonth) * Math.max(1, Math.round(days / 30))
+                : parseFloat(currentSpace.pricePerDay) * days;
+
+            summaryBody.innerHTML = `
+                <div class="flex justify-between items-start">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-primary-container/10 rounded-lg flex items-center justify-center text-primary">
+                            <span class="material-symbols-outlined">${selectedSeatUnit.type === 'CABIN' ? 'meeting_room' : 'desk'}</span>
+                        </div>
+                        <div>
+                            <p class="font-label-md text-label-md text-on-surface">${selectedSeatUnit.label}</p>
+                            <p class="text-on-surface-variant font-label-sm text-label-sm">${currentSpace.name}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3 py-2">
+                    <span class="material-symbols-outlined text-on-surface-variant">calendar_month</span>
+                    <div>
+                        <p class="font-label-md text-label-md text-on-surface">${start} to ${end}</p>
+                        <p class="text-on-surface-variant font-label-sm text-label-sm">${days} Day${days === 1 ? '' : 's'}</p>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('summary-type').textContent = bookingType === 'MONTHLY' ? 'Monthly' : 'Daily';
+            document.getElementById('summary-total').textContent = `$${price.toFixed(2)}`;
+
+            totalsBlock.classList.remove('hidden');
+            typeToggle.classList.remove('hidden');
+            confirmBtn.disabled = false;
+        }
+
+        async function loadSpaceInfo() {
+            currentSpace = await Api.getSpace(spaceId);
+            document.getElementById('space-name').textContent = currentSpace.name;
+            document.getElementById('space-location').textContent = currentSpace.location;
+        }
+
+        async function checkAvailability() {
+            const start = document.getElementById('start-date').value;
+            const end = document.getElementById('end-date').value;
+            const statusEl = document.getElementById('seat-map-status');
+            const grid = document.getElementById('seat-map-grid');
+
+            if (!start || !end) {
+                alert('Please choose both start and end dates.');
+                return;
+            }
+            if (start >= end) {
+                alert('Start date must be before end date.');
+                return;
+            }
+
+            grid.innerHTML = '<p class="col-span-12 text-center text-on-surface-variant py-8">Loading seat map...</p>';
+            selectedSeatUnit = null;
+            updateSummary();
+
+            try {
+                const availability = await Api.getAvailability(spaceId, start, end);
+                renderSeatMap(availability.seatUnits);
+            } catch (err) {
+                grid.innerHTML = `<p class="col-span-12 text-center text-error py-8">${err.message}</p>`;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('logout-btn').addEventListener('click', () => Auth.logout());
+
+            document.getElementById('start-date').value = todayStr(1);
+            document.getElementById('end-date').value = todayStr(4);
+
+            document.getElementById('check-availability-btn').addEventListener('click', checkAvailability);
+
+            document.querySelectorAll('.booking-type-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    bookingType = btn.dataset.type;
+                    document.querySelectorAll('.booking-type-btn').forEach(b => {
+                        b.className = 'flex-1 py-2 rounded-lg border border-outline-variant text-on-surface-variant font-label-md text-label-md booking-type-btn';
+                    });
+                    btn.className = 'flex-1 py-2 rounded-lg border border-primary text-primary font-label-md text-label-md booking-type-btn';
+                    updateSummary();
+                });
+            });
+
+            document.getElementById('confirm-booking-btn').addEventListener('click', async () => {
+                if (!selectedSeatUnit) return;
+
+                const start = document.getElementById('start-date').value;
+                const end = document.getElementById('end-date').value;
+                const confirmBtn = document.getElementById('confirm-booking-btn');
+                const msg = document.getElementById('booking-msg');
+
+                confirmBtn.disabled = true;
+                confirmBtn.textContent = 'Booking...';
+                msg.textContent = '';
+                msg.classList.remove('text-error');
+
+                try {
+                    await Api.createBooking({
+                        seatUnitId: selectedSeatUnit.id,
+                        startDate: start,
+                        endDate: end,
+                        bookingType: bookingType,
+                    });
+                    window.location.href = 'my-bookings.html';
+                } catch (err) {
+                    msg.textContent = err.message;
+                    msg.classList.add('text-error');
+                    confirmBtn.disabled = false;
+                    confirmBtn.textContent = 'Confirm Booking';
+                    checkAvailability(); // refresh seat map since it may now be stale
+                }
+            });
+
+            loadSpaceInfo().then(checkAvailability);
+        });
+    </script>
+</body></html>

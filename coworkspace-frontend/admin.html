@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CoWorkSpace Admin Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary": "#850025",
+                    "on-tertiary-fixed-variant": "#92002a",
+                    "surface-dim": "#d3daea",
+                    "error-container": "#ffdad6",
+                    "on-background": "#151c27",
+                    "on-primary-container": "#c6caff",
+                    "on-surface-variant": "#454655",
+                    "on-secondary-fixed-variant": "#005137",
+                    "on-surface": "#151c27",
+                    "on-secondary": "#ffffff",
+                    "outline": "#757687",
+                    "secondary-container": "#64f9bc",
+                    "inverse-primary": "#bdc2ff",
+                    "surface-container-low": "#f0f3ff",
+                    "on-tertiary-fixed": "#40000d",
+                    "secondary": "#006c4b",
+                    "inverse-on-surface": "#ebf1ff",
+                    "primary-fixed": "#dfe0ff",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-highest": "#dce2f3",
+                    "on-error": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "secondary-fixed": "#68fcbf",
+                    "on-primary-fixed": "#000865",
+                    "on-secondary-container": "#00714e",
+                    "surface-container": "#e7eefe",
+                    "on-secondary-fixed": "#002114",
+                    "surface-variant": "#dce2f3",
+                    "on-tertiary": "#ffffff",
+                    "surface": "#f9f9ff",
+                    "error": "#ba1a1a",
+                    "surface-tint": "#3648e9",
+                    "secondary-fixed-dim": "#45dfa4",
+                    "tertiary-fixed-dim": "#ffb2b7",
+                    "background": "#f9f9ff",
+                    "primary-fixed-dim": "#bdc2ff",
+                    "inverse-surface": "#2a313d",
+                    "on-primary-fixed-variant": "#1127d2",
+                    "on-tertiary-container": "#ffbdc0",
+                    "surface-bright": "#f9f9ff",
+                    "tertiary-container": "#b10035",
+                    "tertiary-fixed": "#ffdadb",
+                    "on-primary": "#ffffff",
+                    "surface-container-high": "#e2e8f8",
+                    "primary-container": "#2d3fe2",
+                    "outline-variant": "#c5c5d8",
+                    "primary": "#001bcc"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "32px",
+                    "container-max": "1280px",
+                    "gutter": "24px",
+                    "margin-mobile": "16px",
+                    "sidebar-width": "240px",
+                    "unit": "4px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "body-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "display": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "600"}],
+                    "headline-lg": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "display": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid #E5E7EB;
+        }
+        .sidebar-active {
+            border-left: 4px solid #001bcc;
+            background: rgba(45, 63, 226, 0.05);
+            color: #001bcc;
+            font-weight: 700;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        /* Custom Table Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #dce2f3; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-background text-on-background selection:bg-primary-fixed-dim min-h-screen">
+<!-- SideNavBar (Shared Component Identity) -->
+<aside class="w-sidebar-width h-full fixed left-0 top-0 bg-surface border-r border-outline-variant flex flex-col py-6 gap-2 z-50">
+<div class="px-6 mb-8">
+<h1 class="font-headline-md text-headline-md font-bold text-primary">CoWorkSpace</h1>
+<p class="font-label-md text-label-md text-on-surface-variant opacity-70">Admin Portal</p>
+</div>
+<nav class="flex-1 px-3 space-y-1">
+<a class="sidebar-active flex items-center px-3 py-3 rounded-r-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center px-3 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-r-lg transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3 group-hover:text-primary" data-icon="meeting_room">meeting_room</span>
+<span class="font-label-md text-label-md">Manage Spaces</span>
+</a>
+<a class="flex items-center px-3 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-r-lg transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3 group-hover:text-primary" data-icon="event_seat">event_seat</span>
+<span class="font-label-md text-label-md">Manage Seats</span>
+</a>
+<a class="flex items-center px-3 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-r-lg transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3 group-hover:text-primary" data-icon="book_online">book_online</span>
+<span class="font-label-md text-label-md">All Bookings</span>
+</a>
+<div class="pt-4 pb-2 px-3">
+<div class="h-px bg-outline-variant/30"></div>
+</div>
+<a class="flex items-center px-3 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-r-lg transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3 group-hover:text-primary" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<div class="px-6 mt-auto">
+<button class="w-full flex items-center justify-center gap-2 py-3 bg-error-container text-on-error-container rounded-lg font-label-md hover:bg-opacity-80 transition-all" id="sign-out-btn">
+<span class="material-symbols-outlined text-[18px]" data-icon="logout">logout</span>
+<span>Sign Out</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-sidebar-width min-h-screen p-margin-desktop bg-surface-container-low">
+<!-- Header Section -->
+<header class="flex justify-between items-end mb-8">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Dashboard Overview</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Real-time performance metrics and space management.</p>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-label-md flex items-center gap-2 shadow-md hover:shadow-lg transition-all active:scale-95" id="add-space-btn">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+                Add New Space
+            </button>
+</header>
+<!-- Stats Bento Grid -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-8">
+<!-- Total Spaces -->
+<div class="glass-card p-6 rounded-xl relative overflow-hidden group">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-secondary-container/20 rounded-lg">
+<span class="material-symbols-outlined text-secondary" data-icon="meeting_room">meeting_room</span>
+</div>
+</div>
+<h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Total Spaces</h3>
+<div class="flex items-baseline gap-2 mt-1">
+<span class="font-display text-display text-on-surface" id="stat-total-spaces">0</span>
+</div>
+<div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-secondary to-transparent opacity-30"></div>
+</div>
+<!-- Total Seat Units -->
+<div class="glass-card p-6 rounded-xl relative overflow-hidden group">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-primary-container/10 rounded-lg">
+<span class="material-symbols-outlined text-primary" data-icon="event_seat">event_seat</span>
+</div>
+</div>
+<h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Total Seat Units</h3>
+<div class="flex items-baseline gap-2 mt-1">
+<span class="font-display text-display text-on-surface" id="stat-total-seats">0</span>
+</div>
+<div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-transparent opacity-30"></div>
+</div>
+<!-- Total Bookings -->
+<div class="glass-card p-6 rounded-xl relative overflow-hidden group">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-tertiary-container/10 rounded-lg">
+<span class="material-symbols-outlined text-tertiary" data-icon="confirmation_number">confirmation_number</span>
+</div>
+</div>
+<h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Total Bookings</h3>
+<div class="flex items-baseline gap-2 mt-1">
+<span class="font-display text-display text-on-surface" id="stat-total-bookings">0</span>
+</div>
+</div>
+</section>
+<!-- Main Workspace Management Area -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Table Section (8 Cols) -->
+<section class="col-span-12 lg:col-span-8 space-y-gutter">
+<div class="glass-card rounded-xl overflow-hidden border border-outline-variant">
+<div class="p-6 border-b border-outline-variant flex justify-between items-center bg-surface-container">
+<h3 class="font-headline-md text-headline-md text-on-surface">Manage Spaces</h3>
+<div class="flex items-center gap-3">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]" data-icon="search">search</span>
+<input class="pl-10 pr-4 py-2 border border-outline-variant rounded-lg bg-surface text-body-md focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all" id="spaces-filter" placeholder="Filter spaces..." type="text"/>
+</div>
+</div>
+</div>
+<div class="overflow-x-auto custom-scrollbar">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-high/50 font-label-md text-label-md text-on-surface-variant uppercase tracking-tight">
+<th class="px-6 py-4">Space Name</th>
+<th class="px-6 py-4">Location</th>
+<th class="px-6 py-4">Type</th>
+<th class="px-6 py-4">Price/Day</th>
+<th class="px-6 py-4">Seat Units</th>
+<th class="px-6 py-4 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30" id="spaces-tbody">
+<tr><td colspan="6" class="px-6 py-10 text-center text-on-surface-variant" id="spaces-status">Loading spaces...</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<!-- Sidebar Info Panel (4 Cols) -->
+<aside class="col-span-12 lg:col-span-4 space-y-gutter">
+<!-- All Bookings Panel -->
+<div class="glass-card rounded-xl p-6 border border-outline-variant">
+<h4 class="font-headline-md text-headline-md text-on-surface mb-6">All Bookings</h4>
+<div class="space-y-4 max-h-[420px] overflow-y-auto custom-scrollbar" id="admin-bookings-list">
+<p class="text-on-surface-variant font-body-md text-body-md">Loading bookings...</p>
+</div>
+</div>
+<!-- Add Seat Units Card -->
+<div class="glass-card rounded-xl p-6 border border-outline-variant">
+<h4 class="font-headline-md text-headline-md text-on-surface mb-2">Add Seat Unit</h4>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">Add a desk or cabin to an existing space.</p>
+<div class="space-y-3">
+<select class="w-full border border-outline-variant rounded-lg px-3 py-2 bg-surface text-body-md" id="seat-space-select">
+<option value="">Select a space...</option>
+</select>
+<input class="w-full border border-outline-variant rounded-lg px-3 py-2 bg-surface text-body-md" id="seat-label-input" placeholder="Label (e.g. Desk-9)" type="text"/>
+<select class="w-full border border-outline-variant rounded-lg px-3 py-2 bg-surface text-body-md" id="seat-type-select">
+<option value="DESK">Desk</option>
+<option value="CABIN">Cabin</option>
+</select>
+<button class="w-full py-2.5 bg-on-surface text-surface rounded-lg font-label-md hover:bg-opacity-90 transition-all" id="add-seat-btn">Add Seat Unit</button>
+<p class="text-label-sm text-on-surface-variant hidden" id="add-seat-msg"></p>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- Add Space Modal -->
+<div class="fixed inset-0 bg-black/40 flex items-center justify-center z-[100] hidden backdrop-blur-sm" id="add-space-modal">
+<div class="bg-surface p-8 rounded-2xl w-full max-w-lg shadow-2xl border border-outline-variant">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-6">Add New Space</h2>
+<div class="space-y-4">
+<input class="w-full border border-outline-variant rounded-lg px-3 py-2 bg-surface text-body-md" id="new-space-name" placeholder="Space name (e.g. Innov8 Hub - Andheri)" type="text"/>
+<input class="w-full border border-outline-variant rounded-lg px-3 py-2 bg-surface text-body-md" id="new-space-location" placeholder="Location" type="text"/>
+<select class="w-full border border-outline-variant rounded-lg px-3 py-2 bg-surface text-body-md" id="new-space-type">
+<option value="DESK">Desk</option>
+<option value="CABIN">Cabin</option>
+</select>
+<textarea class="w-full border border-outline-variant rounded-lg px-3 py-2 bg-surface text-body-md" id="new-space-description" placeholder="Description" rows="2"></textarea>
+<div class="grid grid-cols-2 gap-4">
+<input class="w-full border border-outline-variant rounded-lg px-3 py-2 bg-surface text-body-md" id="new-space-price-day" placeholder="Price per day" type="number"/>
+<input class="w-full border border-outline-variant rounded-lg px-3 py-2 bg-surface text-body-md" id="new-space-price-month" placeholder="Price per month" type="number"/>
+</div>
+<p class="hidden text-error text-label-sm" id="add-space-error"></p>
+</div>
+<div class="flex gap-4 mt-6">
+<button class="flex-1 py-2.5 border border-outline-variant rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container transition-all" id="add-space-cancel">Cancel</button>
+<button class="flex-1 py-2.5 bg-primary text-on-primary rounded-lg font-label-md text-label-md hover:opacity-90 transition-all" id="add-space-submit">Create Space</button>
+</div>
+</div>
+</div>
+<!-- Delete confirm modal -->
+<div class="fixed inset-0 bg-black/40 flex items-center justify-center z-[100] hidden backdrop-blur-sm" id="delete-space-modal">
+<div class="bg-surface p-8 rounded-2xl w-full max-w-md shadow-2xl border border-outline-variant">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-2">Delete Space?</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">This will permanently remove the space and its seat units.</p>
+<div class="flex gap-4">
+<button class="flex-1 py-2.5 border border-outline-variant rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container transition-all" id="delete-space-cancel">Cancel</button>
+<button class="flex-1 py-2.5 bg-error text-on-error rounded-lg font-label-md text-label-md hover:opacity-90 transition-all" id="delete-space-confirm">Delete</button>
+</div>
+</div>
+</div>
+<!-- Success Feedback Notification -->
+<div class="fixed bottom-8 right-8 translate-y-20 opacity-0 transition-all duration-300 pointer-events-none" id="toast">
+<div class="bg-inverse-surface text-inverse-on-surface px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary-fixed" data-icon="check_circle">check_circle</span>
+<span class="font-body-md text-body-md" id="toast-text">Action successful.</span>
+</div>
+</div>
+<script src="api.js"></script>
+<script>
+        Auth.requireAdmin();
+
+        let allSpaces = [];
+        let pendingDeleteId = null;
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-text').textContent = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+                toast.classList.remove('translate-y-0', 'opacity-100');
+            }, 3000);
+        }
+
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+        }
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        function renderSpacesTable(spaces) {
+            const tbody = document.getElementById('spaces-tbody');
+            if (spaces.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="px-6 py-10 text-center text-on-surface-variant">No spaces yet. Click "Add New Space" to create one.</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = spaces.map(s => `
+                <tr class="hover:bg-surface-container-lowest transition-colors group">
+                    <td class="px-6 py-4">
+                        <span class="font-body-lg text-body-lg font-medium text-on-surface">${s.name}</span>
+                    </td>
+                    <td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">${s.location}</td>
+                    <td class="px-6 py-4">
+                        <span class="px-2 py-1 bg-secondary-container/10 text-secondary text-label-sm font-label-sm rounded border border-secondary/20">${s.type}</span>
+                    </td>
+                    <td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">$${s.pricePerDay}</td>
+                    <td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant">${s.totalSeatUnits}</td>
+                    <td class="px-6 py-4 text-right">
+                        <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button class="p-2 text-on-surface-variant hover:text-error hover:bg-error/5 rounded-lg transition-all delete-space-btn" data-space-id="${s.id}">
+                                <span class="material-symbols-outlined text-[20px]">delete</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+
+            document.querySelectorAll('.delete-space-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    pendingDeleteId = btn.dataset.spaceId;
+                    openModal('delete-space-modal');
+                });
+            });
+        }
+
+        function populateSeatSpaceSelect(spaces) {
+            const select = document.getElementById('seat-space-select');
+            select.innerHTML = '<option value="">Select a space...</option>' +
+                spaces.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+        }
+
+        function applySpaceFilter() {
+            const query = document.getElementById('spaces-filter').value.trim().toLowerCase();
+            const filtered = allSpaces.filter(s =>
+                s.name.toLowerCase().includes(query) || s.location.toLowerCase().includes(query)
+            );
+            renderSpacesTable(filtered);
+        }
+
+        async function loadSpaces() {
+            try {
+                allSpaces = await Api.getSpaces();
+                renderSpacesTable(allSpaces);
+                populateSeatSpaceSelect(allSpaces);
+                document.getElementById('stat-total-spaces').textContent = allSpaces.length;
+                document.getElementById('stat-total-seats').textContent =
+                    allSpaces.reduce((sum, s) => sum + s.totalSeatUnits, 0);
+            } catch (err) {
+                document.getElementById('spaces-tbody').innerHTML =
+                    `<tr><td colspan="6" class="px-6 py-10 text-center text-error">Could not load spaces: ${err.message}</td></tr>`;
+            }
+        }
+
+        function renderAdminBookings(bookings) {
+            const list = document.getElementById('admin-bookings-list');
+            document.getElementById('stat-total-bookings').textContent = bookings.length;
+
+            if (bookings.length === 0) {
+                list.innerHTML = '<p class="text-on-surface-variant font-body-md text-body-md">No bookings yet.</p>';
+                return;
+            }
+
+            const statusColor = {
+                CONFIRMED: 'bg-primary',
+                CANCELLED: 'bg-error',
+                PENDING: 'bg-tertiary',
+            };
+
+            list.innerHTML = bookings.map(b => `
+                <div class="flex gap-4">
+                    <div class="mt-1 w-2 h-2 rounded-full ${statusColor[b.status] || 'bg-primary'} flex-shrink-0"></div>
+                    <div>
+                        <p class="font-body-md text-body-md text-on-surface"><strong>${b.seatUnitLabel}</strong> at ${b.spaceName} booked by ${b.userEmail}</p>
+                        <span class="font-label-sm text-label-sm text-on-surface-variant opacity-60">${b.startDate} to ${b.endDate} • ${b.status} • $${b.totalPrice}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function loadAdminBookings() {
+            try {
+                const bookings = await Api.getAllBookings();
+                renderAdminBookings(bookings);
+            } catch (err) {
+                document.getElementById('admin-bookings-list').innerHTML =
+                    `<p class="text-error font-body-md text-body-md">Could not load bookings: ${err.message}</p>`;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('sign-out-btn').addEventListener('click', () => Auth.logout());
+
+            document.getElementById('spaces-filter').addEventListener('keyup', applySpaceFilter);
+
+            // ---- Add Space modal ----
+            document.getElementById('add-space-btn').addEventListener('click', () => openModal('add-space-modal'));
+            document.getElementById('add-space-cancel').addEventListener('click', () => closeModal('add-space-modal'));
+
+            document.getElementById('add-space-submit').addEventListener('click', async () => {
+                const errorEl = document.getElementById('add-space-error');
+                errorEl.classList.add('hidden');
+
+                const name = document.getElementById('new-space-name').value.trim();
+                const location = document.getElementById('new-space-location').value.trim();
+                const type = document.getElementById('new-space-type').value;
+                const description = document.getElementById('new-space-description').value.trim();
+                const pricePerDay = document.getElementById('new-space-price-day').value;
+                const pricePerMonth = document.getElementById('new-space-price-month').value;
+
+                if (!name || !location || !pricePerDay || !pricePerMonth) {
+                    errorEl.textContent = 'Please fill in name, location, and both prices.';
+                    errorEl.classList.remove('hidden');
+                    return;
+                }
+
+                try {
+                    await Api.createSpace({ name, location, type, description, pricePerDay, pricePerMonth });
+                    closeModal('add-space-modal');
+                    // reset form
+                    document.getElementById('new-space-name').value = '';
+                    document.getElementById('new-space-location').value = '';
+                    document.getElementById('new-space-description').value = '';
+                    document.getElementById('new-space-price-day').value = '';
+                    document.getElementById('new-space-price-month').value = '';
+                    showToast('Space created successfully.');
+                    await loadSpaces();
+                } catch (err) {
+                    errorEl.textContent = err.message;
+                    errorEl.classList.remove('hidden');
+                }
+            });
+
+            // ---- Delete Space modal ----
+            document.getElementById('delete-space-cancel').addEventListener('click', () => {
+                pendingDeleteId = null;
+                closeModal('delete-space-modal');
+            });
+
+            document.getElementById('delete-space-confirm').addEventListener('click', async () => {
+                if (!pendingDeleteId) return;
+                try {
+                    await Api.deleteSpace(pendingDeleteId);
+                    closeModal('delete-space-modal');
+                    showToast('Space deleted.');
+                    await loadSpaces();
+                } catch (err) {
+                    alert('Could not delete space: ' + err.message);
+                } finally {
+                    pendingDeleteId = null;
+                }
+            });
+
+            // ---- Add Seat Unit ----
+            document.getElementById('add-seat-btn').addEventListener('click', async () => {
+                const msgEl = document.getElementById('add-seat-msg');
+                const spaceId = document.getElementById('seat-space-select').value;
+                const label = document.getElementById('seat-label-input').value.trim();
+                const type = document.getElementById('seat-type-select').value;
+
+                msgEl.classList.remove('hidden', 'text-error');
+                if (!spaceId || !label) {
+                    msgEl.textContent = 'Select a space and enter a label.';
+                    msgEl.classList.add('text-error');
+                    return;
+                }
+
+                try {
+                    await Api.addSeatUnit(spaceId, { label, type });
+                    document.getElementById('seat-label-input').value = '';
+                    msgEl.textContent = `Added ${label}.`;
+                    showToast(`${label} added.`);
+                    await loadSpaces();
+                } catch (err) {
+                    msgEl.textContent = err.message;
+                    msgEl.classList.add('text-error');
+                }
+            });
+
+            loadSpaces();
+            loadAdminBookings();
+        });
+    </script>
+</body></html>
