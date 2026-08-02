@@ -10,5 +10,6 @@ out/
 # OS
 .DS_Store
 Thumbs.db
+.idea/
 data/
 coworkspace/target/
