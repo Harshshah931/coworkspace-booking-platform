@@ -5,6 +5,7 @@ import com.coworkspace.repository.SeatUnitRepository;
 import com.coworkspace.repository.SpaceRepository;
 import com.coworkspace.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -20,18 +21,24 @@ public class DataSeeder implements CommandLineRunner {
     private final SeatUnitRepository seatUnitRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Value("${admin.seed.email}")
+    private String adminEmail;
+
+    @Value("${admin.seed.password}")
+    private String adminPassword;
+
     @Override
     public void run(String... args) {
         // Seed admin
-        if (!userRepository.existsByEmail("admin@coworkspace.com")) {
+        if (!userRepository.existsByEmail(adminEmail)) {
             User admin = User.builder()
                     .name("Admin")
-                    .email("admin@coworkspace.com")
-                    .password(passwordEncoder.encode("admin123"))
+                    .email(adminEmail)
+                    .password(passwordEncoder.encode(adminPassword))
                     .role(Role.ADMIN)
                     .build();
             userRepository.save(admin);
-            System.out.println(">>> Seeded admin: admin@coworkspace.com / admin123");
+            System.out.println(">>> Seeded admin: " + adminEmail + " / " + adminPassword);
         }
 
         // Seed a sample space with seat units
