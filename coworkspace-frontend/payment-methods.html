@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CoWorkSpace — Payment Methods</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined"/>
+<style>body { font-family: 'Inter', sans-serif; background: #F4F5FB; }</style>
+</head>
+<body class="text-[#1B1C29]">
+
+<header class="bg-white border-b border-gray-100">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <a href="browse.html" class="font-bold text-xl text-[#2D3FE2]">CoWorkSpace</a>
+    <nav class="hidden md:flex items-center gap-6 text-sm text-gray-500">
+      <a href="browse.html" class="hover:text-[#2D3FE2]">Browse</a>
+      <a href="my-bookings.html#" class="hover:text-[#2D3FE2]">Memberships</a>
+      <a href="my-bookings.html#" class="hover:text-[#2D3FE2]">Support</a>
+    </nav>
+    <div class="flex items-center gap-4">
+      <span class="text-sm text-gray-500" id="user-name-label"></span>
+      <button class="text-gray-500 hover:text-[#2D3FE2]" id="logout-btn" title="Log out">
+        <span class="material-symbols-outlined text-[20px]">logout</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="max-w-7xl mx-auto px-6 py-8 flex gap-8">
+
+  <!-- Sidebar -->
+  <aside class="w-64 flex-shrink-0">
+    <nav class="bg-white rounded-xl border border-gray-100 shadow-sm p-2 space-y-1">
+      <a href="my-bookings.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-600 hover:bg-gray-50 transition-all">
+        <span class="material-symbols-outlined text-[20px]">event_seat</span>My Bookings
+      </a>
+      <a href="payment-methods.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-[#EEF0FE] text-[#2D3FE2] font-semibold">
+        <span class="material-symbols-outlined text-[20px]">payments</span>Payment Methods
+      </a>
+      <a href="profile.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-600 hover:bg-gray-50 transition-all">
+        <span class="material-symbols-outlined text-[20px]">person</span>Profile
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <main class="flex-1">
+    <div class="flex justify-between items-start mb-1">
+      <div>
+        <h1 class="text-3xl font-bold mb-1">Payment Methods</h1>
+        <p class="text-gray-500">Manage your billing and payment history.</p>
+      </div>
+      <button class="bg-[#2D3FE2] text-white px-5 py-2.5 rounded-lg font-medium flex items-center gap-2 hover:opacity-90 transition-all" id="add-card-btn">
+        <span class="material-symbols-outlined text-[20px]">add</span>Add Payment Method
+      </button>
+    </div>
+    <p class="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-4 py-2 mb-8 inline-block">
+      Demo data — no real payment processor is connected in this build.
+    </p>
+
+    <h2 class="font-bold text-lg mb-4">Saved Cards</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+      <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 relative">
+        <span class="absolute top-4 right-4 text-xs bg-green-50 text-green-700 px-2 py-1 rounded-full font-medium">Default</span>
+        <span class="material-symbols-outlined text-[#2D3FE2] text-3xl">credit_card</span>
+        <p class="mt-6 tracking-widest text-sm">•••• •••• •••• 4242</p>
+        <p class="text-gray-500 text-sm mt-1">Visa Platinum</p>
+        <p class="text-xs text-gray-400 mt-4">EXPIRY DATE <span class="text-gray-700 font-medium">12/26</span></p>
+      </div>
+      <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+        <span class="material-symbols-outlined text-gray-400 text-3xl">credit_card</span>
+        <p class="mt-6 tracking-widest text-sm">•••• •••• •••• 8812</p>
+        <p class="text-gray-500 text-sm mt-1">Mastercard Business</p>
+        <p class="text-xs text-gray-400 mt-4">EXPIRY DATE <span class="text-gray-700 font-medium">08/25</span></p>
+      </div>
+      <button class="border-2 border-dashed border-gray-200 rounded-xl flex flex-col items-center justify-center gap-2 text-gray-400 hover:border-[#2D3FE2] hover:text-[#2D3FE2] transition-all py-8" id="add-card-btn-2">
+        <span class="material-symbols-outlined text-3xl">add_card</span>
+        <span class="text-sm font-medium">Add New Method</span>
+      </button>
+    </div>
+
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="font-bold text-lg">Billing History</h2>
+      <button class="text-[#2D3FE2] text-sm font-medium flex items-center gap-1 hover:underline" id="download-all-btn">
+        Download All <span class="material-symbols-outlined text-[16px]">download</span>
+      </button>
+    </div>
+    <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-gray-50 text-gray-500 uppercase tracking-tight text-xs">
+            <th class="px-6 py-3 text-left">Date</th>
+            <th class="px-6 py-3 text-left">Description</th>
+            <th class="px-6 py-3 text-left">Amount</th>
+            <th class="px-6 py-3 text-left">Status</th>
+            <th class="px-6 py-3 text-right">Invoice</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100" id="billing-history-tbody"></tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<!-- Add Card Modal (visual only) -->
+<div class="fixed inset-0 bg-black/40 flex items-center justify-center z-[100] hidden backdrop-blur-sm" id="add-card-modal">
+<div class="bg-white p-8 rounded-2xl w-full max-w-md shadow-2xl border border-gray-100">
+<h2 class="text-xl font-bold mb-2">Add Payment Method</h2>
+<p class="text-gray-500 text-sm mb-6">This is a demo form — no card details are actually processed or stored.</p>
+<div class="space-y-4">
+<input class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm" placeholder="Card number" type="text"/>
+<div class="grid grid-cols-2 gap-4">
+<input class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm" placeholder="MM/YY" type="text"/>
+<input class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm" placeholder="CVV" type="text"/>
+</div>
+<input class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm" placeholder="Cardholder name" type="text"/>
+</div>
+<div class="flex gap-4 mt-6">
+<button class="flex-1 py-2.5 border border-gray-200 rounded-lg font-medium text-gray-600 hover:bg-gray-50 transition-all" id="add-card-cancel">Cancel</button>
+<button class="flex-1 py-2.5 bg-[#2D3FE2] text-white rounded-lg font-medium hover:opacity-90 transition-all" id="add-card-close">Done</button>
+</div>
+</div>
+</div>
+
+<script src="api.js"></script>
+<script>
+    Auth.requireLogin();
+
+    // Demo/mock billing history — no backend endpoint exists for this,
+    // since real payment processing is out of scope for this build.
+    const MOCK_BILLING_HISTORY = [
+        { date: '2026-07-24', description: 'Hot Desk — Monthly Subscription', amount: '199.00', status: 'Paid' },
+        { date: '2026-06-24', description: 'Private Office — Booking #882', amount: '450.00', status: 'Paid' },
+        { date: '2026-05-24', description: 'Conference Room (2hr)', amount: '60.00', status: 'Paid' },
+        { date: '2026-07-29', description: 'Virtual Mailing Address (Add-on)', amount: '25.00', status: 'Pending' },
+    ];
+
+    function statusBadge(status) {
+        if (status === 'Paid') return `<span class="px-2 py-1 bg-green-50 text-green-700 text-xs font-medium rounded-full">Paid</span>`;
+        return `<span class="px-2 py-1 bg-amber-50 text-amber-700 text-xs font-medium rounded-full">Pending</span>`;
+    }
+
+    function renderBillingHistory() {
+        const tbody = document.getElementById('billing-history-tbody');
+        tbody.innerHTML = MOCK_BILLING_HISTORY.map(row => `
+            <tr class="hover:bg-gray-50 transition-colors">
+                <td class="px-6 py-4 text-gray-500">${row.date}</td>
+                <td class="px-6 py-4 font-medium">${row.description}</td>
+                <td class="px-6 py-4">$${row.amount}</td>
+                <td class="px-6 py-4">${statusBadge(row.status)}</td>
+                <td class="px-6 py-4 text-right">
+                    <span class="material-symbols-outlined text-gray-300 text-[20px]" title="Demo only — no invoice file exists">description</span>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    function openModal() { document.getElementById('add-card-modal').classList.remove('hidden'); }
+    function closeModal() { document.getElementById('add-card-modal').classList.add('hidden'); }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const user = Auth.getUser();
+        if (user) document.getElementById('user-name-label').textContent = user.name;
+
+        document.getElementById('logout-btn').addEventListener('click', () => Auth.logout());
+        document.getElementById('add-card-btn').addEventListener('click', openModal);
+        document.getElementById('add-card-btn-2').addEventListener('click', openModal);
+        document.getElementById('add-card-cancel').addEventListener('click', closeModal);
+        document.getElementById('add-card-close').addEventListener('click', closeModal);
+        document.getElementById('download-all-btn').addEventListener('click', () => {
+            alert('This is a demo — no real invoices are available to download.');
+        });
+
+        renderBillingHistory();
+    });
+</script>
+</body></html>

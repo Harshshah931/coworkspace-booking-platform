@@ -28,6 +28,8 @@ public class SpaceDtos {
 
         private String description;
 
+        // Base/default price for this space. Individual seat units (e.g. cabins)
+        // can override this with their own price — see SeatUnitRequest.
         @NotNull @Positive
         private BigDecimal pricePerDay;
 
@@ -59,6 +61,11 @@ public class SpaceDtos {
 
         @NotNull
         private SpaceType type;
+
+        // Optional. If omitted, this seat unit uses the parent space's price.
+        // Typically set for CABIN units to charge more than DESK units.
+        private BigDecimal pricePerDay;
+        private BigDecimal pricePerMonth;
     }
 
     @Data
@@ -70,6 +77,8 @@ public class SpaceDtos {
         private String label;
         private SpaceType type;
         private boolean available;
+        private BigDecimal pricePerDay;
+        private BigDecimal pricePerMonth;
     }
 
     @Data

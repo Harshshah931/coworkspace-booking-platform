@@ -41,11 +41,12 @@ public class DataSeeder implements CommandLineRunner {
                     .location("Bandra West, Mumbai")
                     .type(SpaceType.DESK)
                     .description("A vibrant coworking space with high-speed wifi and free coffee.")
-                    .pricePerDay(new BigDecimal("500"))
+                    .pricePerDay(new BigDecimal("500"))      // default desk price
                     .pricePerMonth(new BigDecimal("9000"))
                     .build();
             space = spaceRepository.save(space);
 
+            // Desks use the space's default price (no override needed)
             for (int i = 1; i <= 8; i++) {
                 SeatUnit desk = SeatUnit.builder()
                         .label("Desk-" + i)
@@ -54,16 +55,20 @@ public class DataSeeder implements CommandLineRunner {
                         .build();
                 seatUnitRepository.save(desk);
             }
+
+            // Cabins cost more — set an explicit per-seat override price
             for (int i = 1; i <= 3; i++) {
                 SeatUnit cabin = SeatUnit.builder()
                         .label("Cabin-" + i)
                         .type(SpaceType.CABIN)
+                        .pricePerDay(new BigDecimal("1200"))
+                        .pricePerMonth(new BigDecimal("20000"))
                         .space(space)
                         .build();
                 seatUnitRepository.save(cabin);
             }
 
-            System.out.println(">>> Seeded sample space: " + space.getName() + " with 8 desks + 3 cabins");
+            System.out.println(">>> Seeded sample space: " + space.getName() + " with 8 desks ($500/day) + 3 cabins ($1200/day)");
         }
     }
 }

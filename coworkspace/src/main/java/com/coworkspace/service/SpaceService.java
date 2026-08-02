@@ -72,6 +72,8 @@ public class SpaceService {
         SeatUnit seatUnit = SeatUnit.builder()
                 .label(request.getLabel())
                 .type(request.getType())
+                .pricePerDay(request.getPricePerDay())     // null is fine -> falls back to space price
+                .pricePerMonth(request.getPricePerMonth())
                 .space(space)
                 .build();
 
@@ -82,13 +84,16 @@ public class SpaceService {
                 .label(seatUnit.getLabel())
                 .type(seatUnit.getType())
                 .available(true)
+                .pricePerDay(seatUnit.getEffectivePricePerDay())
+                .pricePerMonth(seatUnit.getEffectivePricePerMonth())
                 .build();
     }
 
     /**
      * The core "realtime seat-map availability" feature.
      * Returns every seat unit in the space, flagged available/unavailable
-     * for the requested date range.
+     * for the requested date range, along with each seat's effective price
+     * (its own override price, or the space's default price).
      */
     public AvailabilityResponse getAvailability(Long spaceId, LocalDate start, LocalDate end) {
         if (!start.isBefore(end)) {
@@ -110,6 +115,8 @@ public class SpaceService {
                         .label(su.getLabel())
                         .type(su.getType())
                         .available(!bookedIds.contains(su.getId()))
+                        .pricePerDay(su.getEffectivePricePerDay())
+                        .pricePerMonth(su.getEffectivePricePerMonth())
                         .build())
                 .collect(Collectors.toList());
 

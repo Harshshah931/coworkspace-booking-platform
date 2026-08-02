@@ -22,6 +22,13 @@ const Auth = {
       })
     );
   },
+  updateStoredName(name) {
+    const user = this.getUser();
+    if (user) {
+      user.name = name;
+      localStorage.setItem("cw_user", JSON.stringify(user));
+    }
+  },
   clearSession() {
     localStorage.removeItem("cw_token");
     localStorage.removeItem("cw_user");
@@ -157,5 +164,22 @@ const Api = {
   // ---- Admin ----
   getAllBookings() {
     return apiFetch("/admin/bookings");
+  },
+
+  // ---- Profile ----
+  getProfile() {
+    return apiFetch("/profile");
+  },
+  updateProfile(name, phone) {
+    return apiFetch("/profile", {
+      method: "PUT",
+      body: JSON.stringify({ name, phone }),
+    });
+  },
+  changePassword(currentPassword, newPassword) {
+    return apiFetch("/profile/password", {
+      method: "PUT",
+      body: JSON.stringify({ currentPassword, newPassword }),
+    });
   },
 };

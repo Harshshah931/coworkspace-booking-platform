@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CoWorkSpace — Profile</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined"/>
+<style>body { font-family: 'Inter', sans-serif; background: #F4F5FB; }</style>
+</head>
+<body class="text-[#1B1C29]">
+
+<header class="bg-white border-b border-gray-100">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <a href="browse.html" class="font-bold text-xl text-[#2D3FE2]">CoWorkSpace</a>
+    <nav class="hidden md:flex items-center gap-6 text-sm text-gray-500">
+      <a href="browse.html" class="hover:text-[#2D3FE2]">Browse</a>
+      <a href="my-bookings.html#" class="hover:text-[#2D3FE2]">Memberships</a>
+      <a href="my-bookings.html#" class="hover:text-[#2D3FE2]">Support</a>
+    </nav>
+    <div class="flex items-center gap-4">
+      <span class="text-sm text-gray-500" id="user-name-label"></span>
+      <button class="text-gray-500 hover:text-[#2D3FE2]" id="logout-btn" title="Log out">
+        <span class="material-symbols-outlined text-[20px]">logout</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="max-w-7xl mx-auto px-6 py-8 flex gap-8">
+
+  <!-- Sidebar -->
+  <aside class="w-64 flex-shrink-0">
+    <nav class="bg-white rounded-xl border border-gray-100 shadow-sm p-2 space-y-1">
+      <a href="my-bookings.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-600 hover:bg-gray-50 transition-all">
+        <span class="material-symbols-outlined text-[20px]">event_seat</span>My Bookings
+      </a>
+      <a href="payment-methods.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-600 hover:bg-gray-50 transition-all">
+        <span class="material-symbols-outlined text-[20px]">payments</span>Payment Methods
+      </a>
+      <a href="profile.html" class="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-[#EEF0FE] text-[#2D3FE2] font-semibold">
+        <span class="material-symbols-outlined text-[20px]">person</span>Profile
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <main class="flex-1">
+    <h1 class="text-3xl font-bold mb-1">Profile Settings</h1>
+    <p class="text-gray-500 mb-8">Update your personal information and security.</p>
+
+    <div id="error-banner" class="hidden mb-4 px-4 py-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm"></div>
+    <div id="success-banner" class="hidden mb-4 px-4 py-3 rounded-lg bg-green-50 border border-green-200 text-green-700 text-sm"></div>
+
+    <!-- Account Details -->
+    <section class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 mb-6">
+      <h2 class="font-bold text-lg mb-6 pb-4 border-b border-gray-100">Account Details</h2>
+      <div class="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-8 items-start">
+        <div class="flex flex-col items-center gap-2">
+          <div class="w-24 h-24 rounded-full bg-[#2D3FE2]/10 flex items-center justify-center">
+            <span class="material-symbols-outlined text-[48px] text-[#2D3FE2]">account_circle</span>
+          </div>
+          <p class="text-xs text-gray-400 text-center max-w-[120px]">Photo upload isn't available in this build</p>
+        </div>
+        <div class="space-y-4 w-full">
+          <div>
+            <label class="text-sm text-gray-600 block mb-1">Full Name</label>
+            <input class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-[#2D3FE2] focus:border-[#2D3FE2] outline-none" id="profile-name" type="text"/>
+          </div>
+          <div>
+            <label class="text-sm text-gray-600 block mb-1">Email Address</label>
+            <div class="relative">
+              <input class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm bg-gray-50 text-gray-500" id="profile-email" type="email" readonly/>
+              <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-[18px]">lock</span>
+            </div>
+            <p class="text-xs text-gray-400 mt-1">Email cannot be changed. Contact support for assistance.</p>
+          </div>
+          <div>
+            <label class="text-sm text-gray-600 block mb-1">Phone Number</label>
+            <input class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-[#2D3FE2] focus:border-[#2D3FE2] outline-none" id="profile-phone" placeholder="+1 (555) 012-3456" type="text"/>
+          </div>
+          <button class="bg-[#2D3FE2] text-white px-6 py-2.5 rounded-lg font-medium hover:opacity-90 transition-all" id="save-profile-btn">Save Changes</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Security -->
+    <section class="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
+      <h2 class="font-bold text-lg mb-6 pb-4 border-b border-gray-100 flex items-center gap-2">
+        <span class="material-symbols-outlined text-[#2D3FE2]">shield</span>
+        Change Password
+      </h2>
+      <div class="space-y-4 max-w-md">
+        <div>
+          <label class="text-sm text-gray-600 block mb-1">Current Password</label>
+          <input class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-[#2D3FE2] focus:border-[#2D3FE2] outline-none" id="current-password" type="password"/>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="text-sm text-gray-600 block mb-1">New Password</label>
+            <input class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-[#2D3FE2] focus:border-[#2D3FE2] outline-none" id="new-password" placeholder="Enter new password" type="password"/>
+          </div>
+          <div>
+            <label class="text-sm text-gray-600 block mb-1">Confirm Password</label>
+            <input class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-[#2D3FE2] focus:border-[#2D3FE2] outline-none" id="confirm-password" placeholder="Confirm new password" type="password"/>
+          </div>
+        </div>
+        <button class="bg-[#1B1C29] text-white px-6 py-2.5 rounded-lg font-medium hover:opacity-90 transition-all" id="change-password-btn">Update Password</button>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="api.js"></script>
+<script>
+    Auth.requireLogin();
+
+    function showBanner(el, message) {
+        document.getElementById('error-banner').classList.add('hidden');
+        document.getElementById('success-banner').classList.add('hidden');
+        el.textContent = message;
+        el.classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    async function loadProfile() {
+        try {
+            const profile = await Api.getProfile();
+            document.getElementById('profile-name').value = profile.name || '';
+            document.getElementById('profile-email').value = profile.email || '';
+            document.getElementById('profile-phone').value = profile.phone || '';
+        } catch (err) {
+            showBanner(document.getElementById('error-banner'), 'Could not load profile: ' + err.message);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const user = Auth.getUser();
+        if (user) document.getElementById('user-name-label').textContent = user.name;
+
+        document.getElementById('logout-btn').addEventListener('click', () => Auth.logout());
+
+        document.getElementById('save-profile-btn').addEventListener('click', async () => {
+            const name = document.getElementById('profile-name').value.trim();
+            const phone = document.getElementById('profile-phone').value.trim();
+
+            if (!name) {
+                showBanner(document.getElementById('error-banner'), 'Name cannot be empty.');
+                return;
+            }
+
+            try {
+                const updated = await Api.updateProfile(name, phone);
+                Auth.updateStoredName(updated.name);
+                document.getElementById('user-name-label').textContent = updated.name;
+                showBanner(document.getElementById('success-banner'), 'Profile updated successfully.');
+            } catch (err) {
+                showBanner(document.getElementById('error-banner'), err.message);
+            }
+        });
+
+        document.getElementById('change-password-btn').addEventListener('click', async () => {
+            const current = document.getElementById('current-password').value;
+            const newPw = document.getElementById('new-password').value;
+            const confirm = document.getElementById('confirm-password').value;
+
+            if (!current || !newPw || !confirm) {
+                showBanner(document.getElementById('error-banner'), 'Please fill in all password fields.');
+                return;
+            }
+            if (newPw !== confirm) {
+                showBanner(document.getElementById('error-banner'), 'New password and confirmation do not match.');
+                return;
+            }
+            if (newPw.length < 6) {
+                showBanner(document.getElementById('error-banner'), 'New password must be at least 6 characters.');
+                return;
+            }
+
+            try {
+                await Api.changePassword(current, newPw);
+                showBanner(document.getElementById('success-banner'), 'Password updated successfully.');
+                document.getElementById('current-password').value = '';
+                document.getElementById('new-password').value = '';
+                document.getElementById('confirm-password').value = '';
+            } catch (err) {
+                showBanner(document.getElementById('error-banner'), err.message);
+            }
+        });
+
+        loadProfile();
+    });
+</script>
+</body></html>

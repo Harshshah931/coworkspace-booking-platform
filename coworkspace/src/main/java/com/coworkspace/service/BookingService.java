@@ -92,15 +92,14 @@ public class BookingService {
     }
 
     private BigDecimal calculatePrice(SeatUnit seatUnit, BookingRequest request) {
-        Space space = seatUnit.getSpace();
         long days = ChronoUnit.DAYS.between(request.getStartDate(), request.getEndDate());
 
         if (request.getBookingType() == BookingType.MONTHLY) {
             long months = Math.max(1, Math.round(days / 30.0));
-            return space.getPricePerMonth().multiply(BigDecimal.valueOf(months));
+            return seatUnit.getEffectivePricePerMonth().multiply(BigDecimal.valueOf(months));
         } else {
             long chargedDays = Math.max(1, days);
-            return space.getPricePerDay().multiply(BigDecimal.valueOf(chargedDays));
+            return seatUnit.getEffectivePricePerDay().multiply(BigDecimal.valueOf(chargedDays));
         }
     }
 
