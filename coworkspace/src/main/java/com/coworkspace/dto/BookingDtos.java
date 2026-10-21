@@ -17,16 +17,16 @@ public class BookingDtos {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class BookingRequest {
-        @NotNull
+        @NotNull(message = "Choose a workspace unit")
         private Long seatUnitId;
 
-        @NotNull
+        @NotNull(message = "Choose a start date")
         private LocalDate startDate;
 
-        @NotNull
+        @NotNull(message = "Choose an end date")
         private LocalDate endDate;
 
-        @NotNull
+        @NotNull(message = "Choose a booking type")
         private BookingType bookingType;
     }
 

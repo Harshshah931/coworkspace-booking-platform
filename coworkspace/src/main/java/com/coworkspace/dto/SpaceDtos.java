@@ -64,7 +64,9 @@ public class SpaceDtos {
 
         // Optional. If omitted, this seat unit uses the parent space's price.
         // Typically set for CABIN units to charge more than DESK units.
+        @jakarta.validation.constraints.Positive
         private BigDecimal pricePerDay;
+        @jakarta.validation.constraints.Positive
         private BigDecimal pricePerMonth;
     }
 

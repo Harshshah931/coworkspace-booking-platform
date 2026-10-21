@@ -1,21 +1,12 @@
 // ---- CoWorkSpace shared API helper ----
 // Talks to the Spring Boot backend at localhost:8080
 
-const API_BASE = "http://localhost:8080/api";
+const API_BASE = String(window.COWORKSPACE_API_BASE || "http://localhost:8080/api").replace(/\/+$/, "");
 
-function normalizeE164Phone(rawPhone) {
-  const cleaned = rawPhone.trim().replace(/[\s\-().]/g, "");
-  const normalized = /^[6-9]\d{9}$/.test(cleaned)
-    ? `+91${cleaned}`
-    : cleaned;
-
-  if (!/^\+[1-9]\d{6,14}$/.test(normalized)) {
-    throw new Error(
-      "Enter a 10-digit Indian mobile number or an international number with country code, such as +<country code><number>."
-    );
-  }
-
-  return normalized;
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  }[char]));
 }
 
 function formatINR(amount) {
@@ -33,7 +24,8 @@ const Auth = {
   },
   getUser() {
     const raw = localStorage.getItem("cw_user");
-    return raw ? JSON.parse(raw) : null;
+    if (!raw) return null;
+    try { return JSON.parse(raw); } catch { return null; }
   },
   setSession(authResponse) {
     localStorage.setItem("cw_token", authResponse.token);
@@ -125,7 +117,7 @@ async function apiFetch(path, options = {}) {
         : body && (body.error || body.message)) ||
       `Request failed with status ${res.status}`;
 
-    if ((res.status === 401 || res.status === 403) && !path.startsWith("/auth/")) {
+    if (res.status === 401 && !path.startsWith("/auth/")) {
       Auth.clearSession();
       window.location.href = "login.html";
     }
@@ -137,105 +129,37 @@ async function apiFetch(path, options = {}) {
 }
 
 const Api = {
-  // ---- Auth ----
+  // ---- Authentication ----
   register(name, email, password) {
-    return apiFetch("/auth/register", {
-      method: "POST",
-      body: JSON.stringify({ name, email, password }),
-    });
+    return apiFetch("/auth/register", { method: "POST", body: JSON.stringify({ name, email, password }) });
   },
   login(email, password) {
-    return apiFetch("/auth/login", {
-      method: "POST",
-      body: JSON.stringify({ email, password }),
-    });
-  },
-  sendOtp(phone, channel = "SMS", purpose = "AUTH") {
-    return apiFetch("/auth/otp/send", {
-      method: "POST",
-      body: JSON.stringify({ phone, channel, purpose }),
-    });
-  },
-  verifyOtp(phone, code, purpose = "AUTH") {
-    return apiFetch("/auth/otp/verify", {
-      method: "POST",
-      body: JSON.stringify({ phone, code, purpose }),
-    });
-  },
-  registerWithPhone(registrationToken, name, email, password) {
-    return apiFetch("/auth/phone/register", {
-      method: "POST",
-      body: JSON.stringify({ registrationToken, name, email, password }),
-    });
-  },
-  getLatestMockOtp(phone) {
-    return apiFetch(`/dev/otp/latest?phone=${encodeURIComponent(phone)}`);
+    return apiFetch("/auth/login", { method: "POST", body: JSON.stringify({ email, password }) });
   },
 
-  // ---- Spaces ----
-  getSpaces() {
-    return apiFetch("/spaces");
-  },
-  getSpace(id) {
-    return apiFetch(`/spaces/${id}`);
-  },
+  // ---- Workspaces ----
+  getSpaces() { return apiFetch("/spaces"); },
+  getSpace(id) { return apiFetch(`/spaces/${id}`); },
   getAvailability(spaceId, start, end) {
-    return apiFetch(
-      `/spaces/${spaceId}/availability?start=${start}&end=${end}`
-    );
+    return apiFetch(`/spaces/${spaceId}/availability?start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}`);
   },
-  createSpace(data) {
-    return apiFetch("/spaces", { method: "POST", body: JSON.stringify(data) });
-  },
-  updateSpace(id, data) {
-    return apiFetch(`/spaces/${id}`, {
-      method: "PUT",
-      body: JSON.stringify(data),
-    });
-  },
-  deleteSpace(id) {
-    return apiFetch(`/spaces/${id}`, { method: "DELETE" });
-  },
-  addSeatUnit(spaceId, data) {
-    return apiFetch(`/spaces/${spaceId}/seat-units`, {
-      method: "POST",
-      body: JSON.stringify(data),
-    });
-  },
+  createSpace(data) { return apiFetch("/spaces", { method: "POST", body: JSON.stringify(data) }); },
+  updateSpace(id, data) { return apiFetch(`/spaces/${id}`, { method: "PUT", body: JSON.stringify(data) }); },
+  deleteSpace(id) { return apiFetch(`/spaces/${id}`, { method: "DELETE" }); },
+  addSeatUnit(spaceId, data) { return apiFetch(`/spaces/${spaceId}/seat-units`, { method: "POST", body: JSON.stringify(data) }); },
 
-  // ---- Bookings ----
-  createBooking(data) {
-    return apiFetch("/bookings", {
-      method: "POST",
-      body: JSON.stringify(data),
-    });
-  },
-  getMyBookings() {
-    return apiFetch("/bookings/my");
-  },
-  cancelBooking(id) {
-    return apiFetch(`/bookings/${id}/cancel`, { method: "PUT" });
-  },
+  // ---- Reservations (no OTP step) ----
+  createBooking(data) { return apiFetch("/bookings", { method: "POST", body: JSON.stringify(data) }); },
+  getMyBookings() { return apiFetch("/bookings/my"); },
+  cancelBooking(id) { return apiFetch(`/bookings/${id}/cancel`, { method: "PUT" }); },
 
   // ---- Admin ----
-  getAllBookings() {
-    return apiFetch("/admin/bookings");
-  },
+  getAllBookings() { return apiFetch("/admin/bookings"); },
 
   // ---- Profile ----
-  getProfile() {
-    return apiFetch("/profile");
-  },
-  updateProfile(name, phone) {
-    return apiFetch("/profile", {
-      method: "PUT",
-      body: JSON.stringify({ name, phone }),
-    });
-  },
+  getProfile() { return apiFetch("/profile"); },
+  updateProfile(name, phone) { return apiFetch("/profile", { method: "PUT", body: JSON.stringify({ name, phone }) }); },
   changePassword(currentPassword, newPassword) {
-    return apiFetch("/profile/password", {
-      method: "PUT",
-      body: JSON.stringify({ currentPassword, newPassword }),
-    });
+    return apiFetch("/profile/password", { method: "PUT", body: JSON.stringify({ currentPassword, newPassword }) });
   },
 };

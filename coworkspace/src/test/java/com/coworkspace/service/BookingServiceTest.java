@@ -76,8 +76,8 @@ class BookingServiceTest {
     void createBooking_Success() {
         BookingRequest request = new BookingRequest(
                 100L,
-                LocalDate.of(2026, 6, 1),
-                LocalDate.of(2026, 6, 5),
+                LocalDate.now().plusDays(1),
+                LocalDate.now().plusDays(5),
                 BookingType.DAILY
         );
 
@@ -98,7 +98,7 @@ class BookingServiceTest {
         assertEquals("Innov8 Hub", response.getSpaceName());
         assertEquals("Desk-1", response.getSeatUnitLabel());
         assertEquals(BookingStatus.CONFIRMED, response.getStatus());
-        // 4 days * $500 = $2000
+        // 4 days × ₹500 = ₹2,000
         assertEquals(new BigDecimal("2000.00"), response.getTotalPrice());
         verify(seatUnitRepository).findByIdWithLock(100L);
         verify(bookingRepository).save(any(Booking.class));
@@ -109,8 +109,8 @@ class BookingServiceTest {
     void createBooking_Fails_WhenStartDateNotBeforeEndDate() {
         BookingRequest invalidSameDay = new BookingRequest(
                 100L,
-                LocalDate.of(2026, 6, 5),
-                LocalDate.of(2026, 6, 5),
+                LocalDate.now().plusDays(5),
+                LocalDate.now().plusDays(5),
                 BookingType.DAILY
         );
 
@@ -120,8 +120,8 @@ class BookingServiceTest {
 
         BookingRequest invalidReversed = new BookingRequest(
                 100L,
-                LocalDate.of(2026, 6, 6),
-                LocalDate.of(2026, 6, 5),
+                LocalDate.now().plusDays(6),
+                LocalDate.now().plusDays(5),
                 BookingType.DAILY
         );
 
@@ -135,8 +135,8 @@ class BookingServiceTest {
     void createBooking_Fails_WhenOverlappingBookingExists() {
         BookingRequest request = new BookingRequest(
                 100L,
-                LocalDate.of(2026, 6, 1),
-                LocalDate.of(2026, 6, 5),
+                LocalDate.now().plusDays(1),
+                LocalDate.now().plusDays(5),
                 BookingType.DAILY
         );
 
@@ -152,12 +152,12 @@ class BookingServiceTest {
     }
 
     @Test
-    @DisplayName("Should calculate monthly price correctly based on 30-day rounding")
+    @DisplayName("Should calculate monthly price correctly in 30-day billing periods")
     void createBooking_CalculatesMonthlyPrice() {
         BookingRequest request = new BookingRequest(
                 100L,
-                LocalDate.of(2026, 6, 1),
-                LocalDate.of(2026, 7, 1),
+                LocalDate.now().plusDays(1),
+                LocalDate.now().plusDays(31),
                 BookingType.MONTHLY
         );
 
@@ -169,8 +169,30 @@ class BookingServiceTest {
 
         BookingResponse response = bookingService.createBooking("alice@example.com", request);
 
-        // 30 days = 1 month * $9000 = $9000
+        // 30 days = 1 month × ₹9,000 = ₹9,000
         assertEquals(new BigDecimal("9000.00"), response.getTotalPrice());
+    }
+
+
+    @Test
+    @DisplayName("Should charge a second monthly period when a stay exceeds 30 days")
+    void createBooking_CalculatesPartialSecondMonthlyPeriod() {
+        BookingRequest request = new BookingRequest(
+                100L,
+                LocalDate.now().plusDays(1),
+                LocalDate.now().plusDays(32),
+                BookingType.MONTHLY
+        );
+
+        when(userRepository.findByEmail("alice@example.com")).thenReturn(Optional.of(sampleUser));
+        when(seatUnitRepository.findByIdWithLock(100L)).thenReturn(Optional.of(sampleSeatUnit));
+        when(bookingRepository.existsOverlappingBooking(eq(100L), any(), any(), eq(BookingStatus.CANCELLED)))
+                .thenReturn(false);
+        when(bookingRepository.save(any(Booking.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        BookingResponse response = bookingService.createBooking("alice@example.com", request);
+
+        assertEquals(new BigDecimal("18000.00"), response.getTotalPrice());
     }
 
     @Test
@@ -181,8 +203,8 @@ class BookingServiceTest {
                 .user(sampleUser)
                 .seatUnit(sampleSeatUnit)
                 .status(BookingStatus.CONFIRMED)
-                .startDate(LocalDate.of(2026, 6, 1))
-                .endDate(LocalDate.of(2026, 6, 5))
+                .startDate(LocalDate.now().plusDays(1))
+                .endDate(LocalDate.now().plusDays(5))
                 .totalPrice(new BigDecimal("2000.00"))
                 .bookingType(BookingType.DAILY)
                 .build();

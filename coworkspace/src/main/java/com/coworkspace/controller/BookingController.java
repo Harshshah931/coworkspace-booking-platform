@@ -20,6 +20,7 @@ public class BookingController {
 
     private final BookingService bookingService;
 
+    /** Creates a reservation directly after authenticated customer confirmation. */
     @PostMapping
     public ResponseEntity<BookingResponse> createBooking(
             @AuthenticationPrincipal UserPrincipal principal,

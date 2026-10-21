@@ -12,6 +12,13 @@
   body { font-family: 'Inter', sans-serif; background: #F4F5FB; }
   .seat-map-grid { display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 0.75rem; }
   @media (max-width: 640px) { .seat-map-grid { grid-template-columns: repeat(3, minmax(0,1fr)); } }
+  .seat-tile { min-height: 100px; border: 1px solid #bbf7d0; background: #f0fdf4; color: #166534; border-radius: 14px; padding: 12px 8px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px; transition:transform .15s, box-shadow .15s, border-color .15s; }
+  .seat-tile.available:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(15,23,42,.08); border-color:#4f46e5; }
+  .seat-tile.selected, .booking-type-btn.active { border:2px solid #4f46e5; background:#eef2ff; color:#4338ca; }
+  .seat-tile.unavailable { border-color:#e2e8f0; background:#f1f5f9; color:#94a3b8; cursor:not-allowed; }
+  .seat-tile small { font-size:10px; color: #64748b; }
+  .seat-tile.cabin-tile { grid-column: span 2; }
+  .booking-type-btn { flex:1; border:1px solid #e2e8f0; border-radius:12px; padding:.65rem; color:#64748b; font-weight:600; }
 </style>
 </head>
 <body class="text-[#1B1C29]">
@@ -35,7 +42,7 @@
 
   <div class="flex flex-col md:flex-row md:justify-between md:items-start gap-4 mb-6">
     <div>
-      <h1 class="text-3xl font-bold" id="space-name">Loading space...</h1>
+      <div class="flex flex-wrap items-center gap-2 mb-2"><span id="space-type-label" class="bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full text-xs font-bold">Workspace</span><span class="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-xs font-bold">Flexible booking</span></div><h1 class="text-3xl md:text-4xl font-bold tracking-tight" id="space-name">Loading space...</h1><p id="space-description" class="text-slate-500 max-w-2xl mt-2">Explore this workspace and choose a unit.</p>
       <p class="text-gray-500 mt-1 flex items-center gap-2">
         <span class="material-symbols-outlined text-[18px]">location_on</span>
         <span id="space-location"></span>
@@ -52,7 +59,7 @@
           <label class="text-xs text-gray-500 block mb-1">End date</label>
           <input class="border border-gray-200 rounded-lg px-3 py-2 text-sm" id="end-date" type="date"/>
         </div>
-        <button class="mt-5 px-4 py-2 bg-[#2D3FE2] text-white rounded-lg text-sm font-medium hover:opacity-90 transition-all" id="check-availability-btn">Check Availability</button>
+        <button class="mt-5 px-4 py-2 bg-[#2D3FE2] text-white rounded-lg text-sm font-medium hover:opacity-90 transition-all" id="check-availability-btn">Check availability</button>
       </div>
       <p class="text-xs text-gray-400 mt-2" id="date-hint"></p>
     </div>
@@ -63,7 +70,7 @@
     <div class="lg:col-span-2">
       <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
         <div class="flex justify-between items-center mb-4">
-          <h2 class="font-bold text-lg">Floor Plan</h2>
+          <div><h2 class="font-bold text-lg">Choose your unit</h2><p class="text-slate-500 text-xs mt-1"><span id="availability-count">Checking availability…</span> for your selected dates</p></div>
           <div class="flex gap-4 text-xs text-gray-500">
             <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-green-100 border border-green-400 inline-block"></span> Available</span>
             <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-gray-200 border border-gray-300 inline-block"></span> Booked</span>
@@ -88,8 +95,8 @@
         <div class="hidden mt-4" id="booking-type-toggle">
           <label class="text-xs text-gray-500 block mb-2">Booking type</label>
           <div class="flex gap-2">
-            <button class="flex-1 py-2 rounded-lg border border-[#2D3FE2] text-[#2D3FE2] text-sm font-medium booking-type-btn" data-type="DAILY">Daily</button>
-            <button class="flex-1 py-2 rounded-lg border border-gray-200 text-gray-500 text-sm font-medium booking-type-btn" data-type="MONTHLY">Monthly</button>
+            <button class="booking-type-btn active" data-type="DAILY">Daily</button>
+            <button class="booking-type-btn" data-type="MONTHLY">Monthly</button>
           </div>
         </div>
 
@@ -105,258 +112,230 @@
         </div>
 
         <button class="w-full mt-6 bg-[#2D3FE2] text-white py-3.5 rounded-xl font-semibold hover:opacity-95 transition-all shadow-lg shadow-[#2D3FE2]/20 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed" disabled id="confirm-booking-btn">
-          Confirm Booking
+          Review booking
         </button>
-        <p class="text-center text-gray-400 text-xs mt-3" id="booking-msg">No charge until confirmation</p>
+        <p class="text-center text-gray-400 text-xs mt-3" id="booking-msg">Confirm your dates and workspace before reserving. No online payment is collected.</p>
       </div>
     </div>
 
   </div>
 </main>
 
+
+<!-- Booking confirmation dialog -->
+<div id="booking-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/50 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="booking-modal-title">
+  <div class="bg-white rounded-3xl shadow-2xl w-full max-w-lg p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
+    <div class="flex items-start justify-between gap-4 mb-5">
+      <div><p class="text-indigo-600 text-xs font-bold uppercase tracking-[.18em]">Final review</p><h2 id="booking-modal-title" class="text-2xl font-bold mt-1">Confirm your reservation</h2></div>
+      <button type="button" id="booking-modal-close" class="text-slate-400 hover:text-slate-800 p-1" aria-label="Close dialog"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div class="rounded-2xl bg-slate-50 border border-slate-100 p-5 mb-5 space-y-3">
+      <div class="flex justify-between gap-4"><span class="text-slate-500">Workspace</span><strong id="confirm-unit" class="text-right"></strong></div>
+      <div class="flex justify-between gap-4"><span class="text-slate-500">Dates</span><strong id="confirm-dates" class="text-right"></strong></div>
+      <div class="flex justify-between gap-4"><span class="text-slate-500">Plan</span><strong id="confirm-plan" class="text-right"></strong></div>
+      <div class="pt-3 border-t border-slate-200 flex justify-between gap-4"><span class="font-semibold">Estimated total</span><strong id="confirm-total" class="text-indigo-700 text-xl"></strong></div>
+    </div>
+    <p id="booking-modal-error" class="hidden rounded-xl bg-red-50 border border-red-100 text-red-700 text-sm p-3 mb-4" role="alert"></p>
+    <p id="booking-modal-note" class="text-xs text-slate-500 mb-5">Your reservation will be confirmed immediately if the selected unit is still available. Payment is not processed online.</p>
+    <div id="booking-success" class="hidden rounded-2xl bg-emerald-50 border border-emerald-100 p-4 mb-4">
+      <div class="flex items-center gap-2 text-emerald-800 font-semibold"><span class="material-symbols-outlined">check_circle</span> Reservation confirmed</div>
+      <p class="text-emerald-800 text-sm mt-2">Reference <strong id="confirmed-reference"></strong></p>
+    </div>
+    <div class="flex flex-col sm:flex-row gap-3" id="booking-modal-actions">
+      <button type="button" id="booking-modal-cancel" class="sm:flex-1 px-5 py-3 rounded-xl border border-slate-200 font-semibold text-slate-600 hover:bg-slate-50">Go back</button>
+      <button type="button" id="booking-modal-confirm" class="sm:flex-1 px-5 py-3 rounded-xl bg-indigo-600 text-white font-semibold hover:bg-indigo-700 disabled:opacity-50"><span class="material-symbols-outlined align-middle text-[18px] mr-1">event_available</span>Confirm reservation</button>
+      <a href="my-bookings.html" id="booking-modal-view" class="hidden sm:flex-1 px-5 py-3 rounded-xl bg-indigo-600 text-white font-semibold text-center justify-center">View my bookings</a>
+    </div>
+  </div>
+</div>
+
 <script src="api.js"></script>
 <script>
-    Auth.requireLogin();
+  Auth.requireLogin();
+  const params = new URLSearchParams(window.location.search);
+  const spaceId = params.get('spaceId');
+  if (!spaceId) window.location.href = 'browse.html';
 
-    const params = new URLSearchParams(window.location.search);
-    const spaceId = params.get('spaceId');
+  let currentSpace = null;
+  let selectedSeatUnit = null;
+  let currentSeatUnits = [];
+  let bookingType = 'DAILY';
+  let lastStartDate = '';
+  let isBooking = false;
 
-    if (!spaceId) {
-        window.location.href = 'browse.html';
-    }
+  const $ = (id) => document.getElementById(id);
+  const localDateString = (date) => {
+    const y = date.getFullYear(); const m = String(date.getMonth() + 1).padStart(2, '0'); const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  };
+  function todayStr(offset = 0) { const d = new Date(); d.setHours(12,0,0,0); d.setDate(d.getDate() + offset); return localDateString(d); }
+  
+function addDays(dateStr, days) {
+  const date = new Date(`${dateStr}T12:00:00`);
+  date.setDate(date.getDate() + days);
+  return localDateString(date);
+}
 
-    let currentSpace = null;
-    let selectedSeatUnit = null; // { id, label, type, pricePerDay, pricePerMonth }
-    let bookingType = 'DAILY';
+function daysBetweenDates(startStr, endStr) {
+  const start = new Date(`${startStr}T12:00:00`);
+  const end = new Date(`${endStr}T12:00:00`);
+  return Math.round((end - start) / 86400000);
+}
 
-    function todayStr(offsetDays = 0) {
-        const d = new Date();
-        d.setDate(d.getDate() + offsetDays);
-        return d.toISOString().split('T')[0];
-    }
+function defaultDurationForType(type) {
+  return type === 'MONTHLY' ? 30 : 1;
+}
 
-    function addMonths(dateStr, months) {
-        const d = new Date(dateStr);
-        d.setMonth(d.getMonth() + months);
-        return d.toISOString().split('T')[0];
-    }
+function applyDefaultDatesForType(type) {
+  const start = $('start-date');
+  const end = $('end-date');
 
-    // Sets sensible default dates depending on booking type, WITHOUT overriding
-    // dates the user already chose deliberately (only applied on type switch
-    // when the current range looks like a leftover default from the other type).
-    function applyDefaultDatesForType(type) {
-        const startInput = document.getElementById('start-date');
-        const endInput = document.getElementById('end-date');
-        const hint = document.getElementById('date-hint');
+  start.min = todayStr(0);
 
-        if (type === 'MONTHLY') {
-            hint.textContent = 'Monthly bookings default to a 1-month window — adjust the end date for longer stays.';
-            if (!startInput.value) startInput.value = todayStr(1);
-            endInput.value = addMonths(startInput.value, 1);
-        } else {
-            hint.textContent = 'Daily bookings are charged per day — pick any date range.';
-            if (!startInput.value) startInput.value = todayStr(1);
-            if (!endInput.value || endInput.value <= startInput.value) {
-                endInput.value = todayStr(2); // sensible 1-day-minimum default, not a forced 3-day minimum
-            }
-        }
-    }
+  if (!start.value || start.value < todayStr(0)) {
+    start.value = todayStr(1);
+  }
 
-    function renderSeatMap(seatUnits) {
-        const grid = document.getElementById('seat-map-grid');
-        grid.innerHTML = '';
+  // Always reset the end date when switching Daily / Monthly.
+  const duration = defaultDurationForType(type);
 
-        if (seatUnits.length === 0) {
-            grid.innerHTML = '<p class="col-span-6 text-center text-gray-500 py-8">No seat units configured for this space yet.</p>';
-            return;
-        }
+  end.min = addDays(start.value, 1);
+  end.value = addDays(start.value, duration);
 
-        seatUnits.forEach(su => {
-            const div = document.createElement('div');
-            const isCabin = su.type === 'CABIN';
-            const priceLabel = bookingType === 'MONTHLY'
-                ? `${formatINR(su.pricePerMonth)}/mo`
-                : `${formatINR(su.pricePerDay)}/day`;
+  lastStartDate = start.value;
 
-            if (!su.available) {
-                div.className = 'p-3 bg-gray-100 border border-gray-200 text-gray-400 rounded-lg cursor-not-allowed flex flex-col items-center justify-center gap-1' + (isCabin ? ' col-span-2' : '');
-                div.innerHTML = `<span class="material-symbols-outlined text-[18px]">block</span><span class="text-[10px] font-medium">${su.label}</span>`;
-            } else {
-                div.className = 'p-3 bg-white border border-green-300 text-green-700 rounded-lg cursor-pointer hover:bg-green-50 transition-all flex flex-col items-center justify-center gap-1' + (isCabin ? ' col-span-2' : '');
-                div.innerHTML = isCabin
-                    ? `<span class="material-symbols-outlined text-[18px]">meeting_room</span><span class="text-[10px] font-bold">${su.label}</span><span class="text-[9px] text-gray-500">${priceLabel}</span>`
-                    : `<span class="material-symbols-outlined text-[18px]">desk</span><span class="text-[10px] font-bold">${su.label}</span><span class="text-[9px] text-gray-500">${priceLabel}</span>`;
-                div.dataset.seatId = su.id;
-                div.dataset.label = su.label;
-                div.dataset.type = su.type;
-                div.dataset.pricePerDay = su.pricePerDay;
-                div.dataset.pricePerMonth = su.pricePerMonth;
-                div.addEventListener('click', () => selectSeat(su, div));
-            }
-            grid.appendChild(div);
-        });
-    }
+  if (type === 'MONTHLY') {
+    $('date-hint').textContent =
+      'Monthly reservations use 30-day billing periods. You can adjust the end date for longer stays.';
+  } else {
+    $('date-hint').textContent =
+      'Daily reservations are priced per day. The end date is your checkout date. You can adjust it for longer stays.';
+  }
+}
 
-    function selectSeat(su, div) {
-        document.querySelectorAll('#seat-map-grid > div[data-seat-id]').forEach(d => {
-            const isCabin = d.dataset.type === 'CABIN';
-            const priceLabel = bookingType === 'MONTHLY'
-                ? `${formatINR(d.dataset.pricePerMonth)}/mo`
-                : `${formatINR(d.dataset.pricePerDay)}/day`;
-            d.className = 'p-3 bg-white border border-green-300 text-green-700 rounded-lg cursor-pointer hover:bg-green-50 transition-all flex flex-col items-center justify-center gap-1' + (isCabin ? ' col-span-2' : '');
-            d.innerHTML = isCabin
-                ? `<span class="material-symbols-outlined text-[18px]">meeting_room</span><span class="text-[10px] font-bold">${d.dataset.label}</span><span class="text-[9px] text-gray-500">${priceLabel}</span>`
-                : `<span class="material-symbols-outlined text-[18px]">desk</span><span class="text-[10px] font-bold">${d.dataset.label}</span><span class="text-[9px] text-gray-500">${priceLabel}</span>`;
-        });
-
-        const isCabin = su.type === 'CABIN';
-        div.className = 'p-3 bg-[#2D3FE2]/10 border-2 border-[#2D3FE2] text-[#2D3FE2] rounded-lg cursor-pointer flex flex-col items-center justify-center gap-1 shadow-sm' + (isCabin ? ' col-span-2' : '');
-        div.innerHTML = `<span class="material-symbols-outlined text-[18px]">check_circle</span><span class="text-[10px] font-bold">${su.label}</span>`;
-
-        selectedSeatUnit = su;
-        updateSummary();
-    }
-
-    function updateSummary() {
-        const summaryBody = document.getElementById('booking-summary-body');
-        const totalsBlock = document.getElementById('booking-summary-totals');
-        const typeToggle = document.getElementById('booking-type-toggle');
-        const confirmBtn = document.getElementById('confirm-booking-btn');
-
-        if (!selectedSeatUnit) {
-            summaryBody.innerHTML = '<p class="text-gray-500 text-sm">Select a seat on the map to begin.</p>';
-            totalsBlock.classList.add('hidden');
-            typeToggle.classList.add('hidden');
-            confirmBtn.disabled = true;
-            return;
-        }
-
-        const start = document.getElementById('start-date').value;
-        const end = document.getElementById('end-date').value;
-        const days = Math.max(1, Math.round((new Date(end) - new Date(start)) / (1000 * 60 * 60 * 24)));
-
-        let price, rateLabel;
-        if (bookingType === 'MONTHLY') {
-            const months = Math.max(1, Math.round(days / 30));
-            price = parseFloat(selectedSeatUnit.pricePerMonth) * months;
-            rateLabel = `${formatINR(selectedSeatUnit.pricePerMonth)}/month × ${months}`;
-        } else {
-            price = parseFloat(selectedSeatUnit.pricePerDay) * days;
-            rateLabel = `${formatINR(selectedSeatUnit.pricePerDay)}/day × ${days}`;
-        }
-
-        summaryBody.innerHTML = `
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-[#2D3FE2]/10 rounded-lg flex items-center justify-center text-[#2D3FE2]">
-                    <span class="material-symbols-outlined">${selectedSeatUnit.type === 'CABIN' ? 'meeting_room' : 'desk'}</span>
-                </div>
-                <div>
-                    <p class="font-medium text-sm">${selectedSeatUnit.label}</p>
-                    <p class="text-gray-500 text-xs">${currentSpace.name}</p>
-                </div>
-            </div>
-            <div class="flex items-center gap-3 py-2">
-                <span class="material-symbols-outlined text-gray-400">calendar_month</span>
-                <div>
-                    <p class="font-medium text-sm">${start} to ${end}</p>
-                    <p class="text-gray-500 text-xs">${days} Day${days === 1 ? '' : 's'}</p>
-                </div>
-            </div>
-        `;
-
-        document.getElementById('summary-rate').textContent = rateLabel;
-        document.getElementById('summary-total').textContent = formatINR(price);
-
-        totalsBlock.classList.remove('hidden');
-        typeToggle.classList.remove('hidden');
-        confirmBtn.disabled = false;
-    }
-
-    async function loadSpaceInfo() {
-        currentSpace = await Api.getSpace(spaceId);
-        document.getElementById('space-name').textContent = currentSpace.name;
-        document.getElementById('space-location').textContent = currentSpace.location;
-    }
-
-    async function checkAvailability() {
-        const start = document.getElementById('start-date').value;
-        const end = document.getElementById('end-date').value;
-        const grid = document.getElementById('seat-map-grid');
-
-        if (!start || !end) {
-            alert('Please choose both start and end dates.');
-            return;
-        }
-        if (start >= end) {
-            alert('Start date must be before end date.');
-            return;
-        }
-
-        grid.innerHTML = '<p class="col-span-6 text-center text-gray-500 py-8">Loading seat map...</p>';
-        selectedSeatUnit = null;
-        updateSummary();
-
-        try {
-            const availability = await Api.getAvailability(spaceId, start, end);
-            renderSeatMap(availability.seatUnits);
-        } catch (err) {
-            grid.innerHTML = `<p class="col-span-6 text-center text-red-600 py-8">${err.message}</p>`;
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('logout-btn').addEventListener('click', () => Auth.logout());
-
-        applyDefaultDatesForType('DAILY');
-
-        document.getElementById('check-availability-btn').addEventListener('click', checkAvailability);
-
-        document.querySelectorAll('.booking-type-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                bookingType = btn.dataset.type;
-                document.querySelectorAll('.booking-type-btn').forEach(b => {
-                    b.className = 'flex-1 py-2 rounded-lg border border-gray-200 text-gray-500 text-sm font-medium booking-type-btn';
-                });
-                btn.className = 'flex-1 py-2 rounded-lg border border-[#2D3FE2] text-[#2D3FE2] text-sm font-medium booking-type-btn';
-
-                // Re-apply sensible defaults for the new type (e.g. monthly -> +1 month window)
-                applyDefaultDatesForType(bookingType);
-                updateSummary();
-                checkAvailability(); // re-check since date range changed
-            });
-        });
-
-        document.getElementById('confirm-booking-btn').addEventListener('click', async () => {
-            if (!selectedSeatUnit) return;
-
-            const start = document.getElementById('start-date').value;
-            const end = document.getElementById('end-date').value;
-            const confirmBtn = document.getElementById('confirm-booking-btn');
-            const msg = document.getElementById('booking-msg');
-
-            confirmBtn.disabled = true;
-            confirmBtn.textContent = 'Booking...';
-            msg.textContent = '';
-            msg.classList.remove('text-red-600');
-
-            try {
-                await Api.createBooking({
-                    seatUnitId: selectedSeatUnit.id,
-                    startDate: start,
-                    endDate: end,
-                    bookingType: bookingType,
-                });
-                window.location.href = 'my-bookings.html';
-            } catch (err) {
-                msg.textContent = err.message;
-                msg.classList.add('text-red-600');
-                confirmBtn.disabled = false;
-                confirmBtn.textContent = 'Confirm Booking';
-                checkAvailability();
-            }
-        });
-
-        loadSpaceInfo().then(checkAvailability);
+  function seatTileMarkup(seat, selected = false) {
+    const cabin = seat.type === 'CABIN';
+    const price = bookingType === 'MONTHLY' ? `${formatINR(seat.pricePerMonth)}/mo` : `${formatINR(seat.pricePerDay)}/day`;
+    const cls = selected ? 'seat-tile selected' : (seat.available ? 'seat-tile available' : 'seat-tile unavailable');
+    return `<span class="material-symbols-outlined">${selected ? 'check_circle' : (cabin ? 'meeting_room' : 'desk')}</span><strong>${escapeHtml(seat.label)}</strong><small>${seat.available ? price : 'Reserved'}</small>`;
+  }
+  function renderSeatMap(seats) {
+    currentSeatUnits = Array.isArray(seats) ? seats : [];
+    const grid = $('seat-map-grid'); grid.innerHTML = '';
+    seats = currentSeatUnits;
+    if (!seats.length) { grid.innerHTML = '<p class="col-span-6 text-center text-slate-500 py-10">No units have been added to this workspace yet.</p>'; return; }
+    seats.forEach(seat => {
+      const btn = document.createElement('button'); btn.type = 'button'; btn.dataset.seatId = seat.id; btn.dataset.type = seat.type;
+      btn.className = seat.available ? 'seat-tile available' : 'seat-tile unavailable';
+      if (seat.type === 'CABIN') btn.classList.add('cabin-tile');
+      btn.disabled = !seat.available; btn.innerHTML = seatTileMarkup(seat);
+      btn.addEventListener('click', () => selectSeat(seat)); grid.appendChild(btn);
     });
+  }
+  function selectSeat(seat) {
+    if (!seat.available) return;
+    selectedSeatUnit = seat;
+    // Re-render the full map so the previous selection returns to its normal
+    // available appearance and only the current selection shows a checkmark.
+    renderSeatMap(currentSeatUnits.map(item => ({ ...item })));
+    const selectedButton = document.querySelector(`#seat-map-grid [data-seat-id="${Number(seat.id)}"]`);
+    if (selectedButton) {
+      selectedButton.classList.add('selected');
+      selectedButton.innerHTML = seatTileMarkup(seat, true);
+    }
+    updateSummary();
+  }
+  function updateSummary() {
+    const body = $('booking-summary-body'); const totalBlock = $('booking-summary-totals'); const typeToggle = $('booking-type-toggle'); const confirm = $('confirm-booking-btn');
+    if (!selectedSeatUnit) { body.innerHTML = '<p class="text-slate-500 text-sm">Choose an available unit on the floor plan to continue.</p>'; totalBlock.classList.add('hidden'); typeToggle.classList.remove('hidden'); confirm.disabled = true; return; }
+    const start = $('start-date').value; const end = $('end-date').value;
+    const days = Math.max(1, Math.round((new Date(`${end}T12:00:00`) - new Date(`${start}T12:00:00`)) / 86400000));
+    const daily = bookingType === 'DAILY'; const rate = Number(daily ? selectedSeatUnit.pricePerDay : selectedSeatUnit.pricePerMonth);
+    const units = daily ? days : Math.max(1, Math.ceil(days / 30)); const total = rate * units;
+    body.innerHTML = `<div class="flex items-center gap-3"><div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-700 flex items-center justify-center"><span class="material-symbols-outlined">${selectedSeatUnit.type === 'CABIN' ? 'meeting_room' : 'desk'}</span></div><div><p class="font-semibold">${escapeHtml(selectedSeatUnit.label)}</p><p class="text-slate-500 text-xs">${escapeHtml(currentSpace?.name || '')}</p></div></div><div class="flex items-start gap-3 mt-4"><span class="material-symbols-outlined text-slate-400">calendar_month</span><div><p class="font-medium text-sm">${start} → ${end}</p><p class="text-slate-500 text-xs">${days} day${days === 1 ? '' : 's'}</p></div></div>`;
+    $('summary-rate').textContent = `${formatINR(rate)}/${daily ? 'day' : 'month'} × ${units}`; $('summary-total').textContent = formatINR(total);
+    totalBlock.classList.remove('hidden'); typeToggle.classList.remove('hidden'); confirm.disabled = !start || !end || start >= end;
+  }
+  async function loadSpaceInfo() {
+    currentSpace = await Api.getSpace(spaceId);
+    $('space-name').textContent = currentSpace.name; $('space-location').textContent = currentSpace.location;
+    $('space-description').textContent = currentSpace.description || 'A thoughtfully designed space to help you focus and do your best work.';
+    $('space-type-label').textContent = currentSpace.type === 'CABIN' ? 'Private workspace' : 'Flexible workspace';
+    document.title = `${currentSpace.name} — CoWorkSpace`;
+  }
+  async function checkAvailability() {
+    const start = $('start-date').value; const end = $('end-date').value; const grid = $('seat-map-grid');
+    if (!start || !end) { showToast('Choose both dates to check availability.', 'error'); return; }
+    if (start < todayStr(0)) { showToast('Start date cannot be in the past.', 'error'); return; }
+    if (start >= end) { showToast('End date must be after the start date.', 'error'); return; }
+    selectedSeatUnit = null; updateSummary(); grid.innerHTML = '<p class="col-span-6 text-center text-slate-500 py-10">Checking live availability…</p>';
+    $('check-availability-btn').disabled = true; $('check-availability-btn').textContent = 'Checking…';
+    try { const res = await Api.getAvailability(spaceId, start, end); renderSeatMap(res.seatUnits || []); $('availability-count').textContent = `${(res.seatUnits || []).filter(x => x.available).length} available`; }
+    catch (err) { grid.innerHTML = `<p class="col-span-6 text-center text-rose-600 py-10">${escapeHtml(err.message)}</p>`; }
+    finally { $('check-availability-btn').disabled = false; $('check-availability-btn').textContent = 'Check availability'; }
+  }
+  function openBookingModal() {
+    if (!selectedSeatUnit) return;
+    const start = $('start-date').value; const end = $('end-date').value;
+    if (!start || !end || start >= end) { showToast('Choose a valid date range first.', 'error'); return; }
+    $('confirm-unit').textContent = `${selectedSeatUnit.label} · ${currentSpace.name}`; $('confirm-dates').textContent = `${start} to ${end}`;
+    $('confirm-plan').textContent = bookingType === 'MONTHLY' ? 'Monthly' : 'Daily'; $('confirm-total').textContent = $('summary-total').textContent;
+    $('booking-modal-error').classList.add('hidden'); $('booking-success').classList.add('hidden'); $('booking-modal-note').classList.remove('hidden');
+    $('booking-modal-confirm').classList.remove('hidden'); $('booking-modal-view').classList.add('hidden'); $('booking-modal-cancel').classList.remove('hidden');
+    const modal = $('booking-modal'); modal.classList.remove('hidden'); modal.classList.add('flex'); document.body.classList.add('overflow-hidden'); $('booking-modal-confirm').focus();
+  }
+  function closeBookingModal() { if (isBooking) return; const modal = $('booking-modal'); modal.classList.add('hidden'); modal.classList.remove('flex'); document.body.classList.remove('overflow-hidden'); }
+  async function submitBooking() {
+    if (isBooking || !selectedSeatUnit) return;
+    const btn = $('booking-modal-confirm'); const error = $('booking-modal-error'); error.classList.add('hidden'); isBooking = true; btn.disabled = true; btn.textContent = 'Confirming reservation…';
+    try {
+      const result = await Api.createBooking({ seatUnitId: selectedSeatUnit.id, startDate: $('start-date').value, endDate: $('end-date').value, bookingType });
+      $('confirmed-reference').textContent = `CW-${String(result.id).padStart(6, '0')}`; $('booking-success').classList.remove('hidden'); $('booking-modal-note').classList.add('hidden');
+      $('booking-modal-confirm').classList.add('hidden'); $('booking-modal-cancel').classList.add('hidden'); $('booking-modal-view').classList.remove('hidden');
+      await checkAvailability();
+    } catch (err) { error.textContent = err.message || 'Could not create the reservation. Please try again.'; error.classList.remove('hidden'); if (/already booked|overlap|available/i.test(err.message || '')) await checkAvailability(); }
+    finally { isBooking = false; btn.disabled = false; btn.innerHTML = '<span class="material-symbols-outlined align-middle text-[18px] mr-1">event_available</span>Confirm reservation'; }
+  }
+  function showToast(message, type = 'info') {
+    let toast = $('app-toast'); if (!toast) { toast = document.createElement('div'); toast.id = 'app-toast'; toast.className = 'fixed bottom-5 left-1/2 -translate-x-1/2 z-[100] rounded-xl px-4 py-3 shadow-xl text-sm font-medium'; document.body.appendChild(toast); }
+    toast.className = `fixed bottom-5 left-1/2 -translate-x-1/2 z-[100] rounded-xl px-4 py-3 shadow-xl text-sm font-medium ${type === 'error' ? 'bg-rose-600 text-white' : 'bg-slate-900 text-white'}`; toast.textContent = message; toast.classList.remove('hidden'); clearTimeout(showToast.timer); showToast.timer = setTimeout(() => toast.classList.add('hidden'), 3500);
+  }
+  document.addEventListener('DOMContentLoaded', async () => {
+    const user = Auth.getUser(); if (user) $('user-name-label') && ($('user-name-label').textContent = user.name);
+    $('logout-btn')?.addEventListener('click', () => Auth.logout());
+    $('check-availability-btn').addEventListener('click', checkAvailability);
+    
+$('start-date').addEventListener('change', () => {
+  const startInput = $('start-date');
+  const endInput = $('end-date');
+  const newStart = startInput.value;
+
+  if (!newStart) return;
+
+  // Preserve the existing stay duration when the start date changes.
+  let duration = lastStartDate && endInput.value > lastStartDate
+    ? daysBetweenDates(lastStartDate, endInput.value)
+    : defaultDurationForType(bookingType);
+
+  duration = Math.max(1, duration);
+
+  endInput.min = addDays(newStart, 1);
+  endInput.value = addDays(newStart, duration);
+
+  lastStartDate = newStart;
+
+  updateSummary();
+  checkAvailability();
+});
+
+    $('end-date').addEventListener('change', () => { updateSummary(); checkAvailability(); });
+    document.querySelectorAll('.booking-type-btn').forEach(btn => btn.addEventListener('click', () => { bookingType = btn.dataset.type; document.querySelectorAll('.booking-type-btn').forEach(b => b.className = 'booking-type-btn'); btn.classList.add('active'); applyDefaultDatesForType(bookingType); checkAvailability(); updateSummary(); }));
+    $('confirm-booking-btn').addEventListener('click', openBookingModal);
+    $('booking-modal-close').addEventListener('click', closeBookingModal); $('booking-modal-cancel').addEventListener('click', closeBookingModal); $('booking-modal-confirm').addEventListener('click', submitBooking);
+    $('booking-modal').addEventListener('mousedown', e => { if (e.target === $('booking-modal')) closeBookingModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('booking-modal').classList.contains('hidden')) closeBookingModal(); });
+    try { applyDefaultDatesForType('DAILY'); await loadSpaceInfo(); await checkAvailability(); }
+    catch (err) { $('space-name').textContent = 'Unable to load workspace'; $('space-description').textContent = err.message; }
+  });
 </script>
 </body></html>

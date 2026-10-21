@@ -34,7 +34,10 @@ public class User {
     @Column(unique = true)
     private String phone;
 
+    // Legacy persistence field retained so existing development databases remain compatible.
+    // It is not used by authentication or booking flows.
     @Column(nullable = false)
     @Builder.Default
     private boolean phoneVerified = false;
+
 }

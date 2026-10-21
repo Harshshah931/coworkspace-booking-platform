@@ -3,6 +3,7 @@ package com.coworkspace.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,9 +13,8 @@ public class ProfileDtos {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class UpdateProfileRequest {
-        @NotBlank
+        @NotBlank(message = "Name cannot be empty")
         private String name;
-
         private String phone;
     }
 
@@ -22,9 +22,8 @@ public class ProfileDtos {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ChangePasswordRequest {
-        @NotBlank
+        @NotBlank(message = "Current password is required")
         private String currentPassword;
-
         @NotBlank @Size(min = 6, message = "New password must be at least 6 characters")
         private String newPassword;
     }
@@ -32,7 +31,7 @@ public class ProfileDtos {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    @lombok.Builder
+    @Builder
     public static class ProfileResponse {
         private String name;
         private String email;

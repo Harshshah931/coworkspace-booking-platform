@@ -8,7 +8,15 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"/>
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined"/>
-<style>body { font-family: 'Inter', sans-serif; background: #F4F5FB; }</style>
+<style>
+body { font-family: 'Inter', sans-serif; background: #F4F5FB; }
+@media (max-width: 767px) {
+  .max-w-7xl.mx-auto.px-6.py-8.flex { flex-direction: column; gap: 1rem; padding-left: 1rem; padding-right: 1rem; }
+  .max-w-7xl.mx-auto.px-6.py-8.flex > aside { width: 100%; }
+  .max-w-7xl.mx-auto.px-6.py-8.flex > aside nav { display: flex; flex-wrap: wrap; }
+  .max-w-7xl.mx-auto.px-6.py-8.flex > main { width: 100%; min-width: 0; }
+}
+</style>
 </head>
 <body class="text-[#1B1C29]">
 
@@ -17,8 +25,8 @@
     <a href="browse.html" class="font-bold text-xl text-[#2D3FE2]">CoWorkSpace</a>
     <nav class="hidden md:flex items-center gap-6 text-sm text-gray-500">
       <a href="browse.html" class="hover:text-[#2D3FE2]">Browse</a>
-      <a href="my-bookings.html#" class="hover:text-[#2D3FE2]">Memberships</a>
-      <a href="my-bookings.html#" class="hover:text-[#2D3FE2]">Support</a>
+      <a href="payment-methods.html" class="hover:text-[#2D3FE2]">Payment preferences</a>
+      <a href="help.html" class="hover:text-[#2D3FE2]">Help Center</a>
     </nav>
     <div class="flex items-center gap-4">
       <span class="text-sm text-gray-500" id="user-name-label"></span>

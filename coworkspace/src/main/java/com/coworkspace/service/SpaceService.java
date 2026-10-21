@@ -11,6 +11,7 @@ import com.coworkspace.repository.SeatUnitRepository;
 import com.coworkspace.repository.SpaceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -25,6 +26,7 @@ public class SpaceService {
     private final SeatUnitRepository seatUnitRepository;
     private final BookingRepository bookingRepository;
 
+    @Transactional
     public SpaceResponse createSpace(SpaceRequest request) {
         Space space = Space.builder()
                 .name(request.getName())
@@ -39,16 +41,19 @@ public class SpaceService {
         return toResponse(space);
     }
 
+    @Transactional(readOnly = true)
     public List<SpaceResponse> getAllSpaces() {
         return spaceRepository.findAll().stream()
                 .map(this::toResponse)
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public SpaceResponse getSpaceById(Long id) {
         return toResponse(getSpaceOrThrow(id));
     }
 
+    @Transactional
     public SpaceResponse updateSpace(Long id, SpaceRequest request) {
         Space space = getSpaceOrThrow(id);
         space.setName(request.getName());
@@ -61,11 +66,16 @@ public class SpaceService {
         return toResponse(space);
     }
 
+    @Transactional
     public void deleteSpace(Long id) {
         Space space = getSpaceOrThrow(id);
+        if (bookingRepository.existsBySeatUnit_Space_Id(id)) {
+            throw new BadRequestException("This workspace has booking history and cannot be deleted. You can edit its details instead.");
+        }
         spaceRepository.delete(space);
     }
 
+    @Transactional
     public SeatUnitResponse addSeatUnit(Long spaceId, SeatUnitRequest request) {
         Space space = getSpaceOrThrow(spaceId);
 
@@ -95,6 +105,7 @@ public class SpaceService {
      * for the requested date range, along with each seat's effective price
      * (its own override price, or the space's default price).
      */
+    @Transactional(readOnly = true)
     public AvailabilityResponse getAvailability(Long spaceId, LocalDate start, LocalDate end) {
         if (!start.isBefore(end)) {
             throw new BadRequestException("startDate must be before endDate");

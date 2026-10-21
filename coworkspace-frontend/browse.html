@@ -1,161 +1,78 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>CoWorkSpace — Browse</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"/>
-<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined"/>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="theme-color" content="#f6f7fb"/><title>Explore Workspaces — CoWorkSpace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet"/>
 <style>
-  body { font-family: 'Inter', sans-serif; background: #F4F5FB; }
-  .glass-effect { background: rgba(255,255,255,0.9); backdrop-filter: blur(8px); }
+:root{--ink:#182136;--muted:#68738a;--brand:#554be5;--brand-dark:#4138c8;--line:#e7eaf1;--paper:#fff;--bg:#f6f7fb}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif}.container{width:min(1180px,calc(100% - 44px));margin:auto}.topbar{background:#ffffffeb;backdrop-filter:blur(14px);position:sticky;top:0;z-index:10;border-bottom:1px solid #e9ebf2}.topnav{height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{display:flex;align-items:center;gap:11px;font:800 20px Manrope,sans-serif;color:var(--ink);text-decoration:none;white-space:nowrap}.brand-icon{height:42px;width:42px;display:grid;place-items:center;border-radius:14px;color:white;background:linear-gradient(145deg,#746aff,#4138c8);box-shadow:0 6px 16px #554be533}.navlinks{display:flex;gap:26px;align-items:center}.navlinks a,.nav-user a{font-size:13px;color:var(--muted);text-decoration:none;font-weight:600}.navlinks a.active,.navlinks a:hover,.nav-user a:hover{color:var(--brand)}.nav-user{display:flex;align-items:center;gap:16px}.avatar{width:34px;height:34px;border-radius:50%;background:#eeedff;color:var(--brand);font-size:13px;font-weight:800;display:grid;place-items:center}.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;padding:12px 17px;font:700 13px 'DM Sans',sans-serif;text-decoration:none;cursor:pointer;transition:.16s}.btn-primary{background:var(--brand);color:#fff;box-shadow:0 7px 16px #554be525}.btn-primary:hover{background:var(--brand-dark);transform:translateY(-1px)}.btn-soft{background:#efefff;color:var(--brand)}.btn-soft:hover{background:#e4e3ff}.btn:disabled{opacity:.5;cursor:wait}.hero{margin:30px 0 25px;padding:45px clamp(24px,5vw,56px);border-radius:28px;min-height:270px;color:white;position:relative;overflow:hidden;background:radial-gradient(circle at 84% 12%,#8e86ff9c 0,transparent 23%),radial-gradient(circle at 70% 110%,#2dd4bf34 0,transparent 30%),linear-gradient(118deg,#1c244b,#353079 56%,#5346c9);display:flex;align-items:center}.hero:before{content:'';position:absolute;width:330px;height:330px;border:1px solid #ffffff20;border-radius:50%;right:40px;top:-110px;box-shadow:0 0 0 35px #ffffff06,0 0 0 75px #ffffff05}.hero-copy{max-width:650px;position:relative;z-index:1}.eyebrow{font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#c7c4ff}.hero h1{font:800 clamp(32px,4.3vw,51px)/1.1 Manrope,sans-serif;letter-spacing:-.05em;margin:16px 0}.hero p{font-size:15px;line-height:1.7;color:#dedff8;max-width:550px;margin:0}.hero-meta{display:flex;gap:20px;flex-wrap:wrap;margin-top:23px;font-size:12px;color:#eaebff}.hero-meta span{display:flex;align-items:center;gap:6px}.search-panel{background:white;border:1px solid var(--line);box-shadow:0 12px 34px #17203308;padding:13px;border-radius:20px;display:grid;grid-template-columns:1.2fr 1fr .8fr .8fr auto;gap:10px;align-items:center}.search-field{min-width:0;padding:3px 12px;display:flex;align-items:center;gap:10px}.search-field+.search-field{border-left:1px solid var(--line)}.search-field .material-symbols-outlined{color:var(--brand);font-size:21px}.search-field label{display:block;color:#8790a3;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}.search-field input,.search-field select{display:block;width:100%;border:0;outline:0;background:transparent;color:var(--ink);font:600 13px 'DM Sans',sans-serif;min-width:0}.search-field input::placeholder{color:#a7aebd;font-weight:400}.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin:34px 0 18px}.section-head h2{font:800 25px Manrope,sans-serif;letter-spacing:-.035em;margin:0}.section-head p{color:var(--muted);font-size:13px;margin:6px 0 0}.results-meta{font-size:12px;color:var(--muted)}.spaces-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin-bottom:55px}.space-card{overflow:hidden;background:white;border:1px solid var(--line);border-radius:21px;box-shadow:0 5px 18px #18213608;transition:transform .2s,box-shadow .2s;min-width:0}.space-card:hover{transform:translateY(-4px);box-shadow:0 20px 40px #18213613}.space-image{height:190px;position:relative;overflow:hidden;background:linear-gradient(135deg,#c8d6f3,#e8e7ff)}.space-image img{width:100%;height:100%;object-fit:cover;transition:transform .5s}.space-card:hover .space-image img{transform:scale(1.04)}.space-image:after{content:'';position:absolute;inset:50% 0 0;background:linear-gradient(transparent,#12193545)}.type-pill{position:absolute;z-index:1;top:14px;left:14px;background:#ffffffed;padding:7px 10px;border-radius:999px;color:#4f46e5;font-weight:800;font-size:10px;letter-spacing:.02em}.seat-count{position:absolute;z-index:1;bottom:14px;left:14px;color:white;font-size:12px;font-weight:700;display:flex;align-items:center;gap:5px}.card-body{padding:19px}.card-heading{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.card-heading h3{font:800 18px Manrope,sans-serif;letter-spacing:-.025em;margin:0}.space-type-icon{height:38px;width:38px;flex-shrink:0;border-radius:12px;background:#f0efff;color:var(--brand);display:grid;place-items:center}.location{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:5px;margin-top:8px}.description{height:40px;overflow:hidden;text-overflow:ellipsis;font-size:12px;line-height:1.6;color:#788297;margin:13px 0 15px}.card-footer{display:flex;align-items:flex-end;justify-content:space-between;border-top:1px solid #eff0f5;padding-top:15px;gap:10px}.price strong{display:block;color:var(--ink);font:800 20px Manrope,sans-serif;letter-spacing:-.035em}.price span{font-size:11px;color:#8590a4}.card-actions{display:flex;gap:7px}.mini-btn{height:39px;padding:0 13px;border-radius:11px;border:1px solid var(--line);font:700 12px 'DM Sans',sans-serif;cursor:pointer;background:white;color:var(--ink)}.mini-btn.primary{background:var(--brand);color:white;border-color:var(--brand)}.mini-btn:hover{filter:brightness(.97)}.empty{display:none;text-align:center;background:white;padding:55px 25px;border-radius:20px;border:1px dashed #d4d9e5;margin:18px 0 50px}.empty .material-symbols-outlined{font-size:36px;color:#8d88ef}.empty h3{margin:12px 0 6px}.empty p{color:var(--muted);font-size:13px}.notice{display:none;background:#fff1f2;border:1px solid #ffe4e6;color:#be123c;border-radius:14px;padding:14px;margin:18px 0;font-size:13px}.footer{padding:22px 0 35px;border-top:1px solid var(--line);color:#8a93a5;font-size:11px;display:flex;justify-content:space-between;gap:12px}.mobile-menu{display:none}@media(max-width:1000px){.search-panel{grid-template-columns:1fr 1fr}.search-field+.search-field{border-left:0}.search-panel .btn{width:100%}.spaces-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:700px){.container{width:calc(100% - 28px)}.topnav{height:66px}.navlinks{display:none}.nav-user{gap:9px}.nav-user .profile-link{display:none}.hero{padding:30px 24px;min-height:265px;border-radius:21px;margin-top:18px}.hero h1{font-size:35px}.hero p{font-size:13px}.hero:before{right:-150px}.search-panel{grid-template-columns:1fr;gap:8px;padding:12px}.search-field{padding:10px 8px;border-bottom:1px solid #f0f1f6}.search-field+.search-field{border-left:0}.section-head{align-items:flex-start;flex-direction:column;margin-top:28px}.spaces-grid{grid-template-columns:1fr;gap:16px}.space-image{height:205px}.footer{flex-direction:column}.result-sort{width:100%}}@media(min-width:701px) and (max-width:850px){.spaces-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
 </head>
-<body class="text-[#1B1C29]">
-
-<header class="bg-white border-b border-gray-100 sticky top-0 z-40" id="site-header">
-  <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-    <a href="browse.html" class="font-bold text-xl text-[#2D3FE2]">CoWorkSpace</a>
-    <nav class="hidden md:flex items-center gap-6 text-sm text-gray-500">
-      <a href="browse.html" class="text-[#2D3FE2] font-medium">Browse</a>
-      <a href="#" class="hover:text-[#2D3FE2]">Memberships</a>
-      <a href="#" class="hover:text-[#2D3FE2]">Support</a>
-    </nav>
-    <div class="flex items-center gap-4" id="user-menu">
-      <a href="my-bookings.html" class="hidden sm:block bg-[#2D3FE2] text-white px-5 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity">My Bookings</a>
-      <a href="profile.html" class="text-sm text-gray-500 hover:text-[#2D3FE2]" id="user-name-label"></a>
-      <button class="text-gray-500 hover:text-[#2D3FE2]" id="logout-btn" title="Log out">
-        <span class="material-symbols-outlined text-[20px]">logout</span>
-      </button>
-    </div>
-  </div>
-</header>
-
-<main class="max-w-7xl mx-auto px-6 py-8">
-
-  <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-2 flex flex-col md:flex-row gap-2 mb-8">
-    <div class="flex-1 flex items-center px-4 gap-3 border-r border-gray-100">
-      <span class="material-symbols-outlined text-[#2D3FE2]">search</span>
-      <input class="w-full bg-transparent border-none focus:ring-0 text-sm" id="search-name" placeholder="Find a workspace..." type="text"/>
-    </div>
-    <div class="flex-1 flex items-center px-4 gap-3">
-      <span class="material-symbols-outlined text-[#2D3FE2]">location_on</span>
-      <input class="w-full bg-transparent border-none focus:ring-0 text-sm" id="search-location" placeholder="Any location" type="text"/>
-    </div>
-    <button class="bg-[#2D3FE2] text-white px-8 py-3 rounded-lg text-sm font-medium hover:opacity-95 transition-opacity" id="search-btn">Search</button>
-  </div>
-
-  <div class="mb-6">
-    <h2 class="text-2xl font-bold">Available Spaces</h2>
-    <p class="text-gray-500 text-sm mt-1" id="results-count">Loading spaces...</p>
-  </div>
-
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="spaces-grid"></div>
-  <div class="hidden text-center py-16" id="empty-state">
-    <p class="text-xl font-bold text-gray-500">No spaces found</p>
-    <p class="text-gray-400 mt-2">Try adjusting your search.</p>
-  </div>
-
+<body>
+<header class="topbar"><div class="container topnav">
+  <a class="brand" href="browse.html"><span class="brand-icon material-symbols-outlined">grid_view</span>CoWorkSpace</a>
+  <nav class="navlinks"><a href="browse.html" class="active">Explore spaces</a><a href="my-bookings.html">My reservations</a></nav>
+  <div class="nav-user"><a id="admin-link" class="hidden" href="admin.html">Manage</a><a href="my-bookings.html" class="profile-link">My bookings</a><a href="profile.html" id="profile-link" aria-label="Open profile"><span class="avatar" id="user-avatar">U</span></a><button class="btn btn-soft" id="logout-btn"><span class="material-symbols-outlined" style="font-size:17px">logout</span><span class="logout-label">Sign out</span></button></div>
+</div></header>
+<main class="container">
+  <section class="hero"><div class="hero-copy"><span class="eyebrow">Space to do your best work</span><h1>Find a place where<br/>good work happens.</h1><p>Discover flexible desks and private spaces designed around your workday. Find a spot, pick your dates, and reserve in a few clicks.</p><div class="hero-meta"><span><i class="material-symbols-outlined" style="font-size:18px">location_on</i>Thoughtful workspaces</span><span><i class="material-symbols-outlined" style="font-size:18px">event_available</i>Live availability</span><span><i class="material-symbols-outlined" style="font-size:18px">currency_rupee</i>Clear INR pricing</span></div></div></section>
+  <section class="search-panel" aria-label="Search spaces">
+    <div class="search-field"><span class="material-symbols-outlined">search</span><div style="min-width:0;flex:1"><label for="search-name">Workspace</label><input id="search-name" placeholder="Search by name" type="search"/></div></div>
+    <div class="search-field"><span class="material-symbols-outlined">location_on</span><div style="min-width:0;flex:1"><label for="search-location">Location</label><input id="search-location" placeholder="City or neighbourhood" type="search"/></div></div>
+    <div class="search-field"><span class="material-symbols-outlined">apartment</span><div style="min-width:0;flex:1"><label for="search-type">Space type</label><select id="search-type"><option value="ALL">All spaces</option><option value="DESK">Desk space</option><option value="CABIN">Private cabin</option></select></div></div>
+    <div class="search-field"><span class="material-symbols-outlined">sort</span><div style="min-width:0;flex:1"><label for="sort-by">Sort by</label><select id="sort-by"><option value="recommended">Recommended</option><option value="price-asc">Price: low to high</option><option value="price-desc">Price: high to low</option><option value="name">Name: A–Z</option></select></div></div>
+    <button class="btn btn-primary" id="search-btn"><span class="material-symbols-outlined" style="font-size:18px">search</span>Search</button>
+  </section>
+  <div class="notice" id="page-error" role="alert"></div>
+  <section class="section-head"><div><h2>Explore workspaces</h2><p>Spaces that fit the way you like to work.</p></div><span class="results-meta" id="results-count">Loading spaces…</span></section>
+  <section class="spaces-grid" id="spaces-grid" aria-live="polite"></section>
+  <section class="empty" id="empty-state"><span class="material-symbols-outlined">travel_explore</span><h3>No matching spaces</h3><p>Try a different name, location or space type.</p><button class="btn btn-soft" id="clear-filters">Clear filters</button></section>
+  <footer class="footer"><span>© <span id="year"></span> CoWorkSpace</span><span>Reservations are confirmed instantly when availability allows. Online payment is not enabled.</span></footer>
 </main>
-
 <script src="api.js"></script>
 <script>
-    Auth.requireLogin();
-
-    const FALLBACK_IMAGES = [
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuB9w27_upfpwxABs-1EY0jt97bJb2w4O__5KG0fexwnX4nSOhGxd9tEtu0nUx5mVFanBwXWsK-fxZIwFt7EiEt-k1bFeW9s8MOL5y3eqKC_TrvtE7fHMFSDiIBjtHqpKIOlRd3BVUVjFBKOMrJtuCghWSVZ4LO0OFKzD-FaypY2l8kJrtbl7LODkW7JsYDBKrDhIQ4JNRFO8zro-8mOY-tBIcfi1JeIVRNjiqSlQ0QGL4oZ641RbxBz",
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuCoqUji9y_OD83vx2dufhvps-4K4z0BpsQ0xWzX8SX_SYwkhpbbTWSRsUTQrxzn-kMtTCfkSmR0Pb4F11IYkrZAsa2--CviFzvvxGAgXKJukLXHpF79cbQZq-Ri_B-dWOjWGRBaHoUQkCESAHpnpZyDskt94QRTnzd6ioqdk5DGpALJv1v_NmkQxzy4gyXsYETcIGZrqAlC3C5sAhH7qBMVUhP7PvVSRwueIS9S9a4tMOoYUmh026xC",
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuDjYZCADSka7AUhaRNcLi-CXPnSRJLp8y8ILn_rjvVsvrL98HpGvU1lC2ZJitHpbemwCii5r6KsZWKLdr6aSY9EKvxp5VCvMMc7nv6z-D-tFtkmNzPTuSTqOfW4VfpZTFJH69bHNWDvXBIQJroEJMLz12shN5hss81yB515ZUbxRpxskMkFmw4_j-Tm_JW3DLYSz5-PSG68jNpg7dBNdv4jwur0evESjTFq-OedXo_EJfZF27XZpIOq",
-    ];
-
-    let allSpaces = [];
-
-    function renderSpaces(spaces) {
-        const grid = document.getElementById('spaces-grid');
-        const emptyState = document.getElementById('empty-state');
-        const countLabel = document.getElementById('results-count');
-
-        grid.innerHTML = '';
-
-        if (spaces.length === 0) {
-            emptyState.classList.remove('hidden');
-            countLabel.textContent = '0 spaces found';
-            return;
-        }
-        emptyState.classList.add('hidden');
-        countLabel.textContent = `${spaces.length} space${spaces.length === 1 ? '' : 's'} found`;
-
-        spaces.forEach((space, i) => {
-            const img = FALLBACK_IMAGES[i % FALLBACK_IMAGES.length];
-            const card = document.createElement('div');
-            card.className = "group bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300";
-            card.innerHTML = `
-                <div class="relative h-48 w-full overflow-hidden">
-                    <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="${img}"/>
-                    <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-[#2D3FE2] shadow-sm">
-                        ${space.type === 'CABIN' ? 'Private Cabin' : 'Desk Space'}
-                    </div>
-                </div>
-                <div class="p-5">
-                    <h3 class="font-bold text-lg">${space.name}</h3>
-                    <div class="flex items-center gap-1 text-gray-500 text-sm mt-1 mb-3">
-                        <span class="material-symbols-outlined text-[16px]">location_on</span>
-                        <span>${space.location}</span>
-                    </div>
-                    <div class="mb-4">
-                        <p class="text-[#2D3FE2] font-bold text-lg">${formatINR(space.pricePerDay)}<span class="text-gray-400 font-normal text-sm">/day</span></p>
-                        <p class="text-gray-400 text-xs mt-1">${space.totalSeatUnits} seat unit${space.totalSeatUnits === 1 ? '' : 's'} • cabin prices may vary</p>
-                    </div>
-                    <button class="w-full bg-[#2D3FE2] text-white py-2.5 rounded-lg text-sm font-medium hover:opacity-90 transition-all view-availability-btn" data-space-id="${space.id}">
-                        View Availability
-                    </button>
-                </div>
-            `;
-            grid.appendChild(card);
-        });
-
-        document.querySelectorAll('.view-availability-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                window.location.href = `space-detail.html?spaceId=${btn.dataset.spaceId}`;
-            });
-        });
-    }
-
-    function applyFilters() {
-        const nameQuery = document.getElementById('search-name').value.trim().toLowerCase();
-        const locationQuery = document.getElementById('search-location').value.trim().toLowerCase();
-
-        const filtered = allSpaces.filter(s => {
-            const matchesName = !nameQuery || s.name.toLowerCase().includes(nameQuery);
-            const matchesLocation = !locationQuery || s.location.toLowerCase().includes(locationQuery);
-            return matchesName && matchesLocation;
-        });
-
-        renderSpaces(filtered);
-    }
-
-    async function loadSpaces() {
-        const countLabel = document.getElementById('results-count');
-        try {
-            allSpaces = await Api.getSpaces();
-            renderSpaces(allSpaces);
-        } catch (err) {
-            countLabel.textContent = 'Could not load spaces. Is the backend running on localhost:8080?';
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const user = Auth.getUser();
-        if (user) document.getElementById('user-name-label').textContent = user.name;
-
-        document.getElementById('logout-btn').addEventListener('click', () => Auth.logout());
-        document.getElementById('search-btn').addEventListener('click', applyFilters);
-        document.getElementById('search-name').addEventListener('keyup', (e) => { if (e.key === 'Enter') applyFilters(); });
-        document.getElementById('search-location').addEventListener('keyup', (e) => { if (e.key === 'Enter') applyFilters(); });
-
-        loadSpaces();
-    });
+Auth.requireLogin();
+const FALLBACK_IMAGES = [
+  'https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=900&q=80',
+  'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=900&q=80',
+  'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=900&q=80',
+  'https://images.unsplash.com/photo-1497366858526-0766cadbe8fa?auto=format&fit=crop&w=900&q=80'
+];
+let allSpaces = [];
+const $ = id => document.getElementById(id);
+function imageFor(space, index) { return FALLBACK_IMAGES[(Number(space.id || index) - 1 + FALLBACK_IMAGES.length) % FALLBACK_IMAGES.length]; }
+function renderSpaces(items) {
+  const grid = $('spaces-grid'); grid.replaceChildren();
+  $('results-count').textContent = `${items.length} workspace${items.length === 1 ? '' : 's'} found`;
+  $('empty-state').style.display = items.length ? 'none' : 'block';
+  if (!items.length) return;
+  items.forEach((space, index) => {
+    const card = document.createElement('article'); card.className = 'space-card';
+    const type = space.type === 'CABIN' ? 'Private cabin' : 'Flexible desk';
+    const icon = space.type === 'CABIN' ? 'meeting_room' : 'desk';
+    card.innerHTML = `<div class="space-image"><img loading="lazy" src="${imageFor(space,index)}" alt="Workspace interior" onerror="this.style.display='none'"/><span class="type-pill">${type}</span><span class="seat-count"><span class="material-symbols-outlined" style="font-size:16px">groups</span>${Number(space.totalSeatUnits)||0} bookable units</span></div><div class="card-body"><div class="card-heading"><h3>${escapeHtml(space.name)}</h3><span class="space-type-icon material-symbols-outlined">${icon}</span></div><div class="location"><span class="material-symbols-outlined" style="font-size:16px">location_on</span>${escapeHtml(space.location)}</div><p class="description">${escapeHtml(space.description || 'A comfortable and thoughtfully equipped space for focused work, collaboration and productive days.')}</p><div class="card-footer"><div class="price"><strong>${formatINR(space.pricePerDay)}</strong><span>per day · ${formatINR(space.pricePerMonth)} per month</span></div><div class="card-actions"><button class="mini-btn details-btn" data-space-id="${space.id}">Details</button><button class="mini-btn primary book-btn" data-space-id="${space.id}">Book <span class="material-symbols-outlined" style="font-size:15px;vertical-align:middle">arrow_forward</span></button></div></div></div>`;
+    grid.appendChild(card);
+  });
+  grid.querySelectorAll('[data-space-id]').forEach(btn => btn.addEventListener('click', () => { window.location.href = `space-detail.html?spaceId=${encodeURIComponent(btn.dataset.spaceId)}`; }));
+}
+function applyFilters() {
+  const name = $('search-name').value.trim().toLowerCase(); const location = $('search-location').value.trim().toLowerCase(); const type = $('search-type').value; const sort = $('sort-by').value;
+  let filtered = allSpaces.filter(s => (!name || String(s.name).toLowerCase().includes(name) || String(s.description || '').toLowerCase().includes(name)) && (!location || String(s.location).toLowerCase().includes(location)) && (type === 'ALL' || s.type === type));
+  if (sort === 'price-asc') filtered.sort((a,b) => Number(a.pricePerDay)-Number(b.pricePerDay));
+  if (sort === 'price-desc') filtered.sort((a,b) => Number(b.pricePerDay)-Number(a.pricePerDay));
+  if (sort === 'name') filtered.sort((a,b) => String(a.name).localeCompare(String(b.name)));
+  renderSpaces(filtered);
+}
+async function loadSpaces() {
+  $('page-error').style.display = 'none'; $('results-count').textContent = 'Loading spaces…'; $('spaces-grid').innerHTML = '<div style="grid-column:1/-1;padding:40px;text-align:center;color:#68738a">Loading available workspaces…</div>';
+  try { allSpaces = await Api.getSpaces(); applyFilters(); }
+  catch (error) { $('spaces-grid').replaceChildren(); $('results-count').textContent = 'Unable to load spaces'; $('page-error').textContent = `${error.message} Check that the CoWorkSpace backend is running.`; $('page-error').style.display = 'block'; }
+}
+document.addEventListener('DOMContentLoaded', () => {
+  const user = Auth.getUser(); if (user) { $('user-avatar').textContent = String(user.name || user.email || 'U').trim().charAt(0).toUpperCase(); if (Auth.isAdmin()) $('admin-link').classList.remove('hidden'); }
+  $('year').textContent = new Date().getFullYear(); $('logout-btn').addEventListener('click', () => Auth.logout()); $('search-btn').addEventListener('click', applyFilters); ['search-name','search-location'].forEach(id => $(id).addEventListener('input', applyFilters)); ['search-type','sort-by'].forEach(id => $(id).addEventListener('change', applyFilters)); $('clear-filters').addEventListener('click', () => { $('search-name').value=''; $('search-location').value=''; $('search-type').value='ALL'; $('sort-by').value='recommended'; applyFilters(); }); loadSpaces();
+});
 </script>
 </body></html>

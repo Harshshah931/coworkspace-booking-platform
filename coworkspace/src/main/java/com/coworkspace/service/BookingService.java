@@ -27,9 +27,8 @@ public class BookingService {
 
     @Transactional
     public BookingResponse createBooking(String userEmail, BookingRequest request) {
-        if (!request.getStartDate().isBefore(request.getEndDate())) {
-            throw new BadRequestException("startDate must be before endDate");
-        }
+        validateDates(request);
+
 
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
@@ -98,11 +97,21 @@ public class BookingService {
         return toResponse(booking);
     }
 
+
+    private void validateDates(BookingRequest request) {
+        if (request.getStartDate().isBefore(java.time.LocalDate.now())) {
+            throw new BadRequestException("Booking start date cannot be in the past");
+        }
+        if (!request.getStartDate().isBefore(request.getEndDate())) {
+            throw new BadRequestException("startDate must be before endDate");
+        }
+    }
+
     private BigDecimal calculatePrice(SeatUnit seatUnit, BookingRequest request) {
         long days = ChronoUnit.DAYS.between(request.getStartDate(), request.getEndDate());
 
         if (request.getBookingType() == BookingType.MONTHLY) {
-            long months = Math.max(1, Math.round(days / 30.0));
+            long months = Math.max(1, (days + 29) / 30);
             return seatUnit.getEffectivePricePerMonth().multiply(BigDecimal.valueOf(months));
         } else {
             long chargedDays = Math.max(1, days);

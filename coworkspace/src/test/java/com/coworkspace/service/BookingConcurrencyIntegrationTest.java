@@ -13,6 +13,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.math.BigDecimal;
@@ -25,7 +26,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+@SpringBootTest(properties = "spring.datasource.url=jdbc:h2:mem:booking_concurrency_it;DB_CLOSE_DELAY=-1")
+@ActiveProfiles("test")
 class BookingConcurrencyIntegrationTest {
 
     @Autowired
@@ -100,8 +102,8 @@ class BookingConcurrencyIntegrationTest {
         AtomicInteger failureCount = new AtomicInteger(0);
         List<String> errors = Collections.synchronizedList(new ArrayList<>());
 
-        LocalDate start = LocalDate.of(2026, 7, 1);
-        LocalDate end = LocalDate.of(2026, 7, 5);
+        LocalDate start = LocalDate.now().plusDays(1);
+        LocalDate end = LocalDate.now().plusDays(5);
 
         for (int i = 0; i < threadCount; i++) {
             final String userEmail = testUserEmails.get(i);

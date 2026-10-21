@@ -13,6 +13,8 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> findByUserId(Long userId);
 
+    boolean existsBySeatUnit_Space_Id(Long spaceId);
+
     /**
      * Core availability query.
      * A seat unit is UNAVAILABLE for [start, end) if there exists a
