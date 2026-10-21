@@ -328,7 +328,7 @@
                 <td class="px-6 py-4 font-medium">${s.name}</td>
                 <td class="px-6 py-4 text-gray-500">${s.location}</td>
                 <td class="px-6 py-4"><span class="px-2 py-1 bg-green-50 text-green-700 text-xs font-medium rounded border border-green-200">${s.type}</span></td>
-                <td class="px-6 py-4 text-gray-500">$${s.pricePerDay}</td>
+                <td class="px-6 py-4 text-gray-500">${formatINR(s.pricePerDay)}</td>
                 <td class="px-6 py-4 text-gray-500">${s.totalSeatUnits}</td>
                 <td class="px-6 py-4 text-right">
                     <button class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all delete-space-btn" data-space-id="${s.id}">
@@ -451,7 +451,7 @@
                 <td class="px-6 py-4 text-gray-500">${b.seatUnitLabel}</td>
                 <td class="px-6 py-4 text-gray-500">${b.startDate} → ${b.endDate}</td>
                 <td class="px-6 py-4 text-gray-500">${b.bookingType}</td>
-                <td class="px-6 py-4 text-gray-500">$${b.totalPrice}</td>
+                <td class="px-6 py-4 text-gray-500">${formatINR(b.totalPrice)}</td>
                 <td class="px-6 py-4">${statusBadge(b.status)}</td>
             </tr>
         `).join('');

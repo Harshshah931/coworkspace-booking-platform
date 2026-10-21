@@ -3,6 +3,30 @@
 
 const API_BASE = "http://localhost:8080/api";
 
+function normalizeE164Phone(rawPhone) {
+  const cleaned = rawPhone.trim().replace(/[\s\-().]/g, "");
+  const normalized = /^[6-9]\d{9}$/.test(cleaned)
+    ? `+91${cleaned}`
+    : cleaned;
+
+  if (!/^\+[1-9]\d{6,14}$/.test(normalized)) {
+    throw new Error(
+      "Enter a 10-digit Indian mobile number or an international number with country code, such as +<country code><number>."
+    );
+  }
+
+  return normalized;
+}
+
+function formatINR(amount) {
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  }).format(Number(amount));
+}
+
 const Auth = {
   getToken() {
     return localStorage.getItem("cw_token");
@@ -69,16 +93,17 @@ async function apiFetch(path, options = {}) {
     headers["Authorization"] = `Bearer ${token}`;
   }
 
-  const res = await fetch(`${API_BASE}${path}`, {
-    ...options,
-    headers,
-  });
-
-  // 401/403 -> session invalid/expired, kick back to login
-  if (res.status === 401 || res.status === 403) {
-    Auth.clearSession();
-    window.location.href = "login.html";
-    throw new Error("Not authenticated");
+  let res;
+  try {
+    res = await fetch(`${API_BASE}${path}`, {
+      ...options,
+      headers,
+    });
+  } catch (error) {
+    if (error instanceof TypeError) {
+      throw new Error(`Cannot connect to the CoWorkSpace backend at ${API_BASE}. Start the backend and try again.`);
+    }
+    throw error;
   }
 
   let body = null;
@@ -92,9 +117,19 @@ async function apiFetch(path, options = {}) {
   }
 
   if (!res.ok) {
+    const validationMessages =
+      body && body.fields && Object.values(body.fields).filter(Boolean);
     const message =
-      (body && (body.error || body.message)) ||
+      (validationMessages && validationMessages.length
+        ? validationMessages.join(" ")
+        : body && (body.error || body.message)) ||
       `Request failed with status ${res.status}`;
+
+    if ((res.status === 401 || res.status === 403) && !path.startsWith("/auth/")) {
+      Auth.clearSession();
+      window.location.href = "login.html";
+    }
+
     throw new Error(message);
   }
 
@@ -114,6 +149,27 @@ const Api = {
       method: "POST",
       body: JSON.stringify({ email, password }),
     });
+  },
+  sendOtp(phone, channel = "SMS", purpose = "AUTH") {
+    return apiFetch("/auth/otp/send", {
+      method: "POST",
+      body: JSON.stringify({ phone, channel, purpose }),
+    });
+  },
+  verifyOtp(phone, code, purpose = "AUTH") {
+    return apiFetch("/auth/otp/verify", {
+      method: "POST",
+      body: JSON.stringify({ phone, code, purpose }),
+    });
+  },
+  registerWithPhone(registrationToken, name, email, password) {
+    return apiFetch("/auth/phone/register", {
+      method: "POST",
+      body: JSON.stringify({ registrationToken, name, email, password }),
+    });
+  },
+  getLatestMockOtp(phone) {
+    return apiFetch(`/dev/otp/latest?phone=${encodeURIComponent(phone)}`);
   },
 
   // ---- Spaces ----

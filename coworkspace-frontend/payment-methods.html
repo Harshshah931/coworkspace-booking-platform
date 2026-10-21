@@ -149,7 +149,7 @@
             <tr class="hover:bg-gray-50 transition-colors">
                 <td class="px-6 py-4 text-gray-500">${row.date}</td>
                 <td class="px-6 py-4 font-medium">${row.description}</td>
-                <td class="px-6 py-4">$${row.amount}</td>
+                <td class="px-6 py-4">${formatINR(row.amount)}</td>
                 <td class="px-6 py-4">${statusBadge(row.status)}</td>
                 <td class="px-6 py-4 text-right">
                     <span class="material-symbols-outlined text-gray-300 text-[20px]" title="Demo only — no invoice file exists">description</span>

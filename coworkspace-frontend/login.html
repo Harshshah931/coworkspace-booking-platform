@@ -117,10 +117,14 @@
         .shadow-soft {
             box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
         }
+        :focus-visible {
+            outline: 3px solid rgba(0, 27, 204, 0.45);
+            outline-offset: 2px;
+        }
     </style>
 </head>
 <body class="text-on-surface">
-<main class="login-canvas flex flex-col md:flex-row overflow-hidden">
+<main class="login-canvas flex flex-col md:flex-row overflow-x-hidden">
 <!-- Left Side: Visual Anchor -->
 <section class="relative w-full md:w-1/2 lg:w-3/5 bg-primary overflow-hidden hidden md:flex flex-col justify-between p-12">
 <!-- Background Image with Overlay -->
@@ -156,25 +160,50 @@
 </div>
 </section>
 <!-- Right Side: Minimalist Login Form -->
-<section class="w-full md:w-1/2 lg:w-2/5 bg-surface flex flex-col items-center justify-center p-8 md:p-16 lg:p-24 relative">
+<section class="w-full min-h-screen md:w-1/2 lg:w-2/5 bg-surface flex flex-col items-center justify-center p-8 md:p-16 lg:p-24 relative">
 <!-- Mobile Header -->
 <div class="md:hidden flex items-center gap-2 mb-12 self-start">
 <span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">domain</span>
 <h1 class="font-headline-md text-headline-md text-on-surface">CoWorkSpace</h1>
 </div>
 <div class="w-full max-w-sm">
-<div class="mb-10">
+<div id="auth-choice" class="space-y-5">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-2">Welcome to CoWorkSpace</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Choose how you would like to continue.</p>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<button class="w-full bg-primary text-white font-label-md text-label-md py-3.5 rounded-lg shadow-soft hover:opacity-90 transition-all" id="choose-login" type="button">Login</button>
+<button class="w-full border border-primary text-primary font-label-md text-label-md py-3.5 rounded-lg hover:bg-primary/5 transition-all" id="choose-signup" type="button">Sign Up</button>
+</div>
+</div>
+<div id="auth-workflow" class="hidden">
+<div class="mb-6">
 <h2 class="font-headline-lg text-headline-lg text-on-surface mb-2" id="form-title">Welcome back</h2>
 <p class="font-body-md text-body-md text-on-surface-variant" id="form-subtitle">Enter your credentials to access your member portal.</p>
 </div>
-<div id="error-banner" class="hidden mb-4 px-4 py-3 rounded-lg bg-red-50 border border-red-200 text-red-700 font-body-md text-body-md"></div>
+
+<!-- Auth Method Switcher Tabs -->
+<div id="auth-method-tabs" class="flex border-b border-outline-variant/40 mb-6 font-label-md text-label-md" role="tablist" aria-label="Authentication method">
+  <button type="button" id="tab-email" role="tab" aria-selected="true" class="pb-2.5 border-b-2 border-primary text-primary font-bold transition-all flex items-center gap-1.5 px-1">
+    <span class="material-symbols-outlined text-[18px]">mail</span> Login with Password
+  </button>
+  <button type="button" id="tab-phone" role="tab" aria-selected="false" class="pb-2.5 border-b-2 border-transparent text-on-surface-variant hover:text-on-surface transition-all flex items-center gap-1.5 px-1 ml-4">
+    <span class="material-symbols-outlined text-[18px]">smartphone</span> Login with OTP
+  </button>
+</div>
+
+<div id="error-banner" class="hidden mb-4 px-4 py-3 rounded-lg bg-red-50 border border-red-200 text-red-700 font-body-md text-body-md" role="alert" aria-live="assertive"></div>
+<div id="success-banner" class="hidden mb-4 px-4 py-3 rounded-lg bg-green-50 border border-green-200 text-green-700 font-body-md text-body-md" role="status" aria-live="polite"></div>
+
+<!-- EMAIL / PASSWORD FORM -->
 <form id="auth-form" class="space-y-6">
 <!-- Name Field (signup only) -->
 <div class="space-y-2 hidden" id="name-field">
 <label class="font-label-md text-label-md text-on-surface-variant block" for="name">Full Name</label>
 <div class="relative">
 <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg">person</span>
-<input class="w-full pl-10 pr-4 py-3 bg-white border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary input-focus-ring transition-all placeholder:text-outline/50" id="name" name="name" placeholder="Jane Doe" type="text"/>
+<input class="w-full pl-10 pr-4 py-3 bg-white border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary input-focus-ring transition-all placeholder:text-outline/50" id="name" name="name" placeholder="Jane Doe" type="text" autocomplete="name"/>
 </div>
 </div>
 <!-- Email Field -->
@@ -182,27 +211,21 @@
 <label class="font-label-md text-label-md text-on-surface-variant block" for="email">Email Address</label>
 <div class="relative">
 <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg">mail</span>
-<input class="w-full pl-10 pr-4 py-3 bg-white border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary input-focus-ring transition-all placeholder:text-outline/50" id="email" name="email" placeholder="name@company.com" required="" type="email"/>
+<input class="w-full pl-10 pr-4 py-3 bg-white border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary input-focus-ring transition-all placeholder:text-outline/50" id="email" name="email" placeholder="name@company.com" required="" type="email" autocomplete="email"/>
 </div>
 </div>
 <!-- Password Field -->
 <div class="space-y-2">
 <div class="flex justify-between items-center">
 <label class="font-label-md text-label-md text-on-surface-variant block" for="password">Password</label>
-<a class="font-label-md text-label-md text-primary hover:underline transition-all" href="#">Forgot password?</a>
 </div>
 <div class="relative">
 <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg">lock</span>
-<input class="w-full pl-10 pr-12 py-3 bg-white border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary input-focus-ring transition-all placeholder:text-outline/50" id="password" name="password" placeholder="••••••••" required="" type="password"/>
-<button class="absolute right-3 top-1/2 -translate-y-1/2 text-outline hover:text-primary transition-colors" type="button">
+<input class="w-full pl-10 pr-12 py-3 bg-white border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary input-focus-ring transition-all placeholder:text-outline/50" id="password" name="password" placeholder="••••••••" required="" type="password" autocomplete="current-password"/>
+<button class="absolute right-3 top-1/2 -translate-y-1/2 text-outline hover:text-primary transition-colors" id="toggle-password" type="button" aria-label="Show password" aria-pressed="false">
 <span class="material-symbols-outlined text-lg">visibility</span>
 </button>
 </div>
-</div>
-<!-- Remember Me Toggle -->
-<div class="flex items-center">
-<input class="w-4 h-4 text-primary border-outline-variant rounded focus:ring-primary transition-all" id="remember" name="remember" type="checkbox"/>
-<label class="ml-2 font-label-md text-label-md text-on-surface-variant cursor-pointer" for="remember">Remember me for 30 days</label>
 </div>
 <!-- Submit Button -->
 <button class="w-full bg-primary text-white font-label-md text-label-md py-3.5 rounded-lg shadow-soft hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-2" id="submit-btn" type="submit">
@@ -210,13 +233,13 @@
                         <span class="material-symbols-outlined text-sm">arrow_forward</span>
 </button>
 <!-- OAuth Divider -->
-<div class="relative py-4 flex items-center">
+<div class="relative py-4 flex items-center hidden">
 <div class="flex-grow border-t border-outline-variant/50"></div>
 <span class="flex-shrink mx-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Or continue with</span>
 <div class="flex-grow border-t border-outline-variant/50"></div>
 </div>
 <!-- Social Logins -->
-<div class="grid grid-cols-2 gap-4">
+<div class="grid grid-cols-2 gap-4 hidden">
 <button class="flex items-center justify-center gap-2 px-4 py-2.5 border border-outline-variant rounded-lg bg-white hover:bg-surface-container-low transition-colors transition-all active:scale-[0.98]" type="button">
 <img alt="Google" class="w-4 h-4 grayscale group-hover:grayscale-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0rQ0PSCJXsHFV7LSnmW-Ckg1_TSjr9Aut33qFLAfK6BowUwkzRlbROfbZQYMx6H_FpklZt5rp6pCD804ohtFrlwgDKgs_d86x9gkaJ1nLFHPm2YEIwflqTqVhuf044oAL__y8rXbz2pw3nMNCGABq1_8JhIg2k2r1KKyyHsYLv9q__FznazqukpYsuYDixpI8agAE_TMbMr_d7avLyvQtBqZLmTwJEHlVj37NI5r-laM_LG_vfDsJ"/>
 <span class="font-label-md text-label-md text-on-surface">Google</span>
@@ -227,20 +250,125 @@
 </button>
 </div>
 </form>
-<div class="mt-12 pt-8 border-t border-outline-variant/30 text-center">
+
+<!-- PHONE OTP AUTHENTICATION FLOW -->
+<div id="phone-auth-container" class="space-y-6 hidden">
+
+  <!-- Step 1: Input Phone & Channel -->
+  <div id="phone-step-1" class="space-y-4">
+    <div class="space-y-2">
+      <label class="font-label-md text-label-md text-on-surface-variant block" for="phone-input">Mobile Phone Number</label>
+      <div class="relative">
+        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg">smartphone</span>
+        <input class="w-full pl-10 pr-4 py-3 bg-white border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary input-focus-ring transition-all placeholder:text-outline/50" id="phone-input" placeholder="0123456789" type="tel" autocomplete="off" aria-describedby="phone-input-help"/>
+      </div>
+      <p class="text-[11px] text-on-surface-variant/70" id="phone-input-help">Enter a 10-digit Indian mobile number or an international number with country code, e.g. +&lt;country code&gt;&lt;number&gt;.</p>
+    </div>
+
+    <!-- Delivery Channel Selector -->
+    <div class="space-y-2">
+      <label class="font-label-md text-label-md text-on-surface-variant block">Delivery Channel</label>
+      <div class="grid grid-cols-2 gap-3">
+        <label class="flex items-center gap-2 p-3 border border-outline-variant rounded-lg cursor-pointer hover:border-primary transition-all has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+          <input type="radio" name="otp-channel" value="SMS" checked class="text-primary focus:ring-primary"/>
+          <span class="material-symbols-outlined text-[18px] text-primary">sms</span>
+          <span class="font-label-md text-label-md text-on-surface">SMS</span>
+        </label>
+        <label class="flex items-center gap-2 p-3 border border-outline-variant rounded-lg cursor-pointer hover:border-primary transition-all has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+          <input type="radio" name="otp-channel" value="WHATSAPP" class="text-primary focus:ring-primary"/>
+          <span class="material-symbols-outlined text-[18px] text-green-600">chat</span>
+          <span class="font-label-md text-label-md text-on-surface">WhatsApp</span>
+        </label>
+      </div>
+    </div>
+
+    <button class="w-full bg-primary text-white font-label-md text-label-md py-3.5 rounded-lg shadow-soft hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-2" id="send-otp-btn" type="button">
+      <span id="send-otp-btn-text">Send Verification Code</span>
+      <span class="material-symbols-outlined text-sm">send</span>
+    </button>
+  </div>
+
+  <!-- Step 2: Enter 6-digit OTP -->
+  <div id="phone-step-2" class="space-y-4 hidden">
+    <div class="p-3 bg-surface-container-low rounded-lg flex items-center justify-between border border-outline-variant/30">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary text-[20px]">check_circle</span>
+        <div>
+          <p class="text-xs font-semibold text-on-surface" id="sent-target-label">+1234567890</p>
+          <p class="text-[10px] text-on-surface-variant" id="sent-channel-badge">Code sent via SMS</p>
+        </div>
+      </div>
+      <button type="button" id="change-phone-btn" class="text-xs text-primary font-bold hover:underline">Change</button>
+    </div>
+
+    <div id="mock-code-panel" class="hidden rounded-lg border border-blue-200 bg-blue-50 p-3 text-sm text-blue-900" role="status">
+      <p id="mock-provider-message"></p>
+      <button type="button" id="show-mock-otp-btn" class="mt-2 font-semibold underline">Show local mock OTP</button>
+      <p id="mock-otp-result" class="mt-2 hidden font-mono text-lg tracking-widest" aria-live="polite"></p>
+      <p class="mt-1 text-xs">Local development only. MOCK does not send SMS or WhatsApp messages.</p>
+    </div>
+
+    <div class="space-y-2">
+      <label class="font-label-md text-label-md text-on-surface-variant block" for="otp-code-input">6-Digit Verification Code</label>
+      <input class="w-full py-3 text-center tracking-[0.5em] font-display text-xl bg-white border border-outline-variant rounded-lg text-on-surface focus:outline-none focus:border-primary input-focus-ring transition-all placeholder:tracking-normal placeholder:text-outline/40" id="otp-code-input" maxlength="6" placeholder="000000" type="text" autocomplete="one-time-code"/>
+    </div>
+
+    <div class="flex items-center justify-between text-xs">
+      <span class="text-on-surface-variant" id="otp-timer-display">Code expires in 5:00</span>
+      <button type="button" id="resend-otp-btn" disabled class="text-primary font-bold disabled:text-outline disabled:cursor-not-allowed hover:underline">
+        Resend code (<span id="resend-countdown">60</span>s)
+      </button>
+    </div>
+
+    <button class="w-full bg-primary text-white font-label-md text-label-md py-3.5 rounded-lg shadow-soft hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-2" id="verify-otp-btn" type="button">
+      <span id="verify-otp-btn-text">Verify & Continue</span>
+      <span class="material-symbols-outlined text-sm">lock_open</span>
+    </button>
+  </div>
+
+  <!-- Step 3: Complete Profile (New User Registration) -->
+  <div id="phone-step-3" class="space-y-4 hidden">
+    <div class="p-3 bg-primary/5 border border-primary/20 rounded-lg">
+      <p class="font-label-md text-label-md text-primary font-bold">Phone number verified!</p>
+      <p class="text-xs text-on-surface-variant">Please complete your member details to finish account creation.</p>
+    </div>
+
+    <div class="space-y-2">
+      <label class="font-label-md text-label-md text-on-surface-variant block" for="phone-reg-name">Full Name</label>
+      <input class="w-full px-4 py-3 bg-white border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary input-focus-ring" id="phone-reg-name" placeholder="John Doe" type="text" required/>
+    </div>
+
+    <div class="space-y-2">
+      <label class="font-label-md text-label-md text-on-surface-variant block" for="phone-reg-email">Email Address</label>
+      <input class="w-full px-4 py-3 bg-white border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary input-focus-ring" id="phone-reg-email" placeholder="john@example.com" type="email" required/>
+    </div>
+
+    <div class="space-y-2">
+      <label class="font-label-md text-label-md text-on-surface-variant block" for="phone-reg-password">Password (min 6 characters)</label>
+      <input class="w-full px-4 py-3 bg-white border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary input-focus-ring" id="phone-reg-password" placeholder="••••••••" type="password" required/>
+    </div>
+
+    <button class="w-full bg-primary text-white font-label-md text-label-md py-3.5 rounded-lg shadow-soft hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-2" id="complete-reg-btn" type="button">
+      <span id="complete-reg-btn-text">Complete Registration</span>
+      <span class="material-symbols-outlined text-sm">check</span>
+    </button>
+    <button type="button" id="edit-phone-btn" class="w-full rounded-lg border border-outline-variant py-3 text-sm font-semibold text-primary hover:bg-primary/5">Back / Edit Phone</button>
+  </div>
+
+</div>
+
+<div class="mt-8 pt-6 border-t border-outline-variant/30 text-center" id="email-toggle-container">
 <p class="font-body-md text-body-md text-on-surface-variant" id="toggle-line">
                         Don't have an account? 
                         <a class="font-label-md text-label-md text-primary font-bold hover:underline ml-1" href="#" id="toggle-link">Sign up</a>
 </p>
 </div>
 </div>
-<!-- Bottom Microcopy -->
-<footer class="absolute bottom-8 left-0 right-0 px-8 flex justify-between text-on-surface-variant/40">
-<span class="font-label-sm text-label-sm">© 2024 CoWorkSpace Inc.</span>
-<div class="flex gap-4 font-label-sm text-label-sm">
-<a class="hover:text-primary transition-colors" href="#">Privacy</a>
-<a class="hover:text-primary transition-colors" href="#">Terms</a>
 </div>
+</div>
+<!-- Bottom Microcopy -->
+<footer class="relative mt-10 px-8 flex justify-between text-on-surface-variant/40 md:absolute md:bottom-8 md:left-0 md:right-0">
+<span class="font-label-sm text-label-sm">© 2024 CoWorkSpace Inc.</span>
 </footer>
 </section>
 </main>
@@ -263,10 +391,12 @@
             const inputs = document.querySelectorAll('input');
             inputs.forEach(input => {
                 input.addEventListener('focus', () => {
-                    input.parentElement.querySelector('.material-symbols-outlined').classList.add('text-primary');
+                    const icon = input.parentElement.querySelector('.material-symbols-outlined');
+                    if (icon) icon.classList.add('text-primary');
                 });
                 input.addEventListener('blur', () => {
-                    input.parentElement.querySelector('.material-symbols-outlined').classList.remove('text-primary');
+                    const icon = input.parentElement.querySelector('.material-symbols-outlined');
+                    if (icon) icon.classList.remove('text-primary');
                 });
             });
 
@@ -284,39 +414,72 @@
             const formSubtitle = document.getElementById('form-subtitle');
             const submitBtnText = document.getElementById('submit-btn-text');
             const toggleLine = document.getElementById('toggle-line');
-            const toggleLink = document.getElementById('toggle-link');
             const errorBanner = document.getElementById('error-banner');
             const form = document.getElementById('auth-form');
             const submitBtn = document.getElementById('submit-btn');
+            const authChoice = document.getElementById('auth-choice');
+            const authWorkflow = document.getElementById('auth-workflow');
+            const authMethodTabs = document.getElementById('auth-method-tabs');
+            const chooseLoginBtn = document.getElementById('choose-login');
+            const chooseSignupBtn = document.getElementById('choose-signup');
+            const passwordInput = document.getElementById('password');
+            const passwordToggle = document.getElementById('toggle-password');
 
             function setMode(newMode) {
+                const previousMode = mode;
                 mode = newMode;
                 errorBanner.classList.add('hidden');
                 if (mode === 'signup') {
                     nameField.classList.remove('hidden');
                     nameInput.required = true;
-                    formTitle.textContent = 'Create your account';
-                    formSubtitle.textContent = 'Sign up to start booking workspaces.';
+                    passwordInput.minLength = 6;
+                    passwordInput.autocomplete = 'new-password';
                     submitBtnText.textContent = 'Sign Up';
                     toggleLine.innerHTML = 'Already have an account? <a class="font-label-md text-label-md text-primary font-bold hover:underline ml-1" href="#" id="toggle-link">Sign in</a>';
                 } else {
                     nameField.classList.add('hidden');
                     nameInput.required = false;
-                    formTitle.textContent = 'Welcome back';
-                    formSubtitle.textContent = 'Enter your credentials to access your member portal.';
+                    passwordInput.removeAttribute('minlength');
+                    passwordInput.autocomplete = 'current-password';
                     submitBtnText.textContent = 'Sign In';
                     toggleLine.innerHTML = "Don't have an account? <a class=\"font-label-md text-label-md text-primary font-bold hover:underline ml-1\" href=\"#\" id=\"toggle-link\">Sign up</a>";
                 }
-                // re-bind since we replaced innerHTML
-                document.getElementById('toggle-link').addEventListener('click', (e) => {
-                    e.preventDefault();
-                    setMode(mode === 'login' ? 'signup' : 'login');
-                });
+                authMethodTabs.classList.toggle('hidden', mode === 'signup');
+                if (mode === 'signup') {
+                    setAuthMethod('phone');
+                } else if (previousMode === 'signup') {
+                    setAuthMethod('email');
+                }
+                if (previousMode !== mode) resetPhoneFlow();
+                formTitle.textContent = authMethod === 'phone'
+                    ? (mode === 'signup' ? 'Sign Up with Phone' : 'Sign In with Phone')
+                    : (mode === 'signup' ? 'Create your account' : 'Welcome back');
+                formSubtitle.textContent = authMethod === 'phone'
+                    ? 'Enter your mobile number to receive a one-time verification code.'
+                    : (mode === 'signup' ? 'Sign up to start booking workspaces.' : 'Enter your credentials to access your member portal.');
             }
 
-            toggleLink.addEventListener('click', (e) => {
+            toggleLine.addEventListener('click', (e) => {
+                if (!e.target.closest('#toggle-link')) return;
                 e.preventDefault();
                 setMode(mode === 'login' ? 'signup' : 'login');
+            });
+
+            function beginAuth(modeToSet) {
+                authChoice.classList.add('hidden');
+                authWorkflow.classList.remove('hidden');
+                setMode(modeToSet);
+                emailToggleContainer.classList.remove('hidden');
+            }
+
+            chooseLoginBtn.addEventListener('click', () => beginAuth('login'));
+            chooseSignupBtn.addEventListener('click', () => beginAuth('signup'));
+
+            passwordToggle.addEventListener('click', () => {
+                const showPassword = passwordInput.type === 'password';
+                passwordInput.type = showPassword ? 'text' : 'password';
+                passwordToggle.setAttribute('aria-pressed', String(showPassword));
+                passwordToggle.setAttribute('aria-label', showPassword ? 'Hide password' : 'Show password');
             });
 
             function showError(message) {
@@ -358,24 +521,334 @@
                 }
             });
 
-            // Social login buttons are visual only in this build
-            document.querySelectorAll('form button[type="button"]').forEach(btn => {
-                if (btn.textContent.includes('Google') || btn.textContent.includes('GitHub')) {
-                    btn.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        showError('Social login is not available in this demo. Please use email/password.');
-                    });
+            // ---- Method Switcher Tabs (Email vs Phone) ----
+            let authMethod = 'email'; // or 'phone'
+            const tabEmail = document.getElementById('tab-email');
+            const tabPhone = document.getElementById('tab-phone');
+            const authForm = document.getElementById('auth-form');
+            const phoneContainer = document.getElementById('phone-auth-container');
+            const emailToggleContainer = document.getElementById('email-toggle-container');
+            const successBanner = document.getElementById('success-banner');
+
+            function setAuthMethod(method) {
+                authMethod = method;
+                tabEmail.setAttribute('aria-selected', String(method === 'email'));
+                tabPhone.setAttribute('aria-selected', String(method === 'phone'));
+                tabEmail.className = method === 'email'
+                    ? 'pb-2.5 border-b-2 border-primary text-primary font-bold transition-all flex items-center gap-1.5 px-1'
+                    : 'pb-2.5 border-b-2 border-transparent text-on-surface-variant hover:text-on-surface transition-all flex items-center gap-1.5 px-1';
+                tabPhone.className = method === 'phone'
+                    ? 'pb-2.5 border-b-2 border-primary text-primary font-bold transition-all flex items-center gap-1.5 px-1 ml-4'
+                    : 'pb-2.5 border-b-2 border-transparent text-on-surface-variant hover:text-on-surface transition-all flex items-center gap-1.5 px-1 ml-4';
+                authForm.classList.toggle('hidden', method === 'phone');
+                phoneContainer.classList.toggle('hidden', method === 'email');
+                formTitle.textContent = method === 'phone'
+                    ? (mode === 'signup' ? 'Sign Up with Phone' : 'Sign In with Phone')
+                    : (mode === 'signup' ? 'Create your account' : 'Welcome back');
+                formSubtitle.textContent = method === 'phone'
+                    ? 'Enter your mobile number to receive a one-time verification code.'
+                    : (mode === 'signup' ? 'Sign up to start booking workspaces.' : 'Enter your credentials to access your member portal.');
+                clearBanners();
+            }
+
+            function showSuccess(message) {
+                errorBanner.classList.add('hidden');
+                successBanner.textContent = message;
+                successBanner.classList.remove('hidden');
+            }
+
+            function clearBanners() {
+                errorBanner.classList.add('hidden');
+                successBanner.classList.add('hidden');
+            }
+
+            tabEmail.addEventListener('click', () => {
+                if (authMethod === 'email') return;
+                setAuthMethod('email');
+            });
+
+            tabPhone.addEventListener('click', () => {
+                if (authMethod === 'phone') return;
+                setAuthMethod('phone');
+            });
+
+            // ---- Phone OTP State Machine ----
+            let activePhone = '';
+            let activeChannel = 'SMS';
+            let activePurpose = 'AUTH';
+            let activeRegToken = null;
+            let resendTimerInterval = null;
+            let expiryTimerInterval = null;
+
+            const phoneStep1 = document.getElementById('phone-step-1');
+            const phoneStep2 = document.getElementById('phone-step-2');
+            const phoneStep3 = document.getElementById('phone-step-3');
+
+            const phoneInput = document.getElementById('phone-input');
+            const sendOtpBtn = document.getElementById('send-otp-btn');
+            const sendOtpBtnText = document.getElementById('send-otp-btn-text');
+
+            const sentTargetLabel = document.getElementById('sent-target-label');
+            const sentChannelBadge = document.getElementById('sent-channel-badge');
+            const otpCodeInput = document.getElementById('otp-code-input');
+            const changePhoneBtn = document.getElementById('change-phone-btn');
+            const editPhoneBtn = document.getElementById('edit-phone-btn');
+            const resendOtpBtn = document.getElementById('resend-otp-btn');
+            const resendCountdown = document.getElementById('resend-countdown');
+            const otpTimerDisplay = document.getElementById('otp-timer-display');
+            const verifyOtpBtn = document.getElementById('verify-otp-btn');
+            const verifyOtpBtnText = document.getElementById('verify-otp-btn-text');
+            const mockCodePanel = document.getElementById('mock-code-panel');
+            const mockProviderMessage = document.getElementById('mock-provider-message');
+            const showMockOtpBtn = document.getElementById('show-mock-otp-btn');
+            const mockOtpResult = document.getElementById('mock-otp-result');
+
+            const phoneRegName = document.getElementById('phone-reg-name');
+            const phoneRegEmail = document.getElementById('phone-reg-email');
+            const phoneRegPassword = document.getElementById('phone-reg-password');
+            const completeRegBtn = document.getElementById('complete-reg-btn');
+            const completeRegBtnText = document.getElementById('complete-reg-btn-text');
+
+            function resetPhoneFlow() {
+                if (resendTimerInterval) clearInterval(resendTimerInterval);
+                if (expiryTimerInterval) clearInterval(expiryTimerInterval);
+                phoneStep1.classList.remove('hidden');
+                phoneStep2.classList.add('hidden');
+                phoneStep3.classList.add('hidden');
+                mockCodePanel.classList.add('hidden');
+                mockOtpResult.classList.add('hidden');
+                otpCodeInput.value = '';
+                activeRegToken = null;
+                activePurpose = mode === 'signup' ? 'REGISTRATION' : 'AUTH';
+            }
+
+            function startCooldownTimer(seconds) {
+                if (resendTimerInterval) clearInterval(resendTimerInterval);
+                let remaining = seconds;
+                resendOtpBtn.disabled = true;
+                resendCountdown.textContent = remaining;
+
+                resendTimerInterval = setInterval(() => {
+                    remaining -= 1;
+                    if (remaining <= 0) {
+                        clearInterval(resendTimerInterval);
+                        resendOtpBtn.disabled = false;
+                    } else {
+                        resendCountdown.textContent = remaining;
+                    }
+                }, 1000);
+            }
+
+            function startExpiryTimer(seconds) {
+                if (expiryTimerInterval) clearInterval(expiryTimerInterval);
+                let remaining = seconds;
+                otpTimerDisplay.classList.remove('text-error');
+                function updateDisplay() {
+                    const m = Math.floor(remaining / 60);
+                    const s = remaining % 60;
+                    otpTimerDisplay.textContent = `Code expires in ${m}:${s < 10 ? '0' : ''}${s}`;
+                }
+                updateDisplay();
+
+                expiryTimerInterval = setInterval(() => {
+                    remaining -= 1;
+                    if (remaining <= 0) {
+                        clearInterval(expiryTimerInterval);
+                        otpTimerDisplay.textContent = 'Code expired. Please request a new one.';
+                        otpTimerDisplay.classList.add('text-error');
+                    } else {
+                        updateDisplay();
+                    }
+                }, 1000);
+            }
+
+            async function handleSendOtp() {
+                clearBanners();
+                const rawPhone = phoneInput.value.trim();
+                if (!rawPhone) {
+                    showError('Please enter your mobile phone number.');
+                    return;
+                }
+                try {
+                    activePhone = normalizeE164Phone(rawPhone);
+                } catch (err) {
+                    showError(err.message);
+                    phoneInput.focus();
+                    return;
+                }
+
+                const channelInput = document.querySelector('input[name="otp-channel"]:checked');
+                activeChannel = channelInput ? channelInput.value : 'SMS';
+                activePurpose = mode === 'signup' ? 'REGISTRATION' : 'AUTH';
+
+                sendOtpBtn.disabled = true;
+                sendOtpBtnText.textContent = 'Sending code...';
+
+                try {
+                    const response = await Api.sendOtp(activePhone, activeChannel, activePurpose);
+                    activePhone = response.phone; // normalized
+                    phoneInput.value = activePhone;
+                    sentTargetLabel.textContent = activePhone;
+                    activeChannel = response.channel || activeChannel;
+                    sentChannelBadge.textContent = `Requested via ${activeChannel === 'WHATSAPP' ? 'WhatsApp' : 'SMS'}`;
+
+                    phoneStep1.classList.add('hidden');
+                    phoneStep2.classList.remove('hidden');
+                    phoneStep3.classList.add('hidden');
+                    otpCodeInput.value = '';
+                    otpCodeInput.focus();
+
+                    mockCodePanel.classList.toggle('hidden', response.deliveryProvider !== 'MOCK');
+                    mockOtpResult.classList.add('hidden');
+                    if (response.deliveryProvider === 'MOCK') {
+                        mockProviderMessage.textContent = 'The local MOCK provider generated this code but did not send a message.';
+                        showSuccess('OTP generated locally. Retrieve the mock code below; no SMS or WhatsApp was sent.');
+                    } else {
+                        showSuccess(`The ${activeChannel === 'WHATSAPP' ? 'WhatsApp' : 'SMS'} provider accepted the OTP request for ${activePhone}. Check your message, then enter the code.`);
+                    }
+                    startCooldownTimer(response.cooldownSeconds || 60);
+                    startExpiryTimer(response.expiresInSeconds || 300);
+                } catch (err) {
+                    showError(err.message || 'Failed to send OTP code. Please try again.');
+                } finally {
+                    sendOtpBtn.disabled = false;
+                    sendOtpBtnText.textContent = 'Send Verification Code';
+                }
+            }
+
+            sendOtpBtn.addEventListener('click', handleSendOtp);
+
+            resendOtpBtn.addEventListener('click', async () => {
+                if (resendOtpBtn.disabled) return;
+                await handleSendOtp();
+            });
+
+            function editPhone() {
+                clearBanners();
+                phoneStep2.classList.add('hidden');
+                phoneStep1.classList.remove('hidden');
+                phoneStep3.classList.add('hidden');
+                mockCodePanel.classList.add('hidden');
+                mockOtpResult.classList.add('hidden');
+                activeRegToken = null;
+                if (resendTimerInterval) clearInterval(resendTimerInterval);
+                if (expiryTimerInterval) clearInterval(expiryTimerInterval);
+                phoneInput.focus();
+            }
+
+            changePhoneBtn.addEventListener('click', editPhone);
+            editPhoneBtn.addEventListener('click', editPhone);
+
+            showMockOtpBtn.addEventListener('click', async () => {
+                showMockOtpBtn.disabled = true;
+                mockOtpResult.classList.add('hidden');
+                clearBanners();
+                try {
+                    const result = await Api.getLatestMockOtp(activePhone);
+                    mockOtpResult.textContent = `Local test code: ${result.code}`;
+                    mockOtpResult.classList.remove('hidden');
+                } catch (err) {
+                    if (err.message && err.message.startsWith('Cannot connect')) {
+                        showError(err.message);
+                    } else {
+                        showError(`${err.message || 'Local mock code unavailable.'} Start the backend with the dev profile, MOCK provider, and OTP_MOCK_EXPOSE_CODE=true.`);
+                    }
+                } finally {
+                    showMockOtpBtn.disabled = false;
                 }
             });
 
-            // Password visibility toggle
-            const pwToggle = document.querySelector('#password + button');
-            if (pwToggle) {
-                pwToggle.addEventListener('click', () => {
-                    const pw = document.getElementById('password');
-                    pw.type = pw.type === 'password' ? 'text' : 'password';
-                });
-            }
+            verifyOtpBtn.addEventListener('click', async () => {
+                clearBanners();
+                const code = otpCodeInput.value.trim();
+                if (!code || code.length !== 6 || !/^\d{6}$/.test(code)) {
+                    showError('Please enter a valid 6-digit numeric verification code.');
+                    return;
+                }
+
+                verifyOtpBtn.disabled = true;
+                verifyOtpBtnText.textContent = 'Verifying...';
+
+                try {
+                    const res = await Api.verifyOtp(activePhone, code, activePurpose);
+                    const isNewUser = res.isNewUser ?? res.newUser;
+                    if (isNewUser) {
+                        if (mode !== 'signup') {
+                            showError('No account exists for this phone number. Choose Sign Up to register.');
+                            return;
+                        }
+                        activeRegToken = res.registrationToken;
+                        phoneStep2.classList.add('hidden');
+                        phoneStep3.classList.remove('hidden');
+                        formTitle.textContent = 'Complete Profile';
+                        formSubtitle.textContent = 'Verified phone: ' + activePhone;
+                        showSuccess('Phone number verified. Complete your profile to register.');
+                        phoneRegName.focus();
+                    } else if (mode === 'signup') {
+                        showError('This phone number is already registered. Switch to Login and request a new code after the resend cooldown.');
+                    } else {
+                        // Existing verified user authenticated
+                        Auth.setSession(res.authResponse);
+                        showSuccess('Phone verified. Signing you in...');
+                        const destination = res.authResponse.role === 'ADMIN' ? 'admin.html' : 'browse.html';
+                        setTimeout(() => {
+                            window.location.href = destination;
+                        }, 700);
+                    }
+                } catch (err) {
+                    showError(err.message || 'Verification failed. Please check the code and try again.');
+                } finally {
+                    verifyOtpBtn.disabled = false;
+                    verifyOtpBtnText.textContent = 'Verify & Continue';
+                }
+            });
+
+            completeRegBtn.addEventListener('click', async () => {
+                clearBanners();
+                const name = phoneRegName.value.trim();
+                const email = phoneRegEmail.value.trim();
+                const password = phoneRegPassword.value;
+
+                if (!name) {
+                    showError('Please enter your full name.');
+                    return;
+                }
+                if (!email) {
+                    showError('Please enter your email address.');
+                    return;
+                }
+                if (!phoneRegEmail.checkValidity()) {
+                    showError('Please enter a valid email address.');
+                    phoneRegEmail.focus();
+                    return;
+                }
+                if (!password || password.length < 6) {
+                    showError('Password must be at least 6 characters.');
+                    return;
+                }
+
+                completeRegBtn.disabled = true;
+                completeRegBtnText.textContent = 'Creating account...';
+
+                try {
+                    const authResponse = await Api.registerWithPhone(activeRegToken, name, email, password);
+                    Auth.setSession(authResponse);
+                    window.location.href = authResponse.role === 'ADMIN' ? 'admin.html' : 'browse.html';
+                } catch (err) {
+                    showError(err.message || 'Registration failed. Please try again.');
+                } finally {
+                    completeRegBtn.disabled = false;
+                    completeRegBtnText.textContent = 'Complete Registration';
+                }
+            });
+
+            // Auto-advance verify on 6 digits
+            otpCodeInput.addEventListener('input', () => {
+                otpCodeInput.value = otpCodeInput.value.replace(/\D/g, '');
+                if (otpCodeInput.value.length === 6) {
+                    verifyOtpBtn.click();
+                }
+            });
         });
     </script>
 </body></html>

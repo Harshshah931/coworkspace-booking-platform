@@ -31,6 +31,10 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
-    // Optional - set via Profile page
+    @Column(unique = true)
     private String phone;
+
+    @Column(nullable = false)
+    @Builder.Default
+    private boolean phoneVerified = false;
 }

@@ -10,6 +10,7 @@ import com.coworkspace.repository.SeatUnitRepository;
 import com.coworkspace.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.temporal.ChronoUnit;
@@ -24,6 +25,7 @@ public class BookingService {
     private final SeatUnitRepository seatUnitRepository;
     private final UserRepository userRepository;
 
+    @Transactional
     public BookingResponse createBooking(String userEmail, BookingRequest request) {
         if (!request.getStartDate().isBefore(request.getEndDate())) {
             throw new BadRequestException("startDate must be before endDate");
@@ -32,7 +34,9 @@ public class BookingService {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        SeatUnit seatUnit = seatUnitRepository.findById(request.getSeatUnitId())
+        // Acquire pessimistic write lock on the target seat unit within this transaction
+        // to prevent simultaneous reservations from double-booking.
+        SeatUnit seatUnit = seatUnitRepository.findByIdWithLock(request.getSeatUnitId())
                 .orElseThrow(() -> new ResourceNotFoundException("Seat unit not found"));
 
         // Race-safety check: re-verify no overlapping booking exists right before insert.
@@ -59,6 +63,7 @@ public class BookingService {
         return toResponse(booking);
     }
 
+    @Transactional(readOnly = true)
     public List<BookingResponse> getMyBookings(String userEmail) {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
@@ -68,12 +73,14 @@ public class BookingService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public List<BookingResponse> getAllBookings() {
         return bookingRepository.findAll().stream()
                 .map(this::toResponse)
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public BookingResponse cancelBooking(String userEmail, Long bookingId) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));

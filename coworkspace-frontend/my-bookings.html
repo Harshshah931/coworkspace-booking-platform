@@ -79,7 +79,7 @@
       </div>
       <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
         <span class="text-gray-500 text-sm">Total Invested</span>
-        <div class="text-3xl font-bold mt-1" id="stat-invested">$0.00</div>
+        <div class="text-3xl font-bold mt-1" id="stat-invested">₹0</div>
       </div>
     </div>
 
@@ -163,7 +163,7 @@
                         <div class="text-xs text-gray-400">${b.bookingType}</div>
                     </td>
                     <td class="px-6 py-4 text-gray-500 ${rowOpacity}">${b.seatUnitLabel}</td>
-                    <td class="px-6 py-4 font-medium ${rowOpacity}">$${b.totalPrice}</td>
+                    <td class="px-6 py-4 font-medium ${rowOpacity}">${formatINR(b.totalPrice)}</td>
                     <td class="px-6 py-4">${statusBadge(b.status)}</td>
                     <td class="px-6 py-4 text-right">${actionCell}</td>
                 </tr>
@@ -198,7 +198,7 @@
 
         document.getElementById('stat-total').textContent = total;
         document.getElementById('stat-active').textContent = active;
-        document.getElementById('stat-invested').textContent = `$${invested.toFixed(2)}`;
+        document.getElementById('stat-invested').textContent = formatINR(invested);
     }
 
     async function loadBookings() {

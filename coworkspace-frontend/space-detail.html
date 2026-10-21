@@ -100,7 +100,7 @@
           </div>
           <div class="flex justify-between font-bold text-lg mt-2 pt-2 border-t border-gray-100">
             <span>Total</span>
-            <span id="summary-total">$0.00</span>
+            <span id="summary-total">₹0</span>
           </div>
         </div>
 
@@ -175,8 +175,8 @@
             const div = document.createElement('div');
             const isCabin = su.type === 'CABIN';
             const priceLabel = bookingType === 'MONTHLY'
-                ? `$${su.pricePerMonth}/mo`
-                : `$${su.pricePerDay}/day`;
+                ? `${formatINR(su.pricePerMonth)}/mo`
+                : `${formatINR(su.pricePerDay)}/day`;
 
             if (!su.available) {
                 div.className = 'p-3 bg-gray-100 border border-gray-200 text-gray-400 rounded-lg cursor-not-allowed flex flex-col items-center justify-center gap-1' + (isCabin ? ' col-span-2' : '');
@@ -200,7 +200,9 @@
     function selectSeat(su, div) {
         document.querySelectorAll('#seat-map-grid > div[data-seat-id]').forEach(d => {
             const isCabin = d.dataset.type === 'CABIN';
-            const priceLabel = bookingType === 'MONTHLY' ? `$${d.dataset.pricePerMonth}/mo` : `$${d.dataset.pricePerDay}/day`;
+            const priceLabel = bookingType === 'MONTHLY'
+                ? `${formatINR(d.dataset.pricePerMonth)}/mo`
+                : `${formatINR(d.dataset.pricePerDay)}/day`;
             d.className = 'p-3 bg-white border border-green-300 text-green-700 rounded-lg cursor-pointer hover:bg-green-50 transition-all flex flex-col items-center justify-center gap-1' + (isCabin ? ' col-span-2' : '');
             d.innerHTML = isCabin
                 ? `<span class="material-symbols-outlined text-[18px]">meeting_room</span><span class="text-[10px] font-bold">${d.dataset.label}</span><span class="text-[9px] text-gray-500">${priceLabel}</span>`
@@ -237,10 +239,10 @@
         if (bookingType === 'MONTHLY') {
             const months = Math.max(1, Math.round(days / 30));
             price = parseFloat(selectedSeatUnit.pricePerMonth) * months;
-            rateLabel = `$${selectedSeatUnit.pricePerMonth}/month × ${months}`;
+            rateLabel = `${formatINR(selectedSeatUnit.pricePerMonth)}/month × ${months}`;
         } else {
             price = parseFloat(selectedSeatUnit.pricePerDay) * days;
-            rateLabel = `$${selectedSeatUnit.pricePerDay}/day × ${days}`;
+            rateLabel = `${formatINR(selectedSeatUnit.pricePerDay)}/day × ${days}`;
         }
 
         summaryBody.innerHTML = `
@@ -263,7 +265,7 @@
         `;
 
         document.getElementById('summary-rate').textContent = rateLabel;
-        document.getElementById('summary-total').textContent = `$${price.toFixed(2)}`;
+        document.getElementById('summary-total').textContent = formatINR(price);
 
         totalsBlock.classList.remove('hidden');
         typeToggle.classList.remove('hidden');

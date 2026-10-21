@@ -105,7 +105,7 @@
                         <span>${space.location}</span>
                     </div>
                     <div class="mb-4">
-                        <p class="text-[#2D3FE2] font-bold text-lg">$${space.pricePerDay}<span class="text-gray-400 font-normal text-sm">/day</span></p>
+                        <p class="text-[#2D3FE2] font-bold text-lg">${formatINR(space.pricePerDay)}<span class="text-gray-400 font-normal text-sm">/day</span></p>
                         <p class="text-gray-400 text-xs mt-1">${space.totalSeatUnits} seat unit${space.totalSeatUnits === 1 ? '' : 's'} • cabin prices may vary</p>
                     </div>
                     <button class="w-full bg-[#2D3FE2] text-white py-2.5 rounded-lg text-sm font-medium hover:opacity-90 transition-all view-availability-btn" data-space-id="${space.id}">

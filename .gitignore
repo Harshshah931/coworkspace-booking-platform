@@ -1,0 +1,30 @@
+﻿# Java and Maven build output
+**/target/
+coworkspace/bin/
+*.class
+
+# Local databases and runtime data
+**/data/
+*.mv.db
+*.trace.db
+
+# IDE-specific files
+.vscode/
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+
+# Local environment files and secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+
+# Operating system files
+.DS_Store
+Thumbs.db
+desktop.ini

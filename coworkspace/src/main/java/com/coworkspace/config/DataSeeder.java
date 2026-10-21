@@ -5,6 +5,7 @@ import com.coworkspace.repository.SeatUnitRepository;
 import com.coworkspace.repository.SpaceRepository;
 import com.coworkspace.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class DataSeeder implements CommandLineRunner {
@@ -21,24 +23,26 @@ public class DataSeeder implements CommandLineRunner {
     private final SeatUnitRepository seatUnitRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Value("${admin.seed.email}")
+    @Value("${admin.seed.email:}")
     private String adminEmail;
 
-    @Value("${admin.seed.password}")
+    @Value("${admin.seed.password:}")
     private String adminPassword;
 
     @Override
     public void run(String... args) {
-        // Seed admin
-        if (!userRepository.existsByEmail(adminEmail)) {
-            User admin = User.builder()
-                    .name("Admin")
-                    .email(adminEmail)
-                    .password(passwordEncoder.encode(adminPassword))
-                    .role(Role.ADMIN)
-                    .build();
-            userRepository.save(admin);
-            System.out.println(">>> Seeded admin: " + adminEmail + " / " + adminPassword);
+        // Seed admin safely without printing credentials
+        if (adminEmail != null && !adminEmail.isBlank() && adminPassword != null && !adminPassword.isBlank()) {
+            if (!userRepository.existsByEmail(adminEmail)) {
+                User admin = User.builder()
+                        .name("Admin")
+                        .email(adminEmail)
+                        .password(passwordEncoder.encode(adminPassword))
+                        .role(Role.ADMIN)
+                        .build();
+                userRepository.save(admin);
+                log.info("Default administrator account created for email: {}", adminEmail);
+            }
         }
 
         // Seed a sample space with seat units
@@ -75,7 +79,7 @@ public class DataSeeder implements CommandLineRunner {
                 seatUnitRepository.save(cabin);
             }
 
-            System.out.println(">>> Seeded sample space: " + space.getName() + " with 8 desks ($500/day) + 3 cabins ($1200/day)");
+            log.info("Initialized sample space: {} with 8 desks and 3 cabins", space.getName());
         }
     }
 }
